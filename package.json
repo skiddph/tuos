@@ -1,0 +1,26 @@
+{
+  "name": "tuos",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/eru123/tuos",
+  "author": "eru123 <yeoligoakino@gmail.com>",
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "fastify": "^3.18.1",
+    "fastify-cors": "^6.0.1",
+    "fastify-jwt": "^3.0.0",
+    "fastify-plugin": "^3.0.0",
+    "fastify-static": "^4.2.2",
+    "fastify-swagger": "^4.8.2",
+    "mongoose": "^5.13.0",
+    "usid": "^1.0.21"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.8"
+  }
+}
