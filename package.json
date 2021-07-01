@@ -10,6 +10,7 @@
     "dev": "nodemon server"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "fastify": "^3.18.1",
     "fastify-cors": "^6.0.1",
@@ -17,6 +18,8 @@
     "fastify-plugin": "^3.0.0",
     "fastify-static": "^4.2.2",
     "fastify-swagger": "^4.8.2",
+    "joi": "^17.4.0",
+    "lodash": "^4.17.21",
     "mongoose": "^5.13.0",
     "usid": "^1.0.21"
   },

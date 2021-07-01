@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const fp = require("fastify-plugin");
-const Users = require("../schema/db/users");
 
 module.exports = fp(async function (fastify) {
   try {
@@ -13,10 +12,13 @@ module.exports = fp(async function (fastify) {
       useFindAndModify: false,
       useCreateIndex: true,
     });
-    console.log("[SYSTEM] Connected to database",process.env.MONGO_DIRECT);
+    console.log("[SYSTEM] Connected to database.");
   } catch (err) {
     console.error(err);
   }
 
-  fastify.decorate("mongoose", { instance: mongoose, Users });
+  fastify.decorate("mongoose", {
+    instance: mongoose,
+    Users: require("../schema/db/users")
+  });
 });

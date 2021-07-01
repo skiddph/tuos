@@ -5,18 +5,15 @@ const path = require("path");
 const PORT = process.env.PORT || 8080;
 const HOST = process.env.HOST || "0.0.0.0";
 
-
-fastify.register(require('fastify-swagger'),{
+fastify.register(require('fastify-swagger'), {
 	exposeRoute: true,
 	routePrefix: '/docs',
-	swagger: {
-		info: {
-			title: 'fastify-api'
-		}
-	}
+	swagger: { info: { title: 'fastify-api' } }
 })
+
 fastify.register(require("./src/plugins/mongoose"))
-fastify.register(require("./src/plugins/uuid"))
+fastify.register(require("./src/plugins/usid"))
+fastify.register(require("./src/plugins/jwt"))
 fastify.register(require("fastify-cors"), {});
 
 fastify.register(require("fastify-static"), {

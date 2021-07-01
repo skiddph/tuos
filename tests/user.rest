@@ -1,0 +1,31 @@
+# Variables
+@url = http://0.0.0.0:8080
+@api = {{url}}/api
+@name = Jericho Aquino
+@user = eru123
+@pass = Password123
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRkZmJjOGRlY2YwMjA5YjAwZGNjZGYiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiYWRtaW4iOmZhbHNlLCJpYXQiOjE2MjUxNjgwNDV9.iOmKenIQlHhSzddmkljCV9VswhKDq4_jGTTAelu2oek
+
+### Create User
+POST {{api}}/users/register
+Content-Type: application/json
+
+{
+  "name": "{{name}}",
+  "user": "{{user}}",
+  "pass": "{{pass}}"
+}
+
+### Login
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{
+  "user": "{{user}}",
+  "pass": "{{pass}}"
+}
+
+### Auth
+GET {{api}}/user/@/{{user}}
+Authorization: Bearer {{token}}

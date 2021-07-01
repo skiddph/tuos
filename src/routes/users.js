@@ -1,10 +1,10 @@
+module.exports = function register(fastify, options, done) {
+	const { create, login } = require('../handlers/users')(fastify)
 
-
-module.exports = function register(fastify, options, done){
-
-	fastify.get("/api/uid",(req,res) => {
-		res.send(fastify.usid.uuid())
+	fastify.post("/api/users/register", create)
+	fastify.post("/api/auth/login", login)
+	fastify.get("/api/user/@/:username", { preValidation: [fastify.authenticate] }, (req, res) => {
+		res.send(req.user)
 	})
-
 	done();
 }
