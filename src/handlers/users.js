@@ -70,7 +70,10 @@ module.exports = function (fastify) {
     })
   }
 
+  const authenticate = { preValidation: [fastify.authenticate] }
+
   return {
+    authenticate,
     create,
     login
   }

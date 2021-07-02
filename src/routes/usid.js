@@ -1,15 +1,9 @@
-module.exports = function register(fastify, options, done) {
+module.exports = async function (fastify, options, done) {
 
-	const len = options.defaultLength || 24
+	const { uuid } = fastify.handler.usid
 
-	fastify.get("/api/id", (req, res) => {
-		res.send({ id: fastify.usid.uuid(len) })
-	})
-
-	fastify.get("/api/id/:length", (req, res) => {
-		console.log()
-		res.send({ id: fastify.usid.uuid(req.params.length || len) })
-	})
+	fastify.get("/api/id", uuid.default)
+	fastify.get("/api/id/:length", uuid.custom)
 
 	done();
 }

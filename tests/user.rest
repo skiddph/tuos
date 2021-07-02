@@ -5,7 +5,7 @@
 @user = eru123
 @pass = Password123
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRkZmJjOGRlY2YwMjA5YjAwZGNjZGYiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiYWRtaW4iOmZhbHNlLCJpYXQiOjE2MjUxNjgwNDV9.iOmKenIQlHhSzddmkljCV9VswhKDq4_jGTTAelu2oek
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRkZmJjOGRlY2YwMjA5YjAwZGNjZGYiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiYWRtaW4iOmZhbHNlLCJpYXQiOjE2MjUxOTQyOTR9.KiAknrY6DNghkXJCHSMpaJYr7J2PS-pqaKhhKOA5MYo
 
 ### Create User
 POST {{api}}/users/register
