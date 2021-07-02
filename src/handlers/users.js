@@ -192,11 +192,17 @@ module.exports = function (fastify) {
     if (!user) return res.code(404).send({})
     res.send({ data: user })
   }
+  const readOneById = async (req, res) => {
+    const user = await fastify.mongoose.Users.findOne({ _id: req.params.id })
+    if (!user) return res.code(404).send({})
+    res.send({ data: user })
+  }
   return {
     create,
     createSchema,
     loginSchema,
     readOneSchema,
+    readOneById,
     login,
     authenticate,
     readOneByUser,

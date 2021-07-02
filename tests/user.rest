@@ -30,3 +30,7 @@ Content-Type: application/json
 ### Read User By Username
 GET {{api}}/user/@{{user}}
 Authorization: Bearer {{token}}
+
+### Read user by id
+GET {{api}}/user/${{id}}
+Authorization: Bearer {{token}}
