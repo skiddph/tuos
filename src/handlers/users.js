@@ -2,6 +2,42 @@ const _ = require('lodash');
 const Joi = require('joi');
 const bcrypt = require('bcrypt')
 module.exports = function (fastify) {
+  const readOneSchema = {
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            type: { type: 'string', default: "success" },
+            message: { type: 'string', default: "User found" },
+            data: {
+              type: 'object',
+              properties: {
+                _id: { type: 'string' },
+                user: { type: 'string' },
+                name: { type: 'string' },
+                created_at: { type: 'number' }
+              }
+            },
+          }
+        },
+        404: {
+          type: 'object',
+          properties: {
+            type: { type: 'string', default: "error" },
+            message: { type: 'string', default: "User not found" },
+          }
+        },
+        500: {
+          type: 'object',
+          properties: {
+            type: { type: 'string', default: "error" },
+            message: { type: 'string' },
+          }
+        }
+      }
+    }
+  }
   const createSchema = {
     schema: {
       body: {
@@ -21,11 +57,7 @@ module.exports = function (fastify) {
             message: { type: 'string' },
             data: {
               type: 'object',
-              properties: {
-                _id: { type: 'string' },
-                user: { type: 'string' },
-                name: { type: 'string' }
-              }
+              properties: readOneSchema.schema.response[200].properties.data.properties
             },
             token: { type: 'string' }
           },
@@ -90,58 +122,67 @@ module.exports = function (fastify) {
       }
     }
   }
-  const readOneSchema = {
+  const readOneByUserSchema = {
+    ...readOneSchema,
     schema: {
+      params: {
+        type: 'object',
+        properties: {
+          user: { type: 'string' }
+        }
+      },
+      ...readOneSchema.response
+    }
+  }
+  const readOneByIdSchema = {
+    schema: {
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' }
+        }
+      },
+      ...readOneSchema.response
+    }
+  }
+  const readManySchema = {
+    schema: {
+      params: {
+        type: 'object',
+        properties: {
+          page: { type: 'number', default: 1 },
+          items: { type: 'number', default: 20 }
+        }
+      },
       response: {
         200: {
           type: 'object',
           properties: {
             type: { type: 'string', default: "success" },
-            message: { type: 'string', default: "User found" },
+            message: { type: 'string' },
             data: {
-              type: 'object',
-              properties: {
-                _id: { type: 'string' },
-                user: { type: 'string' },
-                name: { type: 'string' }
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: readOneSchema.schema.response[200].properties.data.properties
               }
             },
-          }
+          },
         },
-        404: {
+        400: {
           type: 'object',
           properties: {
             type: { type: 'string', default: "error" },
-            message: { type: 'string', default: "User not found" },
+            message: { type: 'string' },
           }
         },
         500: {
           type: 'object',
           properties: {
             type: { type: 'string', default: "error" },
-            message: { type: 'string' },
+            message: { type: 'string', default: "Server Error" },
           }
         }
-      }
-    }
-  }
-  const readOneByUserSchema = {
-    ...readOneSchema,
-    params: {
-      type: 'object',
-      required: ['user'],
-      properties: {
-        user: { type: 'string' }
-      }
-    }
-  }
-  const readOneByIdSchema = {
-    ...readOneSchema,
-    params: {
-      type: 'object',
-      required: ['id'],
-      properties: {
-        id: { type: 'string' }
       }
     }
   }
@@ -174,7 +215,7 @@ module.exports = function (fastify) {
     const salt = await bcrypt.genSalt(10)
     const hashed = await bcrypt.hash(req.body.pass, salt)
     user.pass = hashed
-
+    user.created_at = Date.now()
     user.save()
       .then((u) => {
         console.log(u)
@@ -217,6 +258,17 @@ module.exports = function (fastify) {
     if (!user) return res.code(404).send({})
     res.send({ data: user })
   }
+  const readMany = async (req, res) => {
+    const page = req.params.page
+    const items = req.params.items
+    const users = await fastify.mongoose.Users.paginate({}, { page: page, limit: items })
+    console.log(users.docs)
+    res.send({
+      type: 'success',
+      message: `${users.docs.length} users found.`,
+      data: users.docs
+    })
+  }
   return {
     create,
     createSchema,
@@ -224,6 +276,8 @@ module.exports = function (fastify) {
     readOneSchema,
     readOneByUserSchema,
     readOneByIdSchema,
+    readMany,
+    readManySchema,
     readOneById,
     login,
     authenticate,

@@ -5,11 +5,11 @@
 @user = eru123
 @pass = Password123
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRkZmJjOGRlY2YwMjA5YjAwZGNjZGYiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiYWRtaW4iOmZhbHNlLCJpYXQiOjE2MjUxOTQyOTR9.KiAknrY6DNghkXJCHSMpaJYr7J2PS-pqaKhhKOA5MYo
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRmMjZlNjNmYWE2ODI5MjBiYmI4YWIiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiaWF0IjoxNjI1MjM4MDQxfQ.AaUzhiIOqxWVLYy-ToFbbTzuIEMF7sDCxBE8YzxrFAs
 @id = 60de977d27f1ac1ca8c3c35f
 
 ### Create User
-POST {{api}}/users/register
+POST {{api}}/auth/register
 Content-Type: application/json
 
 {
@@ -33,4 +33,8 @@ Authorization: Bearer {{token}}
 
 ### Read user by id
 GET {{api}}/user/${{id}}
+Authorization: Bearer {{token}}
+
+### GET users
+GET {{api}}/users/3/2
 Authorization: Bearer {{token}}

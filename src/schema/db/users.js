@@ -1,6 +1,6 @@
 
 const mongoose = require('mongoose')
-
+const mongoosePaginate = require('mongoose-paginate-v2');
 const UsersSchema = new mongoose.Schema({
 	name: {
 		type: String,
@@ -19,7 +19,13 @@ const UsersSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 		min: [6, "Minimum of 6 characters"]
+	},
+	created_at: {
+		type: Number,
+		required: true
 	}
-})
+}, { createdAt: "created_at" })
+
+UsersSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Users', UsersSchema)
