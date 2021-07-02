@@ -6,6 +6,7 @@
 @pass = Password123
 
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRkZmJjOGRlY2YwMjA5YjAwZGNjZGYiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiYWRtaW4iOmZhbHNlLCJpYXQiOjE2MjUxOTQyOTR9.KiAknrY6DNghkXJCHSMpaJYr7J2PS-pqaKhhKOA5MYo
+@id = 60de977d27f1ac1ca8c3c35f
 
 ### Create User
 POST {{api}}/users/register
@@ -26,6 +27,6 @@ Content-Type: application/json
   "pass": "{{pass}}"
 }
 
-### Auth
-GET {{api}}/user/@/{{user}}
+### Read User By Username
+GET {{api}}/user/@{{user}}
 Authorization: Bearer {{token}}
