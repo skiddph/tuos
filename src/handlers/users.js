@@ -125,6 +125,26 @@ module.exports = function (fastify) {
       }
     }
   }
+  const readOneByUserSchema = {
+    ...readOneSchema,
+    params: {
+      type: 'object',
+      required: ['user'],
+      properties: {
+        user: { type: 'string' }
+      }
+    }
+  }
+  const readOneByIdSchema = {
+    ...readOneSchema,
+    params: {
+      type: 'object',
+      required: ['id'],
+      properties: {
+        id: { type: 'string' }
+      }
+    }
+  }
   function validateUser(user) {
     const schema = Joi.object({
       name: Joi.string().pattern(new RegExp('^[a-zA-Z ]{2,50}$')).min(2).max(50).required(),
@@ -202,6 +222,8 @@ module.exports = function (fastify) {
     createSchema,
     loginSchema,
     readOneSchema,
+    readOneByUserSchema,
+    readOneByIdSchema,
     readOneById,
     login,
     authenticate,
