@@ -1,16 +1,19 @@
 require("dotenv").config();
-const fastify = require("fastify")({ logger: true });
-fastify.register(require("./src/autoload"))
+const app = require('./api').server
+const config = {
+	port: process.env.PORT,
+	host: process.env.HOST,
+	token: process.env.JWT_TOKEN,
+	mongo: process.env.MONGO_DIRECT,
+	config: require('./tuos.json'),
+	plugins: [
+		require('./mongoose'),
+		require('./auth').plugin,
+	]
+}
 
-const start = async () => {
-	const PORT = process.env.PORT || 8080;
-	const HOST = process.env.HOST || "0.0.0.0";
-	await fastify.ready();
-	await fastify.listen(PORT, HOST).then((addr) => console.log(`[SYSTEM] Server listening on ${addr}`)).catch((err) => {
-		fastify.log.error(err);
-		console.log("[SYSTEM] Failed to start server! exiting...");
-		process.exit(1);
-	});
-};
+config.config.plugins.mongoose.models = {
+	...require('./auth').models(config)
+}
 
-start();
+app(config).start()

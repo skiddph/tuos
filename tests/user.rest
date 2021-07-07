@@ -3,10 +3,10 @@
 @api = {{url}}/api
 @name = Jericho Aquino
 @user = eru123
-@pass = Password123
+@pass = !P4s5W04d~
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRmMjZlNjNmYWE2ODI5MjBiYmI4YWIiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiaWF0IjoxNjI1MjM4MDQxfQ.AaUzhiIOqxWVLYy-ToFbbTzuIEMF7sDCxBE8YzxrFAs
-@id = 60de977d27f1ac1ca8c3c35f
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGU1MTNiOGRlM2NlMjA5ZjBjNTQ4ODkiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiaWF0IjoxNjI1NjMyMzI5fQ.mV2iHN1_ihRbkqgt1wUY5PJWzvC2xh5Uv0qqkU7fVD4
+@id = 60e513b8de3ce209f0c54889
 
 ### Create User
 POST {{api}}/auth/register
@@ -14,8 +14,8 @@ Content-Type: application/json
 
 {
   "name": "{{name}}",
-  "user": "{{user}}",
-  "pass": "{{pass}}"
+  "pass": "{{pass}}",
+  "user": "{{user}}"
 }
 
 ### Login
@@ -27,6 +27,10 @@ Content-Type: application/json
   "pass": "{{pass}}"
 }
 
+### Read User by token
+GET {{api}}/user
+Authorization: Bearer {{token}}
+
 ### Read User By Username
 GET {{api}}/user/@{{user}}
 Authorization: Bearer {{token}}
@@ -36,5 +40,13 @@ GET {{api}}/user/${{id}}
 Authorization: Bearer {{token}}
 
 ### GET users
-GET {{api}}/users/3/2
+GET {{api}}/users/1/1
+Authorization: Bearer {{token}}
+
+### UPDATE user
+PUT {{api}}/user
+Authorization: Bearer {{token}}
+
+### DELETE user
+DELETE {{api}}/user
 Authorization: Bearer {{token}}

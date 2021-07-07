@@ -1,0 +1,69 @@
+{
+	"appName": "Tuos",
+	"appId": "ml.skiddph.tuos",
+	"appVersion": "v1.0.1",
+	"appAuthor": "",
+	"appAuthors": [
+		""
+	],
+	"appRepository": "",
+	"appAbout": "",
+	"appDescription": "",
+	"appLicense": "",
+	"fastify": {
+		"logger": true
+	},
+	"plugins": {
+		"mongoose": {
+			"options": {
+				"useNewUrlParser": true,
+				"config": {
+					"autoIndex": true
+				},
+				"useUnifiedTopology": true,
+				"useFindAndModify": false,
+				"useCreateIndex": true
+			},
+			"models": {}
+		},
+		"auth": {
+			"routePrefix": "auth-",
+			"register": {
+				"required": [
+					"user",
+					"name",
+					"pass"
+				]
+			},
+			"login": {
+				"allowed": ["user","_id"]
+			},
+			"users": {
+				"model": "Users",
+				"uniqueEmail": false,
+				"uniquePhone": false,
+				"items": 20
+			},
+			"jwt": {
+				"payload": [
+					"_id",
+					"name",
+					"user"
+				]
+			}
+		}
+	},
+	"routes": {
+		"auth-register": "/api/auth/register",
+		"auth-login": "/api/auth/login",
+		"auth-read-me": "/api/user",
+		"auth-read-user": "/api/user/@:user",
+		"auth-read-id": "/api/user/$:_id",
+		"auth-reads": "/api/users",
+		"auth-reads-page": "/api/users/:page",
+		"auth-reads-page-items": "/api/users/:page/:items",
+		"auth-update": "/api/user",
+		"auth-delete": "/api/user",
+		"swagger-docs": "/docs"
+	}
+}
