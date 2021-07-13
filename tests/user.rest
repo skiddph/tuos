@@ -46,7 +46,16 @@ Authorization: Bearer {{token}}
 ### UPDATE user
 PUT {{api}}/user
 Authorization: Bearer {{token}}
+Content-Type: application/json
 
+{
+  "user": "{{user}}",
+  "pass": "{{pass}}"
+}
 ### DELETE user
 DELETE {{api}}/user
 Authorization: Bearer {{token}}
+
+
+### GET
+GET https://www.whatsmydns.net/api/details?server=428&type=MX&query=facebook.com

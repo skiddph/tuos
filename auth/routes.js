@@ -14,6 +14,8 @@ module.exports = async function (app, options, done) {
 	app.get(r[`${p}reads`], h.rdauth(), h.reads)
 	app.get(r[`${p}reads-page`], h.rdauth(), h.reads)
 	app.get(r[`${p}reads-page-items`], h.rdauth(), h.reads)
-
+	// app.put(r[`${p}update`], h.rdauth(), h.update)
+	// app.delete(r[`${p}delete`], h.rdauth(), h.delete)
+	
 	done();
 }

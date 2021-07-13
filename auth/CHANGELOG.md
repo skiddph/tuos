@@ -1,5 +1,5 @@
-# v2.0.01
-In this version, we rewrite the whole plugin to fix known errors in the previous version and to match the compatibility of tuos-api@v2.0.01 universal config
+# v2.0.1
+In this version, we rewrite the whole plugin to fix known errors in the previous version and to match the compatibility of tuos-api@v2.0.1 universal config
 
 ### CHANGES
  - Rename functions in routes handler

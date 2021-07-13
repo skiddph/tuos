@@ -53,7 +53,7 @@ module.exports = function (app, options) {
 					name: { type: 'string' },
 					user: { type: 'string' },
 					pass: { type: 'string' },
-					opass: { type: 'string' },
+					npass: { type: 'string' },
 					phone: { type: 'string' },
 					countryCode: { type: 'string' },
 					lon: { type: 'number' },
@@ -135,7 +135,7 @@ module.exports = function (app, options) {
 			name: Joi.string().pattern(new RegExp("^[a-zA-Z ]{2,50}$")).min(2).max(50),
 			user: Joi.string().alphanum().min(3).max(30),
 			pass: passwordComplexity(complexityOptions),
-			cpass: passwordComplexity(complexityOptions),
+			npass: passwordComplexity(complexityOptions),
 			string: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
 			phone: Phone.string().phoneNumber(),
 			email: Joi.string().email(),
@@ -246,13 +246,20 @@ module.exports = function (app, options) {
 	    });
 	}
 
-	// Read Users Handler
+	// Update User Handler
 	const update = async (req, res) => {
-		console.log(req.params)
-		res.send(req.user)
+		// Filter Request
+		const { error } = validate(req.body);
+		if (error) return res.code(400).send({message: error.details[0].message });
+
+		// Filter Public Data
+		// Updatables that don't need to resubmit password
+		const upPub = _.pick(req.body,['defaultPhoto', 'countryCode', 'phone', 'email'])
+		const cfPub = _.pick(req.body,['user', 'pass', 'npass', 'name'])
+		res.send({})
 	}
 
-	// Read Users Handler
+	// Delete User Handler
 	const remove = async (req, res) => {
 		console.log(req.params)
 		res.send(req.user)
