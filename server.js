@@ -9,6 +9,7 @@ const config = {
 	plugins: [
 		require('./mongoose'),
 		require('./auth').plugin,
+		require('./src/plugins/swagger')
 	]
 }
 

@@ -41,8 +41,8 @@ module.exports = function (app, options) {
 				properties: {
 					_id: { type: 'string' },
 					user: { type: 'string' },
-					page: {type: 'number'},
-					items:{type: 'number'}
+					page: { type: 'number' },
+					items: { type: 'number' }
 				}
 			},
 			body: {
@@ -69,7 +69,7 @@ module.exports = function (app, options) {
 						type: { type: "string", default: "success" },
 						message: { type: "string", default: "Request success" },
 						data: {
-							type: "array", 
+							type: "array",
 							items: {
 								type: "object",
 								properties: userResponseSchema
@@ -110,7 +110,7 @@ module.exports = function (app, options) {
 			response: gschema.schema.response,
 		}
 	}
-	
+
 	// Add additional required parameters to `schema.body.required` from Global Schema
 	const rschema = (req = []) => {
 		const schem = gschema
@@ -157,31 +157,32 @@ module.exports = function (app, options) {
 	const register = async (req, res) => {
 		// Validate Request Data
 		const { error } = validate(req.body);
-		if (error) return res.code(400).send({message: error.details[0].message });
+		if (error) return res.code(400).send({ message: error.details[0].message });
 
 		// Validate Username
-		const dups = await app.mongoose[UsersModel].findOne({user:req.body.user});
-		if(dups) return res.code(400).send({message:"Username already exists" });
+		const dups = await app.mongoose[UsersModel].findOne({ user: req.body.user });
+		if (dups) return res.code(400).send({ message: "Username already exists" });
 
 		// Create user object
 		const user = new app.mongoose[UsersModel](req.body);
-		
+
 		// Set timestamp
 		user.created_at = Date.now();
-		
+
 		// Hash password
 		user.pass = await pash(req.body.pass)
-		
+
 		// Save user object to database
 		await user.save()
-			.then((u) => 
+			.then((u) =>
 				res.code(200).send({
 					message: "User successfully created.",
-					data: u._doc,
+					...u._doc,
 					token: newJWTToken(u),
 				})
 			)
-			.catch((e) =>{
+			.catch((e) => {
+				console.error(10000000000001,'ERROR',e)
 				res.code(500).send({
 					message:
 						"Failed to register. Please contact your administrator to fix this error",
@@ -192,77 +193,148 @@ module.exports = function (app, options) {
 	// Login Handler
 	const login = async (req, res) => {
 		// Filter Request Data
-		const id = _.pick(req.body, (config?.login?.allowed || ['user','_id']))
-		const entry = {...id,pass:req.body.pass}
+		const id = _.pick(req.body, (config?.login?.allowed || ['user', '_id']))
+		const entry = { ...id, pass: req.body.pass }
 
 		// Validate Request Data
 		const { error } = validate(entry);
-	    if (error)return res.code(400).send({ message: error.details[0].message });
+		if (error) return res.code(400).send({ message: error.details[0].message });
 
-	    // Check if user exists
-	    const user = await app.mongoose[UsersModel].findOne(id);
-	    if (!user) return res.code(400).send({ type: "error", message: "Invalid credentials" });
-	    
-	    // Verify Password
-	    const pass = await bcrypt.compare(entry.pass, user.pass);
-	    if (!pass)return res.code(400).send({ type: "error", message: "Invalid credentials" });
+		// Check if user exists
+		const user = await app.mongoose[UsersModel].findOne(id);
+		if (!user) return res.code(400).send({ type: "error", message: "Invalid credentials" });
 
-	    // Reply token
-	    res.send({
-	      status: "success",
-	      message: "You are now logged in.",
-	      token: newJWTToken(user),
-	    });
+		// Verify Password
+		const pass = await bcrypt.compare(entry.pass, user.pass);
+		if (!pass) return res.code(400).send({ type: "error", message: "Invalid credentials" });
+
+		// Reply token
+		res.send({
+			status: "success",
+			message: "You are now logged in.",
+			token: newJWTToken(user),
+		});
 	}
 
 	// Auth + Global Schema 
-	const auth = () => ({ preValidation: [app.authenticate],...gschema });
+	const auth = () => ({ preValidation: [app.authenticate], ...gschema });
 
 	// Auth + Read Handler Schema
-	const rdauth = () => ({ preValidation: [app.authenticate],...rdschema});
+	const rdauth = () => ({ preValidation: [app.authenticate], ...rdschema });
 
 	// Read User Handler
 	// Make sure to add `rdauth()`` as a schema in your routes 
 	// to validate the request before calling this handler
 	const read = async (req, res) => {
-		const me = {_id: req.user?._id}
-		const other = _.pick(req.params,['user','_id'])
+		const me = { _id: req.user?._id }
+		const other = _.pick(req.params, ['user', '_id'])
 		const find = (other._id || other.user) ? other : me
 		const user = await app.mongoose[UsersModel].findOne(find);
-	    if (!user) return res.code(404).send({});
-	    res.send(user);
+		if (!user) return res.code(404).send({});
+		res.send(user);
 	}
 
 	// Read Users Handler
 	const reads = async (req, res) => {
-		const pg = _.pick(req.params,['page','items'])
+		const pg = _.pick(req.params, ['page', 'items'])
 		const page = pg.page || 1
 		const items = pg.items || config.users?.items || 20
-		const users = await app.mongoose[UsersModel].paginate({},{page:page,limit:items});
-	    res.send({
-	      type: "success",
-	      message: `${users.docs.length} users found.`,
-	      data: users.docs,
-	    });
+		const users = await app.mongoose[UsersModel].paginate({}, { page: page, limit: items });
+		res.send({
+			type: "success",
+			message: `${users.docs.length} users found.`,
+			data: users.docs,
+		});
 	}
 
 	// Update User Handler
 	const update = async (req, res) => {
 		// Filter Request
 		const { error } = validate(req.body);
-		if (error) return res.code(400).send({message: error.details[0].message });
+		if (error) return res.code(400).send({ message: error.details[0].message });
 
 		// Filter Public Data
 		// Updatables that don't need to resubmit password
-		const upPub = _.pick(req.body,['defaultPhoto', 'countryCode', 'phone', 'email'])
-		const cfPub = _.pick(req.body,['user', 'pass', 'npass', 'name'])
-		res.send({})
+		const upPub = _.pick(req.body, ['defaultPhoto', 'countryCode', 'phone', 'email'])
+		const cfPub = _.pick(req.body, ['user', 'pass', 'npass', 'name'])
+
+		let ndata = {};
+
+		const { _id } = req.user;
+		const user = await app.mongoose[UsersModel].findOne({ _id });
+		if (!user) return res.code(404).send({ message: "User not found" });
+
+		if (Object.keys(cfPub).length > 0) {
+			if (!cfPub.pass) return res.code(400).send({ message: "Invalid password, you must re-submit your password to apply this changes." });
+
+			const pass = await bcrypt.compare(cfPub.pass, user.pass);
+			if (cfPub.npass) {
+				if (cfPub.pass == cfPub.npass) {
+					return res.code(400).send({ message: "Invalid Password, must be different from previous password!" });
+				} else {
+					ndata["pass"] = await pash(cfPub.npass);
+				}
+			}
+
+			if (!pass) return res.code(400).send({ message: "Password doesn't match! try again later." });
+
+			ndata = { ...ndata, ..._.pick(cfPub, ['user', 'name']) }
+
+			if (typeof ndata.user == "string") {
+				if (ndata.user == user.user) return res.code(400).send({ message: "New username must not be equal to old username! try again later." });
+				const usernameCheck = await app.mongoose[UsersModel].findOne({ user: ndata.user });
+				if (usernameCheck) return res.code(400).send({ message: "Username already exists, please choose another username" });
+			}
+		}
+
+		ndata = { ...ndata, ...upPub }
+
+		if (Object.keys(ndata).length <= 0) return res.code(200).send({ message: "Noting to update" });
+
+		const update = await app.mongoose[UsersModel].findOneAndUpdate(
+			{ _id },
+			ndata,
+			{ new: true }
+		);
+
+		if (!update) res.code(500).send({ message: "Server error! Failed to update." })
+		res.code(200).send({ message: "Userdata updated successfully." })
 	}
 
 	// Delete User Handler
 	const remove = async (req, res) => {
-		console.log(req.params)
-		res.send(req.user)
+		if (!req.body?.pass) return res
+			.code(400)
+			.send({
+				type: "error",
+				message:
+					"You must re-submit your password to complete this action.",
+			});
+		const { _id } = req.user;
+		const user = await app.mongoose[UsersModel].findOne({ _id });
+		if (!user) {
+			return res
+				.code(500)
+				.send({
+					type: "error",
+					message:
+						"Server Error. Failed to find user information, failed to delete",
+				});
+		}
+
+		const pass = await bcrypt.compare(req.body.pass, user.pass);
+		if (!pass)
+			return res.code(400).send({ type: "error", message: "Invalid password" });
+
+		const deleteStatus = await app.mongoose[UsersModel].findOneAndDelete({ _id });
+		if (!deleteStatus)
+			return res
+				.code(500)
+				.send({
+					type: "error",
+					message: "Server Error. Failed to delete user",
+				});
+		res.send({ message: "User deleted successfully" });
 	}
 
 	// Returns Schema and Handlers
@@ -276,6 +348,6 @@ module.exports = function (app, options) {
 		read,
 		reads,
 		update,
-		delete:remove
+		delete: remove
 	}
 }

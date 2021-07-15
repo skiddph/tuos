@@ -5,8 +5,8 @@
 @user = eru123
 @pass = !P4s5W04d~
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGU1MTNiOGRlM2NlMjA5ZjBjNTQ4ODkiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiaWF0IjoxNjI1NjMyMzI5fQ.mV2iHN1_ihRbkqgt1wUY5PJWzvC2xh5Uv0qqkU7fVD4
-@id = 60e513b8de3ce209f0c54889
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGVmZWViOGRiNWY2YzEzNDgxMWRlYzkiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiaWF0IjoxNjI2MzM2OTUzfQ.tdxLQRpKa2sasIccKrRQf2v5YTyWDs1OL4oCSZUkktI
+@id = 60efeeb8db5f6c134811dec9
 
 ### Create User
 POST {{api}}/auth/register
@@ -49,13 +49,20 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "user": "{{user}}",
+  "user": "eru123",
   "pass": "{{pass}}"
 }
 ### DELETE user
 DELETE {{api}}/user
 Authorization: Bearer {{token}}
+Content-Type: application/json
 
+{
+  "user": "eru123",
+  "pass": "{{pass}}"
+}
 
 ### GET
 GET https://www.whatsmydns.net/api/details?server=428&type=MX&query=facebook.com
+
+####
