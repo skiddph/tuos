@@ -5,7 +5,7 @@ const config = {
 	host: process.env.HOST,
 	token: process.env.JWT_TOKEN,
 	mongo: process.env.MONGO_DIRECT,
-	config: require('./tuos.json'),
+	config: require('./api').config,
 	plugins: [
 		require('./mongoose'),
 		require('./auth').plugin,

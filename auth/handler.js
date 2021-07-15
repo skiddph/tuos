@@ -182,7 +182,6 @@ module.exports = function (app, options) {
 				})
 			)
 			.catch((e) => {
-				console.error(10000000000001,'ERROR',e)
 				res.code(500).send({
 					message:
 						"Failed to register. Please contact your administrator to fix this error",
@@ -253,9 +252,12 @@ module.exports = function (app, options) {
 		const { error } = validate(req.body);
 		if (error) return res.code(400).send({ message: error.details[0].message });
 
-		// Filter Public Data
+		// Filter Data
+		
 		// Updatables that don't need to resubmit password
 		const upPub = _.pick(req.body, ['defaultPhoto', 'countryCode', 'phone', 'email'])
+		
+		// Confidential/Secured data that needs to re-sub mit password
 		const cfPub = _.pick(req.body, ['user', 'pass', 'npass', 'name'])
 
 		let ndata = {};

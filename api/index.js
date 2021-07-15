@@ -45,5 +45,6 @@ const server = (options) => {
 
 module.exports = {
 	plugin,
-	server
+	server,
+	config: require('./tuos.json')
 }
