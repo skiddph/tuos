@@ -51,6 +51,11 @@
 					"user"
 				]
 			}
+		},
+		"static": {
+			"index": ["index.html", "README.md"],
+			"dirs": [],
+			"fallbacks": {}
 		}
 	},
 	"routes": {

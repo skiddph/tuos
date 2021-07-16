@@ -13,8 +13,6 @@ const config = {
 	]
 }
 
-config.config.plugins.mongoose.models = {
-	...require('./auth').models(config)
-}
+config.config.plugins.mongoose.models = {...require('./auth').models(config)}
 
 app(config).start()
