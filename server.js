@@ -9,10 +9,10 @@ const config = {
 	plugins: [
 		require('./mongoose'),
 		require('./auth').plugin,
-		require('./static')
+		require('./static'),
+		require('fastify-cors')
 	]
 }
 
 config.config.plugins.mongoose.models = {...require('./auth').models(config)}
-
 app(config).start()

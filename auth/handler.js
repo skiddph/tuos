@@ -157,11 +157,11 @@ module.exports = function (app, options) {
 	const register = async (req, res) => {
 		// Validate Request Data
 		const { error } = validate(req.body);
-		if (error) return res.code(400).send({ message: error.details[0].message });
+		if (error) return res.code(200).send({type: 'error', message: error.details[0].message });
 
 		// Validate Username
 		const dups = await app.mongoose[UsersModel].findOne({ user: req.body.user });
-		if (dups) return res.code(400).send({ message: "Username already exists" });
+		if (dups) return res.code(200).send({type: 'error', message: "Username already exists" });
 
 		// Create user object
 		const user = new app.mongoose[UsersModel](req.body);
@@ -182,7 +182,7 @@ module.exports = function (app, options) {
 				})
 			)
 			.catch((e) => {
-				res.code(500).send({
+				res.code(200).send({type: 'error',
 					message:
 						"Failed to register. Please contact your administrator to fix this error",
 				})
@@ -197,21 +197,23 @@ module.exports = function (app, options) {
 
 		// Validate Request Data
 		const { error } = validate(entry);
-		if (error) return res.code(400).send({ message: error.details[0].message });
+		if (error) return res.code(200).send({type: 'error', message: error.details[0].message });
 
 		// Check if user exists
 		const user = await app.mongoose[UsersModel].findOne(id);
-		if (!user) return res.code(400).send({ type: "error", message: "Invalid credentials" });
+		if (!user) return res.code(200).send({ type: "error", message: "Invalid credentials" });
 
 		// Verify Password
 		const pass = await bcrypt.compare(entry.pass, user.pass);
-		if (!pass) return res.code(400).send({ type: "error", message: "Invalid credentials" });
+		if (!pass) return res.code(200).send({ type: "error", message: "Invalid credentials" });
 
 		// Reply token
-		res.send({
+		console.log('+++++++ USER +++++++',user)
+		res.code(200).send({
 			status: "success",
 			message: "You are now logged in.",
 			token: newJWTToken(user),
+			..._.pick(user,['name','_id','user','created_at'])
 		});
 	}
 
@@ -229,7 +231,7 @@ module.exports = function (app, options) {
 		const other = _.pick(req.params, ['user', '_id'])
 		const find = (other._id || other.user) ? other : me
 		const user = await app.mongoose[UsersModel].findOne(find);
-		if (!user) return res.code(404).send({});
+		if (!user) return res.code(200).send({});
 		res.send(user);
 	}
 
@@ -250,7 +252,7 @@ module.exports = function (app, options) {
 	const update = async (req, res) => {
 		// Filter Request
 		const { error } = validate(req.body);
-		if (error) return res.code(400).send({ message: error.details[0].message });
+		if (error) return res.code(200).send({ type: 'error',message: error.details[0].message });
 
 		// Filter Data
 		
@@ -264,28 +266,28 @@ module.exports = function (app, options) {
 
 		const { _id } = req.user;
 		const user = await app.mongoose[UsersModel].findOne({ _id });
-		if (!user) return res.code(404).send({ message: "User not found" });
+		if (!user) return res.code(200).send({ type: 'error',message: "User not found" });
 
 		if (Object.keys(cfPub).length > 0) {
-			if (!cfPub.pass) return res.code(400).send({ message: "Invalid password, you must re-submit your password to apply this changes." });
+			if (!cfPub.pass) return res.code(200).send({type: 'error', message: "Invalid password, you must re-submit your password to apply this changes." });
 
 			const pass = await bcrypt.compare(cfPub.pass, user.pass);
 			if (cfPub.npass) {
 				if (cfPub.pass == cfPub.npass) {
-					return res.code(400).send({ message: "Invalid Password, must be different from previous password!" });
+					return res.code(200).send({type: 'error', message: "Invalid Password, must be different from previous password!" });
 				} else {
 					ndata["pass"] = await pash(cfPub.npass);
 				}
 			}
 
-			if (!pass) return res.code(400).send({ message: "Password doesn't match! try again later." });
+			if (!pass) return res.code(200).send({type: 'error', message: "Password doesn't match! try again later." });
 
 			ndata = { ...ndata, ..._.pick(cfPub, ['user', 'name']) }
 
 			if (typeof ndata.user == "string") {
-				if (ndata.user == user.user) return res.code(400).send({ message: "New username must not be equal to old username! try again later." });
+				if (ndata.user == user.user) return res.code(200).send({type: 'error', message: "New username must not be equal to old username! try again later." });
 				const usernameCheck = await app.mongoose[UsersModel].findOne({ user: ndata.user });
-				if (usernameCheck) return res.code(400).send({ message: "Username already exists, please choose another username" });
+				if (usernameCheck) return res.code(200).send({type: 'error', message: "Username already exists, please choose another username" });
 			}
 		}
 
@@ -299,14 +301,14 @@ module.exports = function (app, options) {
 			{ new: true }
 		);
 
-		if (!update) res.code(500).send({ message: "Server error! Failed to update." })
-		res.code(200).send({ message: "Userdata updated successfully." })
+		if (!update) res.code(200).send({type: 'error', message: "Server error! Failed to update." })
+		res.code(200).send({type: 'error', message: "Userdata updated successfully." })
 	}
 
 	// Delete User Handler
 	const remove = async (req, res) => {
 		if (!req.body?.pass) return res
-			.code(400)
+			.code(200)
 			.send({
 				type: "error",
 				message:
@@ -316,7 +318,7 @@ module.exports = function (app, options) {
 		const user = await app.mongoose[UsersModel].findOne({ _id });
 		if (!user) {
 			return res
-				.code(500)
+				.code(200)
 				.send({
 					type: "error",
 					message:
@@ -326,12 +328,12 @@ module.exports = function (app, options) {
 
 		const pass = await bcrypt.compare(req.body.pass, user.pass);
 		if (!pass)
-			return res.code(400).send({ type: "error", message: "Invalid password" });
+			return res.code(200).send({ type: "error", message: "Invalid password" });
 
 		const deleteStatus = await app.mongoose[UsersModel].findOneAndDelete({ _id });
 		if (!deleteStatus)
 			return res
-				.code(500)
+				.code(200)
 				.send({
 					type: "error",
 					message: "Server Error. Failed to delete user",

@@ -13,9 +13,6 @@ module.exports = fp(async function (app) {
 	})
 
 	routes.forEach(route => {
-		app.get(route, function(req, res) {
-			console.log('>> >> >>', route)
-			return res.sendFile('index.html')
-		})
+		app.get(route, async (req, res) => res.sendFile('index.html'))
 	})
 })

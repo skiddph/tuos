@@ -1,0 +1,72 @@
+.p-auth {
+    margin: 1em 0 5em 0;
+    background: none;
+    padding: 2em 1em 0 1em;
+
+    h1 {
+      margin-bottom: 2rem;
+    }
+  
+    form {
+      background: inherit;
+      max-width: 300px;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      
+      input, button {
+        width: calc(100% - 16px);
+        border: none;
+        margin-bottom: 1rem;
+        border-radius: 3px;
+        font-size: 0.9em;
+        padding: 12px 8px;
+        background: #f2f2f2;
+        transition: 0.2s;
+  
+        &:hover,
+        &:focus {
+          background: #e6e6e6;
+        }
+        &[type="submit"] {
+          margin-top: 1rem;
+          width: 100%;
+          font-weight: bold;
+          color: #fff;
+          border: none;
+          background: #1a75ff;
+  
+          &:hover {
+            background: #005ce6;
+          }
+          &:focus,
+          &:active {
+            background: #003380;
+          }
+
+          &[disabled] {
+            background: #3c89fc;
+            cursor: wait;
+          }
+        }
+      }
+    }
+
+    .notes {
+        max-width: 300px;
+        margin: 0 auto;
+        p {
+            margin: 2em 1em;
+            font-size: .9em;
+
+            a {
+                color: dodgerblue;
+                text-decoration: none;
+
+                &:hover {
+                  color: rgb(24, 121, 218);
+                }
+            }
+        }
+    }
+  }

@@ -1,18 +1,27 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from './pages/Home.vue'
-import Login from './pages/Login.vue'
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            component: Home
+            component: () => import('./pages-group/auth.vue'),
+            children: [
+                {
+                    path: "",
+                    component: () => import('./pages/Login.vue')
+                },
+                {
+                    path: "login",
+                    component: () => import('./pages/Login.vue')
+                },
+                {
+                    path: "register",
+                    component: () => import('./pages/Register.vue')
+                },
+            ]
         },
-        {
-            path: '/guide',
-            component: Login
-        }
+        
     ]
 })
 export default router
