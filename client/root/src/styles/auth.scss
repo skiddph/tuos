@@ -14,7 +14,52 @@
       flex-direction: column;
       margin: 0 auto;
       
-      input, button {
+      .prompts {
+
+        *[type] {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1em;
+          padding: 12px 10px;
+          border-left: 5px solid #333;
+          background: #f0f0f0;
+          color: #333;
+          border-radius: 3px;
+          animation-name: promptsin;
+          animation-duration: .2s;
+
+          i {
+            font-size: 1.5em;
+            margin: 0 .3em 0 1em;
+            background: inherit;
+            border-radius: 50%;
+            transition: .2s;
+            &:hover {
+              opacity: .6;
+            }
+          }
+        }
+        
+        *[type="error"]{
+          background: #ffcccc;
+          color: #800000;
+          border-color: #cc0000;
+        }
+        *[type="success"]{
+          background: #ccffdd;
+          color: #004d1a;
+          border-color: #009933;
+        }
+
+
+        *[type].out {
+          display: none;
+        }
+
+      }
+      input, button{
         width: calc(100% - 16px);
         border: none;
         margin-bottom: 1rem;
@@ -69,4 +114,14 @@
             }
         }
     }
+}
+@keyframes promptsin {
+  from {
+    margin-bottom: 0;
+    opacity: 0;
   }
+  to {
+    margin-bottom: 1em;
+    opacity: 1;
+  }
+}

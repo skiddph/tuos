@@ -1,8 +1,20 @@
 <template>
-  <auth-form title="Login" @onSubmit="login">
+  <auth-form title="Login" @onSubmit="login" :res="serv">
     <template #form>
-      <input type="text" placeholder="Username" name="user" autocomplete required />
-      <input type="password" placeholder="Password" name="pass" autocomplete required/>
+      <input
+        type="text"
+        placeholder="Username"
+        name="user"
+        autocomplete
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        name="pass"
+        autocomplete
+        required
+      />
       <button type="submit" v-btnload="loading" value="Authenticate" />
     </template>
     <template #notes>
@@ -25,15 +37,23 @@ export default {
   },
   data: () => ({
     loading: false,
+    serv: {
+      type: "",
+      message: "",
+    },
   }),
   methods: {
     async login(data) {
       this.loading = true;
       await this.$tuos.auth
         .login(data)
-        .then((e) => console.log(e))
-        .catch((e) => console.warn(e))
-        .finally(() => (this.loading = false));
+        .then((e) => (this.serv = e))
+        .catch(
+          () => (this.serv = { type: "error", message: "Unknown error occur." })
+        )
+        .finally((e) => {
+          this.loading = false;
+        });
     },
   },
 };
