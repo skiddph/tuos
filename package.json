@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
-    "push": "git add . && git commit -am update && gitpush"
+    "push": "git add . && git commit -am update && git push"
   },
   "dependencies": {
     "auto-load": "^3.0.4",
