@@ -34,7 +34,6 @@ const mixin = {
     methods: {
         accessTokenHandler() { },
         accessTokenValidateChange(token) {
-            console.log('validated')
             if (token && typeof token == 'string' && token.length > 0) {
                 this.$store.commit('authenticated', true)
             } else {
