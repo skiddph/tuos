@@ -11,7 +11,7 @@ import './styles/global.scss'
 
 const app = createApp(App)
 
-app.use(store)
+app.use(store.store)
 app.use(router)
 app.use(layouts)
 app.use(directives)

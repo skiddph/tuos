@@ -1,5 +1,5 @@
 <template>
-  <auth-form title="Login" @onSubmit="login" :res="serv">
+  <auth-form title="Login" @onSubmit="authFormLogin" :res="serv">
     <template #form>
       <input
         type="text"
@@ -43,18 +43,11 @@ export default {
     },
   }),
   methods: {
-    async login(data) {
-      this.loading = true;
-      await this.$tuos.auth
-        .login(data)
-        .then((e) => (this.serv = e))
-        .catch(
-          () => (this.serv = { type: "error", message: "Unknown error occur." })
-        )
-        .finally((e) => {
-          this.loading = false;
-        });
-    },
-  },
+    onAuthStateChanged(auth){
+      if(auth){
+        this.$router.push("/register");
+      }
+    }
+  }
 };
 </script>

@@ -1,9 +1,42 @@
 import { createStore } from 'vuex'
 import createCache from 'vuex-cache';
+import VuexPersistence from 'vuex-persist/dist/esm/index.js';
+
+import ls from 'store'
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
+
+const oldState = ls.get('vuex') || {}
+
+const state = {
+  accessToken: '',
+  authenticated: false
+}
+
+const stator = () => {
+  const res = {}
+  for(let x in state){
+    res[x] = oldState[x] || state[x]
+  }
+  return res
+}
+
+const mutate = () => {
+  const res = {}
+  for(let x in state){
+    res[x] = (state,val) => {
+      state[x] = val
+    }
+  }
+  return res
+}
 
 const store = createStore({
-  plugins: [createCache()]
+  plugins: [ createCache(), vuexLocal.plugin ],
+  state: stator(),
+  mutations: mutate()
 });
 
-
-export default store;
+export default {store, state};
