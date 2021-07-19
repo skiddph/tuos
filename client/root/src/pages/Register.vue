@@ -1,10 +1,12 @@
 <template>
-  <auth-form title="Register" @onSubmit="register">
+  <auth-form title="Register" @onSubmit="authFormRegister" :res="serv">
     <template #form>
-      <input type="text" name="name" placeholder="Name">
-      <input type="text" name="user" placeholder="Username">
-      <input type="email" name="email" placeholder="Email">
-      <input type="password" name="pass" placeholder="Password" autocomplete>
+      <input type="text" name="name" placeholder="Name" required>
+      <input type="text" name="user" placeholder="Username" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="tel" name="phone" placeholder="Phone" required>
+      <input type="password" name="pass" placeholder="Password" autocomplete required>
+      <input type="password" name="cpass" placeholder="Confirm Password" autocomplete required>
       <button type="submit" v-btnload="loading" value="Create Account"/>
     </template>
     <template #notes>
@@ -20,12 +22,18 @@ export default {
   components: {
     AuthForm
   },
-  data: () =>({
-    loading: false
+  data: () => ({
+    loading: false,
+    serv: {
+      type: "",
+      message: "",
+    },
   }),
   methods: {
-    register (data) {
-      console.log(data)
+    onAuthStateChanged(auth){
+      if(auth){
+        this.$router.push("/user/home");
+      }
     }
   }
 }

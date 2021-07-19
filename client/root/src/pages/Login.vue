@@ -45,7 +45,7 @@ export default {
   methods: {
     onAuthStateChanged(auth){
       if(auth){
-        this.$router.push("/register");
+        this.$router.push("/user/home");
       }
     }
   }

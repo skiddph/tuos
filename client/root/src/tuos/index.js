@@ -15,7 +15,6 @@ export default {
         app.config.globalProperties.$tuos = {
             auth: auth.proto(options)
         }
-
         app.mixin(auth.mixin)
     }
 }

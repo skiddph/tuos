@@ -5,7 +5,7 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            component: () => import('./pages-group/auth.vue'),
+            component: () => import('./pages-group/Auth.vue'),
             children: [
                 {
                     path: "",
@@ -19,8 +19,22 @@ const router = createRouter({
                     path: "register",
                     component: () => import('./pages/Register.vue')
                 },
+                {
+                    path: "logout",
+                    component: () => import('./pages/Logout.vue')
+                },
             ]
         },
+        {
+            path: '/user',
+            component: () => import('./pages-group/User.vue'),
+            children: [
+                {
+                    path: "home",
+                    component: () => import('./pages/Home.vue')
+                },
+            ]
+        }
         
     ]
 })

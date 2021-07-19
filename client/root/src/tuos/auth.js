@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from '../store';
 import { mapState } from 'vuex';
-
+import _ from 'lodash'
 import ls from 'store'
 const proto = function (options) {
     const { host } = options;
@@ -24,8 +24,18 @@ const proto = function (options) {
             .then(e => e.data)
             .catch(() => ({ type: 'error', message: 'Unknown error occur.' }))
     }
-
-    return { login }
+    const register = async (data = {}) => {
+        const opt = {
+            method: 'POST',
+            url: url('register'),
+            headers: { 'content-type': 'application/json' },
+            data
+        }
+        return await axios.request(opt)
+            .then(e => e.data)
+            .catch(() => ({ type: 'error', message: 'Unknown error occur.' }))
+    }
+    return { login ,register }
 }
 const mixin = {
     computed: {
@@ -42,16 +52,35 @@ const mixin = {
         },
         onAuthStateChanged() { },
         resetStore() {
+            ls.clearAll()
             const originalState = store.state
             for (let x in originalState) {
                 this.$store.commit(x, originalState[ x ])
             }
-            ls.clearAll()
         },
         async authFormLogin(data) {
             this.loading = true;
             await this.$tuos.auth
                 .login(data)
+                .then((e) => {
+                    this.serv = e
+                    this.$store.commit("accessToken", e.token);
+                })
+                .catch(
+                    () => (this.serv = { type: "error", message: "Unknown error occur." })
+                )
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        async authFormRegister(data) {
+            if(!Boolean(data.pass) || !Boolean(data.cpass) || data.pass != data.cpass){
+                this.serv = { type: "error", message: "Password doesn't match" }
+                return;
+            }
+            this.loading = true;
+            await this.$tuos.auth
+                .register(_.omit(data, ['cpass']))
                 .then((e) => {
                     this.serv = e
                     this.$store.commit("accessToken", e.token);
