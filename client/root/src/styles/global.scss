@@ -1,11 +1,14 @@
 html,
-body {
+body,
+#app {
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
   overflow-x: hidden;
   overflow-y: auto;
   background:  #fff;
+  max-height: 100vh;
+  // overflow-y: hidden;
 }
 * {
   outline: none;

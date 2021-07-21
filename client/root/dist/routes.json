@@ -1,5 +1,9 @@
 [
     "/",
     "/login",
-    "/register"
+    "/register",
+    "/home",
+    "/settings",
+    "/settings/profile",
+    "/logout"
 ]

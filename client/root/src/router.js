@@ -1,38 +1,58 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import Auth from './pages-group/Auth.vue'
+import Login from './pages/Login.vue'
+import Register from './pages/Register.vue'
+import Logout from './pages/Logout.vue'
+import User from './pages-group/User.vue'
+import Home from './pages/Home.vue'
+import Settings from './pages-group/Settings.vue'
+import Profile from './pages/Profile.vue'
+
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            component: () => import('./pages-group/Auth.vue'),
+            component: Auth,
             children: [
                 {
                     path: "",
-                    component: () => import('./pages/Login.vue')
+                    component: Login
                 },
                 {
                     path: "login",
-                    component: () => import('./pages/Login.vue')
+                    component: Login
                 },
                 {
                     path: "register",
-                    component: () => import('./pages/Register.vue')
+                    component: Register
                 },
                 {
                     path: "logout",
-                    component: () => import('./pages/Logout.vue')
+                    component: Logout
                 },
             ]
         },
         {
             path: '/user',
-            component: () => import('./pages-group/User.vue'),
+            component: User,
             children: [
                 {
                     path: "/home",
-                    component: () => import('./pages/Home.vue')
+                    component: Home
                 },
+                {
+                    path: "/settings",
+                    component: Settings,
+                    children: [
+                        {
+                            path: "",
+                            component: Profile
+                        },
+                    ]
+                }
             ]
         }
         
