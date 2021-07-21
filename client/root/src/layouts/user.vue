@@ -14,12 +14,12 @@
       </ul>
       <ul class="main__navi">
         <li>
-          <router-link to="/home">
+          <router-link to="/home" @click="menu = false">
             <i class="fa fa-home"></i>
           </router-link>
         </li>
         <li>
-          <router-link to="/settings">
+          <router-link to="/settings" @click="menu = false">
             <i class="fa fa-cog"></i>
           </router-link>
         </li>
