@@ -8,7 +8,8 @@ const proto = function (options) {
 
     const urls = {
         login: '/api/auth/login',
-        register: '/api/auth/register'
+        register: '/api/auth/register',
+        userMe: '/api/user',
     }
 
     const url = (u) => host + urls[ u ]
@@ -35,7 +36,22 @@ const proto = function (options) {
             .then(e => e.data)
             .catch(() => ({ type: 'error', message: 'Unknown error occur.' }))
     }
-    return { login ,register }
+
+    const userMe = async () => {
+        const storeState = ls.get('vuex')
+        const accessToken = storeState.accessToken || ""
+        const opt = {
+            method: 'GET',
+            url: url('userMe'),
+            headers: {
+                authorization: 'Bearer ' + accessToken
+            }
+        }
+        return await axios.request(opt)
+            .then(e => e.data)
+            .catch((e) => ({ type: 'error', message: 'Unknown error occur.',e }))
+    }
+    return { login ,register, userMe }
 }
 const mixin = {
     computed: {

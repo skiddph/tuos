@@ -1,0 +1,42 @@
+.lo-user {
+    & > header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background: dodgerblue;
+        color: #fff;
+        margin: 0;
+        padding: 10px 20px;
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        & > ul {
+            padding: 0;
+            margin: 0;
+            display: flex;
+            list-style: none;
+
+            &.brand__search {
+                align-items: center;
+
+                .brand {
+                    font-size: 1.5em;
+                    margin-right: .5em;
+                }
+
+                .search {
+                    
+
+                    input[type=text]{
+                        padding: 8px 10px;
+                        border: none;
+                        border-radius: 3px;
+                    }
+                }
+            }
+        }
+    }
+}

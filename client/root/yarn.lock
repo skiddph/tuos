@@ -1166,6 +1166,11 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
+numesis@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/numesis/-/numesis-1.0.1.tgz#c6a61bfca2af83aa965f1143c5b76346246488b6"
+  integrity sha512-tne7XC+6um7UKDV3cp7a7oqQkDINwzHsOLxJ+xNRWozGYmsY49Zc7YQuHV8EOo6OfvpDHVJ+9gdJdtGbQrpsbA==
+
 oauth-sign@~0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.9.0.tgz#47a7b016baa68b5fa0ecf3dee08a85c679ac6455"
@@ -1765,6 +1770,13 @@ uri-js@^4.2.2:
   integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
+
+usid@^1.0.21:
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/usid/-/usid-1.0.21.tgz#d71a7034fd631182ce3c8de133d6a793d31dcb7a"
+  integrity sha512-mtKJe80ZAwWh5kxsMZ0Re/cwmfL87T9xdJfaLbZ7CD7IAG3AW8L/fYJtYx7Z1OtUnt/X8T8yyz1vomPcnWwOtg==
+  dependencies:
+    numesis "^1.0.1"
 
 util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"

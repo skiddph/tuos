@@ -30,7 +30,7 @@ const router = createRouter({
             component: () => import('./pages-group/User.vue'),
             children: [
                 {
-                    path: "home",
+                    path: "/home",
                     component: () => import('./pages/Home.vue')
                 },
             ]

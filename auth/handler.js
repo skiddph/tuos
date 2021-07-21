@@ -3,6 +3,8 @@ const Joi = require("joi");
 const Phone = Joi.extend(require('joi-phone-number'));
 const bcrypt = require("bcrypt");
 const passwordComplexity = require("joi-password-complexity");
+const Numesis = require("numesis");
+var md5 = require('md5');
 
 module.exports = function (app, options) {
 	// Plugin config from Tuos Universal Config
@@ -11,8 +13,27 @@ module.exports = function (app, options) {
 	// Users `key` to `app.mongoose[key]`
 	const UsersModel = config.users.model || "Users"
 
+	const numesis = new Numesis()
+
+	// Password Hashing
+	async function pash(pass) {
+		const salt = await bcrypt.genSalt(10);
+		const hashed = await bcrypt.hash(pass, salt);
+		return hashed;
+	}
+
+	async function newHC(id,ip){
+		const pass = md5(id + ip)
+		const salt = await bcrypt.genSalt(10);
+		const hashed = await bcrypt.hash(pass, salt);
+		return pass;
+	}
+
 	// Function for signing Users Token
-	const newJWTToken = (payload) => app.jwt.sign(_.pick(payload, (config?.jwt?.payload || ["_id", "name", "user"])))
+	const newJWTToken = async (payload,req) => {
+		const hc =  await newHC(payload._id,req.ip)
+		return String(app.jwt.sign({..._.pick(payload, (config?.jwt?.payload || ["_id", "name", "user"])),hc}))
+	}
 
 	// Global Response Schema
 	const userResponseSchema = {
@@ -146,12 +167,6 @@ module.exports = function (app, options) {
 		return schema.validate(user);
 	}
 
-	// Password Hashing
-	async function pash(pass) {
-		const salt = await bcrypt.genSalt(10);
-		const hashed = await bcrypt.hash(pass, salt);
-		return hashed;
-	}
 
 	// Register Handler
 	const register = async (req, res) => {
@@ -178,7 +193,7 @@ module.exports = function (app, options) {
 				res.code(200).send({
 					message: "User successfully created.",
 					...u._doc,
-					token: newJWTToken(u),
+					token: newJWTToken(u,req),
 				})
 			)
 			.catch((e) => {
@@ -212,7 +227,7 @@ module.exports = function (app, options) {
 		res.code(200).send({
 			status: "success",
 			message: "You are now logged in.",
-			token: newJWTToken(user),
+			token: await newJWTToken(user,req),
 			..._.pick(user,['name','_id','user','created_at'])
 		});
 	}

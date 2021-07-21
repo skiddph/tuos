@@ -32,7 +32,7 @@ export default {
   methods: {
     onAuthStateChanged(auth){
       if(auth){
-        this.$router.push("/user/home");
+        this.$router.push("/home");
       }
     }
   }

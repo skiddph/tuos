@@ -3,5 +3,7 @@
     "/login",
     "/register",
     "/home",
+    "/settings",
+    "/settings/profile",
     "/logout"
 ]

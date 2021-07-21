@@ -1,5 +1,5 @@
 const fp = require("fastify-plugin")
-
+var md5 = require('md5');
 module.exports = fp(async function (app, options) {
   app.register(require("fastify-jwt"), {
     secret: options.token
@@ -7,7 +7,8 @@ module.exports = fp(async function (app, options) {
 
   app.decorate(options.decorate || "authenticate", async function (req, res) {
     try {
-      await req.jwtVerify()
+      const payload  = await req.jwtVerify()
+      if(payload.hc != md5(payload._id + req.ip)) res.code(401).send({ type: 'error', message: 'Invalid token.' })
     } catch (err) {
       res.code(401).send({ type: 'error', message: 'Invalid token.' })
     }

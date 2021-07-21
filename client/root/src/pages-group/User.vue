@@ -1,5 +1,5 @@
 <template>
-    <lo-default>
+    <lo-user>
         <router-view />
-    </lo-default>
+    </lo-user>
 </template>
