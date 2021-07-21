@@ -7,7 +7,7 @@ import Logout from './pages/Logout.vue'
 import User from './pages-group/User.vue'
 import Home from './pages/Home.vue'
 import Settings from './pages-group/Settings.vue'
-import Profile from './pages/Profile.vue'
+import SettingsProfile from './pages/SettingsProfile.vue'
 
 
 const router = createRouter({
@@ -49,7 +49,7 @@ const router = createRouter({
                     children: [
                         {
                             path: "",
-                            component: Profile
+                            component: SettingsProfile
                         },
                     ]
                 }

@@ -31,7 +31,7 @@
             }
 
             &.router-link-active {
-                background: #edeade;
+                background: #ccc;
             }
 
         }
@@ -39,7 +39,7 @@
 
     .main {
         flex: 1;
-        padding: 1em .5em;
+        padding: 1em;
         max-height: $height;
         overflow-y: auto;
         text-align: left;
