@@ -1,3 +1,4 @@
+@import 'variables';
 .lo-user {
     & > header {
         display: flex;
@@ -12,23 +13,23 @@
             a, button {
                 text-decoration: none;
                 i { 
-                    font-size: 1em;
-                    padding: 8px 10px;
-                    color: #fff;
-                    background: #034f84;
+                    margin: 0 .2em;
+                    font-size: calc(1em + 16px);
+                    color: #4e87af;
                     border-radius: 10%;
                     transition: .2s;
     
                     &:hover {
-                        background: rgba($color: #ffffff, $alpha: .1);
+                        color: #74a5c9;
                     }
                 }
     
                 &.router-link-active i {
-                    background: #fff;
-                    color: #034f84;
+                    color: #fff;
                 }
             }
+
+            
         }
 
         & > ul {
@@ -75,6 +76,65 @@
                     }
                 }
             }
+
+            .menu {
+                .menu-content {
+                    display: none;
+                    position: fixed;
+                    top: calc(100vh - calc(100vh - 38px - 1em ) - 8px);
+                    right: 2em;
+                    min-width: 200px;
+                    max-width: 350px;
+                    border: 0;
+                    border-radius: 3px;
+                    background: #fff;
+                    box-shadow: 0px 0px 10px #3333336e;
+                    padding: 0;
+                    color: #333;
+                    text-align: left;
+                    max-height: $height;
+
+                    .items {
+                        .item { 
+                            background: #fff;
+                            display: inline-flex;
+                            padding: 10px 8px;
+                            width: 100%;
+                            color: #0f77c2;
+                            align-items: center;
+                            transition: .2s;
+
+                            i { 
+                                color: #0f77c2;
+                                font-size: 1.5em;
+                                margin-right: .5em;
+
+                            }
+                            span {
+                                font-size: 1em;
+                                font-weight: bold;
+                            }
+
+                            &:hover, &:hover i{
+                                color: #034f84;
+                                background: #f0f0f0;
+                            }
+                        }
+                    }
+                }
+
+                &[active=true]  {
+                    .menu-content {
+                        display: block;
+                        animation-name: main__navi_menu-animation;
+                        animation-duration: .2s;
+                        animation-timing-function:  ease-in-out;
+                    }
+                    .toggle-menu i {
+                        color: #fff;
+                    }
+                }
+            }
         }
     }
     & > main {
@@ -82,3 +142,14 @@
         padding: 0;
     }
 }
+
+@keyframes main__navi_menu-animation {
+    from {
+        top: calc(100vh - calc(100vh - 38px - 1em ) - 1em);
+        opacity: 0;
+    }
+    to {
+        top: calc(100vh - calc(100vh - 38px - 1em ) - 8px);
+        opacity: 1;
+    }
+  }

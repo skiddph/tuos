@@ -23,6 +23,21 @@
             <i class="fa fa-cog"></i>
           </router-link>
         </li>
+        <li>
+          <div class="menu" :active="menu">
+            <a href="#" class="toggle-menu" @click="menu = !menu">
+              <i class="fa fa-caret-down"></i>
+            </a>
+            <div class="menu-content">
+              <div class="items">
+                <router-link to="/logout" class="item">
+                  <i class="fa fa-sign-out"></i>
+                  <span>Logout</span>
+                </router-link>
+              </div>
+            </div>
+          </div>
+        </li>
       </ul>
     </header>
     <div class="main">
@@ -34,5 +49,8 @@
 import "../styles/lo-user.scss";
 export default {
   name: "layoutUser",
+  data: () => ({
+    menu: false
+  })
 };
 </script>

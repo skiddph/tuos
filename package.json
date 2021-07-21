@@ -33,7 +33,8 @@
     "usid": "^1.0.21"
   },
   "devDependencies": {
-    "nodemon": "^2.0.8"
+    "nodemon": "^2.0.8",
+    "svg-captcha": "^1.4.0"
   },
   "description": "Online Quiz API",
   "private": true

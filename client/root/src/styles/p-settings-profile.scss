@@ -65,7 +65,10 @@
                     font-weight: bolder;
                 }
 
-                input[type=text] {
+                input[type=text],
+                input[type=email],
+                input[type=phone],
+                input[type=password] {
                     padding: 12px 8px;
                     margin-bottom: 1em;
                     border-radius: 3px;
