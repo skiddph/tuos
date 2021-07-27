@@ -1,0 +1,11 @@
+[
+    "/",
+    "/login",
+    "/register",
+    "/home",
+    "/settings",
+    "/me",
+    "/user/:user",
+    "/id/:id",
+    "/logout"
+]

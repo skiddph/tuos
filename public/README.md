@@ -1,1 +1,0 @@
-# All static files goes in public folder

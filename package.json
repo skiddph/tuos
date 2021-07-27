@@ -19,6 +19,7 @@
     "fastify-cors": "^6.0.2",
     "fastify-jwt": "^3.0.0",
     "fastify-plugin": "^3.0.0",
+    "fastify-rate-limit": "^5.6.0",
     "fastify-static": "^4.2.2",
     "fastify-swagger": "^4.8.2",
     "joi": "^17.4.0",
