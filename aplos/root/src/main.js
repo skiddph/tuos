@@ -8,7 +8,9 @@ import tuos from './tuos'
 import store from './store'
 
 import './assets/css/font-awesome.min.css'
+import './styles/index.scss'
 import './styles/global.scss'
+
 
 const app = createApp(App)
 

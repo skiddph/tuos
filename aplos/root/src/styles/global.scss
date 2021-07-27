@@ -6,9 +6,6 @@ body,
   box-sizing: border-box;
   overflow-x: hidden;
   overflow-y: auto;
-  background:  #fff;
-  max-height: 100vh;
-  overflow-y: hidden;
 }
 *,a {
   outline: none;
@@ -23,11 +20,4 @@ input {
 }
 button, a {
   cursor: pointer;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
 }

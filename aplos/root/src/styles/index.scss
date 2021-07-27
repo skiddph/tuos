@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #app {
+    @apply overflow-x-hidden;
+}
+
+.lo-default {
+    @apply min-h-screen container -mx-0 md:mx-auto flex justify-center items-center;
+}
+.p-auth {
+    @apply flex my-4 flex-col border-0 md:border px-4 md:px-6 py-4 rounded-lg bg-white;
+
+    h1 {
+        @apply text-4xl mb-12 md:mb-6 text-center font-semibold font-sans tracking-widest md:tracking-normal;
+    }
+
+    form {
+        .prompts {
+
+            *[type] {
+                @apply flex flex-row justify-between items-center mb-5 rounded bg-gray-50 text-gray-900 border-l-4 px-4 py-2;
+                animation-name: promptsin;
+                animation-duration: .2s;
+        
+                i {
+                    font-size: 1.5em;
+                    margin: 0 .3em 0 1em;
+                    background: inherit;
+                    border-radius: 50%;
+                    transition: .2s;
+                    &:hover {
+                    opacity: .6;
+                    }
+                }
+            }
+            
+            *[type="error"]{
+                @apply bg-red-100 text-red-900 border-red-600;
+            }
+
+            *[type="success"]{
+                @apply bg-green-100 text-green-900 border-green-600;
+            }
+    
+    
+            *[type].out {
+              @apply hidden;
+            }
+    
+          }
+
+        .inputs {
+            @apply flex flex-col;
+        
+            & > div {
+                @apply flex flex-col mb-5;
+
+                label {
+                    @apply text-sm md:text-xs font-semibold pb-1;
+                }
+                input {
+                    @apply text-base md:text-sm px-4 py-2 rounded border-solid border;
+                }
+                
+                *[type=submit]{
+                    @apply text-base md:text-sm mt-4 px-4 py-2 rounded bg-blue-800 hover:bg-blue-900 transition text-blue-50;
+                }
+            }
+        }
+    }
+    hr {
+        @apply mb-4;
+    }
+    .notes {
+        @apply text-center text-base md:text-sm mx-4;
+    }
+    a {
+        @apply text-blue-500 hover:text-blue-800;
+    }
+}
+@keyframes promptsin {
+    from {
+      margin-bottom: 0;
+      opacity: 0;
+    }
+    to {
+      margin-bottom: 1em;
+      opacity: 1;
+    }
+  }

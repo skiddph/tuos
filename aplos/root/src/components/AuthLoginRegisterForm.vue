@@ -8,8 +8,11 @@
           <i class="fa fa-times-circle" @click="prompt = false" aria-hidden="true"></i>
         </div>
       </div>
-      <slot name="form" />
+      <div class="inputs">
+        <slot name="form" />
+      </div>
     </form>
+    <hr />
     <div class="notes">
       <slot name="notes" />
     </div>
@@ -17,7 +20,7 @@
 </template>
 
 <script>
-import "../styles/auth.scss";
+// import "../styles/auth.scss";
 export default {
   name: "AuthLoginRegisterForm",
   props: {

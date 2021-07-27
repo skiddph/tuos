@@ -1,21 +1,27 @@
 <template>
   <auth-form title="Login" @onSubmit="authFormLogin" :res="serv">
     <template #form>
-      <input
-        type="text"
-        placeholder="Username"
-        name="user"
-        autocomplete
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        name="pass"
-        autocomplete
-        required
-      />
-      <button type="submit" v-btnload="loading" value="Authenticate" />
+      <div>
+        <label>Username</label>
+        <input
+          type="text"
+          name="user"
+          autocomplete="email"
+          required
+        />
+      </div>
+      <div>
+        <label>Password</label>
+        <input
+          type="password"
+          name="pass"
+          autocomplete
+          required
+        />
+      </div>
+      <div>
+        <button type="submit" v-btnload="loading" value="Authenticate" />
+      </div>
     </template>
     <template #notes>
       <p>
