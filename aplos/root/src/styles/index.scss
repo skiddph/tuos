@@ -1,8 +1,142 @@
+@import 'variables';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html, body, #app {
+@layer utilities {
+    .wf-header {
+        @apply bg-blue-800 text-white;
+        
+        .header {
+            @apply flex flex-row justify-between mx-2 md:mx-auto items-center py-2;
+            max-width: $pmax-width;
+
+            .brand__group {
+                @apply flex flex-row items-center;
+
+                .title {
+                    @apply text-4xl md:text-3xl pr-4 font-bold;
+                    cursor: pointer;
+                }
+    
+                .search {
+                    @apply hidden md:flex md:flex-row md:items-center;
+                    
+                    input, button, i {
+                        @apply mr-2 rounded;
+                    }
+
+                    input {
+                        @apply px-4 py-2 text-gray-900 text-base bg-blue-50;
+                    }
+
+                    button {
+                        @apply m-0 p-0;
+
+                        i {
+                            @apply hover:bg-white hover:text-blue-800 px-4 py-2 text-base transition;
+                        }
+                    }
+                }
+            }
+
+            .main__navi {
+                @apply flex flex-row;
+
+                li {
+
+                    i {
+                        @apply ml-3 md:ml-1 text-2xl md:text-xl text-blue-100 py-1 px-3 md:px-2 transition rounded hover:bg-blue-100 hover:text-blue-800;
+                    }
+
+                    .router-link-active i,.router-link-exact-active i {
+                        @apply bg-white text-blue-800;
+                    }
+
+                    .menu {
+
+
+                        .menu-content {
+                            @apply hidden absolute m-0 mr-2 md:mr-0 mt-1 right-0 w-screen;
+                            
+                            .match-width {
+                                @apply  mx-auto;
+                                max-width: $pmax-width;
+                            }
+
+                            .items {
+                                @apply flex flex-col bg-white shadow-lg text-gray-900 mr-0 ml-auto rounded;
+                                width: 100%;
+                                max-width: 250px;
+                                
+                                .item {
+                                    @apply flex flex-row items-center py-2 md:py-1 rounded transition font-semibold;
+
+                                    i { 
+                                        @apply mr-2 bg-white text-gray-900;
+                                    }
+
+                                    &.router-link-active,&.router-link-exact-active {
+                                        @apply text-blue-900 bg-blue-50;
+
+                                        i {
+                                            @apply text-blue-900 bg-blue-50;
+                                        }
+                                    }
+
+                                    &:hover {
+                                        @apply text-blue-900 bg-blue-100;
+
+                                        i {
+                                            @apply text-blue-900 bg-blue-100;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &[active=true]  {
+                            .menu-content {
+                                @apply block;
+                                animation-name: main__navi_menu-animation;
+                                animation-duration: .2s;
+                                animation-timing-function:  ease-in-out;
+                            }
+                            .toggle-menu i {
+                                @apply bg-white text-blue-800 ;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+    
+    .wf-container {
+        @apply w-full m-0 md:px-0 px-2;
+        
+        .main {
+            @apply mx-auto w-full;
+            max-width: $pmax-width;
+        }
+    }
+}
+*,a {
+  outline: none;
+  user-select: none;
+  margin-block: 0px;
+  margin-inline: 0px;
+}
+textarea,
+p,
+input {
+  user-select: auto;
+}
+button, a {
+  cursor: pointer;
+}
+#app {
     @apply overflow-x-hidden;
 }
 
@@ -80,6 +214,18 @@ html, body, #app {
         @apply text-blue-500 hover:text-blue-800;
     }
 }
+
+#header {
+    @apply sticky top-0 left-0;
+
+    header[lo-user] {
+        @apply wf-header;
+    }
+}
+
+.lo-user-container {
+    @apply wf-container;
+}
 @keyframes promptsin {
     from {
       margin-bottom: 0;
@@ -89,4 +235,13 @@ html, body, #app {
       margin-bottom: 1em;
       opacity: 1;
     }
-  }
+}
+@keyframes main__navi_menu-animation {
+    from {
+        margin-top: -1em;
+        @apply opacity-0;
+    }
+    to {
+        @apply mt-1 opacity-100;
+    }
+}

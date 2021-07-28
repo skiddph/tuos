@@ -107,6 +107,13 @@ const mixin = {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        gotoHome(){
+            try {
+                window.location.href = '/'
+            } catch {
+                this.$router.push('/')
+            }
         }
     },
     watch: {
