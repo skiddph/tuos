@@ -32,15 +32,15 @@
               <div class="menu-content">
                 <div class="match-width">
                   <div class="items">
-                  <router-link to="/me" class="item">
-                    <i class="fa fa-user-circle"></i>
-                    <span>Profile</span>
-                  </router-link>
-                  <router-link to="/logout" class="item">
-                    <i class="fa fa-sign-out"></i>
-                    <span>Logout</span>
-                  </router-link>
-                </div>
+                    <router-link to="/me" class="item" @click="menu = !menu">
+                      <i class="fa fa-user-circle"></i>
+                      <span>Profile</span>
+                    </router-link>
+                    <router-link to="/logout" class="item">
+                      <i class="fa fa-sign-out"></i>
+                      <span>Logout</span>
+                    </router-link>
+                  </div>
                 </div>
               </div>
             </div>
