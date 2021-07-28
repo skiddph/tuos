@@ -1,0 +1,12 @@
+.lo-default {
+    @apply min-h-screen mx-0 md:mx-auto flex justify-center items-center;
+}
+
+.lo-settings {
+    @apply wf1-content;
+}
+.lo-user-container {
+    @apply wf1-container h-full;
+
+    .main {@apply h-full;}
+}

@@ -1,0 +1,62 @@
+@import 'utils';
+
+*,a {
+    outline: none;
+    user-select: none;
+    margin-block: 0px;
+    margin-inline: 0px;
+}
+
+textarea,
+p,
+input {
+    user-select: auto;
+}
+button, a {
+    cursor: pointer;
+}
+body {
+    @apply flex flex-col h-screen;
+
+    #header {
+        header[lo-user] {
+            @apply wf1-header;
+        }
+    }
+
+    #app {
+        @apply flex-1 h-full overflow-y-auto overflow-x-hidden;
+    }
+}
+
+@keyframes promptsin {
+    from {
+      margin-bottom: 0;
+      opacity: 0;
+    }
+    to {
+      margin-bottom: 1em;
+      opacity: 1;
+    }
+}
+@keyframes main__navi_menu-animation {
+    from {
+        margin-top: -1em;
+        @apply opacity-0;
+    }
+    to {
+        @apply mt-1 opacity-100;
+    }
+}
+::-webkit-scrollbar {
+    @apply w-1 px-2;
+}
+
+::-webkit-scrollbar-track {
+    @apply rounded;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply rounded bg-none hover:bg-gray-400 transition;
+}
+
