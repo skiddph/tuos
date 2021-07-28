@@ -38,5 +38,10 @@
     "svg-captcha": "^1.4.0"
   },
   "description": "Online Quiz API",
-  "private": true
+  "private": true,
+  "engines": {
+    "yarn": ">=1.22.x",
+    "node": ">=14.x",
+    "npm": ">=7.x"
+  }
 }
