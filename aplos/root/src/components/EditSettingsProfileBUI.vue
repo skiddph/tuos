@@ -1,7 +1,6 @@
 <template>
     <div class="basic-info-container">
       <div class="header">Basic Information</div>
-      <confirm-dialog />
       <form class="forms-container">
         <div class="dp-form">
           <img
