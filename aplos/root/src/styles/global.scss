@@ -22,6 +22,10 @@ body {
         header[lo-user] {
             @apply wf1-header;
         }
+
+        header[wf1]{
+            @apply wf1-header;
+        }
     }
 
     #app {

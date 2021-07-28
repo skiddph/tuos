@@ -112,40 +112,41 @@
 
     }
     .wf1-container {
-        @apply w-full m-0 md:px-0 px-2;
+        @apply w-full h-full m-0 md:px-0 px-2;
         
         .main {
-            @apply mx-auto w-full;
+            @apply mx-auto w-full h-full;
             max-width: $pmax-width;
-        }
-    }
-    .wf1-content {
-        @apply flex flex-row h-full;
 
-        .sidebar {
-            @apply flex flex-col max-h-full overflow-y-auto overflow-x-hidden pr-2 mr-2;
+            .content {
+                @apply flex flex-row h-full;
 
-            a {
-                @apply flex flex-row items-center py-2 px-4 hover:bg-gray-200 mt-2 bg-gray-100 rounded-xl w-full;
-                min-width: 200px;
+                .sidebar {
+                    @apply flex flex-col max-h-full overflow-y-auto overflow-x-hidden pr-2 mr-2;
 
-                i {
-                    @apply mr-4 text-xl text-gray-900;
+                    a {
+                        @apply flex flex-row items-center py-2 px-4 hover:bg-gray-200 mt-2 bg-gray-100 rounded-xl w-full;
+                        min-width: 200px;
+
+                        i {
+                            @apply mr-4 text-xl text-gray-900;
+                        }
+
+                        span {
+                            @apply text-base font-semibold text-gray-900;
+                        }
+
+
+                        &.router-link-active,&.router-link-exact-active {
+                            @apply bg-gray-400;
+                        }
+                    }
                 }
-
-                span {
-                    @apply text-base font-semibold text-gray-900;
-                }
-
-
-                &.router-link-active,&.router-link-exact-active {
-                    @apply bg-gray-400;
+                
+                .main-activity {
+                    @apply flex-1 text-justify overflow-y-auto max-h-full p-2;
                 }
             }
-        }
-        
-        .main-activity {
-            @apply flex-1 text-justify overflow-y-auto max-h-full p-2;
         }
     }
     .wf1-auth-form {
