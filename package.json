@@ -8,6 +8,7 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
+    "dev:sc" : "start yarn dev && cd aplos\\root && start yarn dev",
     "push": "git add . && git commit -am update && git push"
   },
   "dependencies": {
