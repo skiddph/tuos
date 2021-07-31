@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const fp = require("fastify-plugin");
 
-module.exports = fp(async function (fastify, options) {
+module.exports = fp(async function (fastify, options, done) {
   const APPNAME = options.config?.appName || 'SYSTEM'
   const LOGGER = options.config?.fastify?.logger || false
   const config = options.config.plugins?.mongoose || {}
@@ -9,15 +9,16 @@ module.exports = fp(async function (fastify, options) {
   const models = config?.models || {}
   const pluginId = config?.id || "mongoose"
 
-  try {
-    await mongoose.connect(options.mongo, optionsDefault);
+  await mongoose.connect(options.mongo, optionsDefault).then(() => {
     if (LOGGER) console.log(`[${APPNAME}] Connected to database.`);
-  } catch (err) {
-    if (LOGGER) console.error(err);
-  }
+  }).catch(e => {
+    if (LOGGER) console.log("\n[DATABASE ERROR]",e)
+  })
 
   fastify.decorate(pluginId, {
     instance: mongoose,
     ...models,
   });
+
+  done();
 });
