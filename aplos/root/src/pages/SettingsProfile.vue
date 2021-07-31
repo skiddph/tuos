@@ -1,10 +1,10 @@
 <template>
-  <div class="p-settings-profile">
+  <div>
+    <div class="title">Edit Profile</div>
     <basic-info />
   </div>
 </template>
 <script>
-import "../styles/p-settings-profile.scss";
 import BasicInfo from '../components/EditSettingsProfileBUI.vue';
 export default {
     components: {

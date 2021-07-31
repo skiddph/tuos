@@ -145,6 +145,16 @@
                 
                 .main-activity {
                     @apply flex-1 text-justify overflow-y-auto max-h-full p-2;
+
+
+                    .title {
+                        @apply font-semibold text-2xl mb-2;
+                    }
+
+                    .subtitle {
+                        @apply text-xl;
+                    }
+
                 }
             }
         }
