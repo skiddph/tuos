@@ -8,7 +8,10 @@ module.exports = fp(async function (app, options) {
   app.decorate(options.decorate || "authenticate", async function (req, res) {
     try {
       const payload  = await req.jwtVerify()
-      if(String(payload.hc) != String(md5(payload._id + req.ip))) res.code(401).send({ type: 'error', message: 'Invalid token.' })
+      const frPL = String(payload.hc);
+      const frRQ = String(md5(payload._id + req.ip))
+      console.log('\n\n',frPL == frRQ,`\n\n'${frPL}' == '${frRQ}'\n\n`)
+      if(frPL != frRQ) res.code(401).send({ type: 'error', message: 'Invalid token.' })
     } catch (err) {
       res.code(401).send({ type: 'error', message: 'Invalid token.' })
     }
