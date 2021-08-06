@@ -8,6 +8,8 @@ import User from './pages-group/User.vue'
 import Home from './pages/Home.vue'
 import Settings from './pages-group/Settings.vue'
 import SettingsProfile from './pages/SettingsProfile.vue'
+import SettingsPassword from './pages/SettingsPassword.vue'
+import SettingsAccBindings from './pages/SettingsAccBindings.vue'
 import UserProfile from './pages/UserProfile.vue'
 
 const router = createRouter({
@@ -55,6 +57,14 @@ const router = createRouter({
                             path: "",
                             component: SettingsProfile
                         },
+                        {
+                            path: "bindings",
+                            component: SettingsAccBindings
+                        },
+                        {
+                            path: "password",
+                            component: SettingsPassword
+                        }
                     ]
                 }
             ]

@@ -75,7 +75,7 @@
                                         @apply mr-2 bg-white text-gray-900;
                                     }
 
-                                    &.router-link-active,&.router-link-exact-active {
+                                    &.router-link-exact-active {
                                         @apply text-blue-900 bg-blue-50;
 
                                         i {
@@ -137,7 +137,7 @@
                         }
 
 
-                        &.router-link-active,&.router-link-exact-active {
+                        &.router-link-exact-active {
                             @apply bg-gray-400;
                         }
                     }
@@ -154,6 +154,25 @@
                     .subtitle {
                         @apply text-xl;
                     }
+
+                    .form-container {
+                        @apply my-4 w-full mx-auto md:ml-0;
+                        max-width: 350px;
+                    
+                        .inputs-container {
+                          @apply flex flex-col;
+                    
+                          label {
+                            @apply text-base md:text-xs font-semibold;
+                          }
+                          input {
+                            @apply mb-4 md:mb-3 bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 transition rounded px-4 py-2;
+                          }
+                          [type=submit] {
+                            @apply bg-blue-600 hover:bg-blue-700 transition text-white rounded py-2 px-4 mt-4 mx-auto md:mr-0 w-full md:w-min;
+                          }
+                        }
+                      }
 
                 }
             }

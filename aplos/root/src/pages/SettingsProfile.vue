@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="title">Edit Profile</div>
-    <basic-info />
+    <ep-form />
   </div>
 </template>
 <script>
-import BasicInfo from '../components/EditSettingsProfileBUI.vue';
+import EpForm from '../components/SettingsEditProfileForm.vue';
 export default {
     components: {
-        BasicInfo
+        EpForm
     }
 };
 </script>

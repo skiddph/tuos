@@ -20,7 +20,6 @@
 </template>
 
 <script>
-// import "../styles/auth.scss";
 export default {
   name: "AuthLoginRegisterForm",
   props: {
