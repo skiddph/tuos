@@ -317,7 +317,7 @@ module.exports = function (app, options) {
 		);
 
 		if (!update) res.code(200).send({type: 'error', message: "Server error! Failed to update." })
-		res.code(200).send({type: 'error', message: "Userdata updated successfully." })
+		res.code(200).send({type: 'success', message: "Userdata updated successfully." })
 	}
 
 	// Delete User Handler
