@@ -12,7 +12,15 @@ const oldState = ls.get('vuex') || {}
 
 const state = {
   accessToken: '',
-  authenticated: false
+  authenticated: false,
+  userdataState: 'error',
+  userdata: {
+    _id: "",
+    user: "",
+    name: "",
+    email: "",
+    phone: ""
+  }
 }
 
 const stator = () => {
