@@ -22,7 +22,6 @@ export default {
     BaseForm,
   },
   data: () => ({
-    isComponentLoading: true,
     loading: false,
     odata: {},
     data: {
@@ -30,8 +29,8 @@ export default {
       user: "",
     },
     serv: {
-      type: "success",
-      message: "successs sdf sfsdf",
+      type: "",
+      message: "",
     },
   }),
   computed: {
@@ -39,19 +38,17 @@ export default {
   },
   methods: {
     check(e) {
-      console.log('submitting for update prepro >>', e)
       e =  this.$tuos.auth.filterUpdateData(this.odata, e)
-      console.log('submitting for update', e)
       this.loading = true
       this.$tuos.auth.update(e)
         .then(e => {
           this.serv = e
-          console.log(e)
         })
         .catch(e => {
           this.serv = e
         })
-        .finally(() => {
+        .finally(async () => {
+          await this.fetchUserData()
           this.loading = false
         })
     },
