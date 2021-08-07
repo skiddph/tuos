@@ -67,7 +67,7 @@
 .c-server-response-handler {
         
     [type] {
-        @apply flex flex-row items-center justify-between font-semibold px-2 border-l-4 rounded p-2 text-sm my-2;
+        @apply flex flex-row items-center justify-between font-semibold px-2 border-l-4 rounded p-2 text-sm my-2 text-left;
         
         &.out {
             @apply hidden;
