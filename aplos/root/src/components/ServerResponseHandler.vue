@@ -25,7 +25,6 @@ export default {
             this.message = res.message
             this.type = res.type
             this.prompt = true;
-            console.log('res updated')
         },
     },
     watch: {
