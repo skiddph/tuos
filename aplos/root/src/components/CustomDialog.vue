@@ -16,11 +16,13 @@
 <style lang="scss" scoped>
     .dialog-container {
         @apply flex fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-60 items-center justify-center;
-
+        
         .dialog {
             @apply bg-white rounded overflow-hidden;
             min-width: 250px;
             max-width: 55%;
+            animation-name: dialog-prompt-in;
+            animation-duration: .2s;
 
             .header {
                 @apply flex justify-between items-center pl-4 pr-2 pt-2 pb-1 border-b border-gray-100 bg-gray-50;
