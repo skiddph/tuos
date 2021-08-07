@@ -4,7 +4,7 @@
       <label>New Password</label>
       <input
         type="password"
-        name="pass"
+        name="npass"
         v-model="data.pass"
         :disabled="loading"
         autocomplete
@@ -12,7 +12,7 @@
       <label>Confirm New Password</label>
       <input
         type="password"
-        name="cpass"
+        name="cnpass"
         v-model="data.cpass"
         :disabled="loading"
         autocomplete
