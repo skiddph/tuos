@@ -64,3 +64,33 @@
         }
     }
 }
+.c-server-response-handler {
+        
+    [type] {
+        @apply flex flex-row items-center justify-between font-semibold px-2 border-l-4 rounded p-2 text-sm my-2;
+        
+        &.out {
+            @apply hidden;
+        }
+
+        i {
+            @apply text-xl;
+        }
+
+        &[type=success] {
+            @apply bg-green-100 text-green-800 border-green-800;
+
+            i {
+                @apply text-green-800;
+            }
+        }
+
+        &[type=error] {
+            @apply bg-red-100 text-red-800 border-red-800;
+
+            i {
+                @apply text-red-800;
+            }
+        }
+    }
+}
