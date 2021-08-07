@@ -70,8 +70,6 @@ const proto = function (options) {
     const filterUpdateData = (old,data) => {
         const nd = {}
         for(let d in data) {
-            console.log('filter d >> ', d)
-            console.log(`matching d="${d}" o="${String(old[d])}" n="${String(data[d])}" m=${Number(String(old[d]) != String(data[d]))}`)
             if(String(old[d]) != String(data[d])) {
                 nd[d] = data[d]
             }
@@ -79,7 +77,9 @@ const proto = function (options) {
         return nd;
     }
 
-    return { login ,register, userMe, update, filterUpdateData}
+    const filterUpdatePasswordData = data => _.pick(data,['pass','npass'])
+
+    return { login ,register, userMe, update, filterUpdateData, filterUpdatePasswordData}
 }
 const mixin = {
     computed: {
@@ -148,7 +148,7 @@ const mixin = {
             return await this.$tuos.auth.userMe()
                 .then(e => {
                     if(e.type == "error") throw Error("Error Server Response")
-                    const data = _.pick(e,['user','name','email','_id','email','phone'])
+                    const data = _.pick(e,['user','name','email','_id','phone'])
                     this.$store.commit('userdata', data)
                     this.$store.commit('userdataState','success')
                     return data;
