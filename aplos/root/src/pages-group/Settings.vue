@@ -8,3 +8,16 @@
         <router-view />
     </wf1-main>
 </template>
+<script>
+export default {
+    methods: {
+        async onAuthStateChanged(authenticated){
+            if(authenticated){
+                await this.fetchUserData()
+            } else {
+                this.$router.push('/')
+            }
+        }
+    },
+}
+</script>
