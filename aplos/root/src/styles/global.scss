@@ -52,6 +52,16 @@ body {
         @apply mt-1 opacity-100;
     }
 }
+
+@keyframes dialog-prompt-in {
+    from {
+        margin-top: -1em;
+        @apply opacity-0;
+    }
+    to {
+        @apply mt-0 opacity-100;
+    }
+}
 ::-webkit-scrollbar {
     @apply w-1 px-2;
 }
