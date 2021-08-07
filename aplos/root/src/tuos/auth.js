@@ -5,11 +5,12 @@ import _ from 'lodash'
 import ls from 'store'
 const proto = function (options) {
     const { host } = options;
-
+    const authorizationToken = () => 'Bearer ' + (ls.get('vuex').accessToken || "");
     const urls = {
         login: '/api/auth/login',
         register: '/api/auth/register',
-        userMe: '/api/user',
+        user: '/api/user',
+        users: '/api/users',
     }
 
     const url = (u) => host + urls[ u ]
@@ -38,20 +39,47 @@ const proto = function (options) {
     }
 
     const userMe = async () => {
-        const storeState = ls.get('vuex')
-        const accessToken = storeState.accessToken || ""
+        
         const opt = {
             method: 'GET',
-            url: url('userMe'),
+            url: url('user'),
             headers: {
-                authorization: 'Bearer ' + accessToken
+                authorization: authorizationToken()
             }
         }
         return await axios.request(opt)
             .then(e => e.data)
             .catch((e) => ({ type: 'error', message: 'Unknown error occur.',e }))
     }
-    return { login ,register, userMe }
+
+    const update = async (data = {}) => {
+        const opt = {
+            method: 'PUT',
+            url: url('user'),
+            headers: { 
+                'content-type': 'application/json',
+                authorization: authorizationToken() 
+            },
+            data
+        }
+        return await axios.request(opt)
+            .then(e => e.data)
+            .catch(() => ({ type: 'error', message: 'Unknown error occur.' }))
+    }
+
+    const filterUpdateData = (old,data) => {
+        const nd = {}
+        for(let d in data) {
+            console.log('filter d >> ', d)
+            console.log(`matching d="${d}" o="${String(old[d])}" n="${String(data[d])}" m=${Number(String(old[d]) != String(data[d]))}`)
+            if(String(old[d]) != String(data[d])) {
+                nd[d] = data[d]
+            }
+        }
+        return nd;
+    }
+
+    return { login ,register, userMe, update, filterUpdateData}
 }
 const mixin = {
     computed: {
@@ -114,6 +142,21 @@ const mixin = {
             } catch {
                 this.$router.push('/')
             }
+        },
+        async fetchUserData(){
+            this.$store.commit('userdataState','fetching')
+            return await this.$tuos.auth.userMe()
+                .then(e => {
+                    if(e.type == "error") throw Error("Error Server Response")
+                    const data = _.pick(e,['user','name','email','_id','email','phone'])
+                    this.$store.commit('userdata', data)
+                    this.$store.commit('userdataState','success')
+                    return data;
+                })
+                .catch((e) => {
+                    console.error(e)
+                    this.$store.commit('userdataState','error')
+                })
         }
     },
     watch: {
