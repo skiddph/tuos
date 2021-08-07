@@ -8,36 +8,6 @@
         </div>
     </div>
 </template>
-<style lang="scss">
-    .skeleton-loader {
-        @apply w-full rounded p-2 flex flex-col;
-        min-height: 1em;
-
-        &.skeleton-container {
-            @apply bg-gray-100;
-        }
-
-        .top {
-            @apply  flex flex-col;
-
-            .h {
-                @apply bg-gray-400 mb-1 rounded-xl;
-                width: 40%;
-                height: 1em;
-            }
-
-            .sh {
-                @apply bg-gray-200 mb-2 rounded-xl;
-                height: .6em;
-                width: 50%;
-            }
-        }
-        .body {
-            @apply bg-gray-300 mt-1 rounded-xl;
-            height: 5em;
-        }
-    }
-</style>
 <script>
 export default {
     name: "SkeletonLoader",
