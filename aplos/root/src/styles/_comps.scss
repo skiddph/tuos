@@ -94,3 +94,22 @@
         }
     }
 }
+.c-user-about {
+    @apply bg-white border border-gray-300 rounded;
+
+    .row {
+      @apply flex justify-between items-center border-b border-gray-300 px-4 py-3;
+
+      .key {
+        @apply uppercase font-semibold text-xs text-gray-500;
+      }
+
+      .value {
+        @apply text-sm text-gray-600;
+      }
+    }
+
+    .row:last-child {
+      @apply border-0 ;
+    } 
+  }

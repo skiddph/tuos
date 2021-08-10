@@ -12,9 +12,7 @@
 export default {
     methods: {
         async onAuthStateChanged(authenticated){
-            if(authenticated){
-                await this.fetchUserData()
-            } else {
+            if(!authenticated) {
                 this.$router.push('/')
             }
         }

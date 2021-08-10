@@ -52,6 +52,19 @@ const proto = function (options) {
             .catch((e) => ({ type: 'error', message: 'Unknown error occur.',e }))
     }
 
+    const userName = async (username) => {
+        const opt = {
+            method: 'GET',
+            url: `${url('user')}/@${username}`,
+            headers: {
+                authorization: authorizationToken()
+            }
+        }
+        return await axios.request(opt)
+            .then(e => e.data)
+            .catch((e) => ({ type: 'error', message: 'Unknown error occur.',e }))
+    }
+
     const update = async (data = {}) => {
         const opt = {
             method: 'PUT',
@@ -79,7 +92,15 @@ const proto = function (options) {
 
     const filterUpdatePasswordData = data => _.pick(data,['pass','npass'])
 
-    return { login ,register, userMe, update, filterUpdateData, filterUpdatePasswordData}
+    return {
+        login,
+        register, 
+        userMe, 
+        userName, 
+        update,
+        filterUpdateData, 
+        filterUpdatePasswordData
+    }
 }
 const mixin = {
     computed: {
@@ -156,6 +177,22 @@ const mixin = {
                 .catch((e) => {
                     console.error(e)
                     this.$store.commit('userdataState','error')
+                })
+        },
+        async fetchCurUserData(){
+            const username = () => this.$router.currentRoute.value.params.user
+            this.$store.commit('curUserDataState','fetching')
+            return await this.$tuos.auth.userName(username())
+                .then(e => {
+                    if(e.type == "error") throw Error("Error Server Response")
+                    const data = _.pick(e,['user','name','_id'])
+                    this.$store.commit('curUserData', data)
+                    this.$store.commit('curUserDataState','success')
+                    return data;
+                })
+                .catch((e) => {
+                    console.error(e)
+                    this.$store.commit('curUserDataState','error')
                 })
         }
     },

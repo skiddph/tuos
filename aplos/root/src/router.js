@@ -10,7 +10,8 @@ import Settings from './pages-group/Settings.vue'
 import SettingsProfile from './pages/SettingsProfile.vue'
 import SettingsPassword from './pages/SettingsPassword.vue'
 import SettingsAccBindings from './pages/SettingsAccBindings.vue'
-import UserProfile from './pages/UserProfile.vue'
+import UserProfileGroup from './pages-group/UserProfileGroup.vue'
+import UserAbout from './pages/UserAbout.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -42,8 +43,16 @@ const router = createRouter({
             component: User,
             children: [
                 {
-                    path: "/me",
-                    component: UserProfile
+                    path: "@:user",
+                    alias: "",
+                    component: UserProfileGroup,
+                    children: [
+                        {
+                            path: "about",
+                            alias: "",
+                            component: UserAbout
+                        }
+                    ]
                 },
                 {
                     path: "/home",

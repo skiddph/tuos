@@ -4,7 +4,7 @@
             <div v-if="h" class="h"></div>
             <div v-if="sh" class="sh"></div>
         </div>
-        <div v-if="b" class="body">
+        <div v-if="b" class="body" :style="`height:${height}`">
         </div>
     </div>
 </template>
@@ -15,6 +15,10 @@ export default {
         extendClass: {
             type: String,
             default: ""
+        },
+        height: {
+            type:String,
+            default: "5em"
         }
     },
     data: ()=>({

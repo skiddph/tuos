@@ -20,7 +20,13 @@ const state = {
     name: "",
     email: "",
     phone: ""
-  }
+  },
+  curUserData: {
+    _id: "",
+    user: "",
+    name: "",
+  },
+  curUserDataState: 'error'
 }
 
 const stator = () => {

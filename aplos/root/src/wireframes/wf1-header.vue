@@ -33,7 +33,7 @@
                 <div class="menu-content">
                   <div class="match-width">
                     <div class="items">
-                      <router-link to="/me" class="item" @click="menu = !menu">
+                      <router-link v-if="$store.state.userdataState == 'success'" :to="`/user/@${$store.state.userdata.user}`" class="item" @click="menu = !menu">
                         <i class="fa fa-user-circle"></i>
                         <span>Profile</span>
                       </router-link>
