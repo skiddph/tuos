@@ -44,7 +44,6 @@ const router = createRouter({
             children: [
                 {
                     path: "@:user",
-                    alias: "",
                     component: UserProfileGroup,
                     children: [
                         {
