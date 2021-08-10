@@ -98,18 +98,41 @@
     @apply bg-white border border-gray-300 rounded;
 
     .row {
-      @apply flex justify-between items-center border-b border-gray-300 px-4 py-3;
+        @apply flex justify-between items-center border-b border-gray-300 px-4 py-3;
 
-      .key {
-        @apply uppercase font-semibold text-xs text-gray-500;
-      }
+        .key {
+            @apply uppercase font-semibold text-xs text-gray-500;
+        }
 
-      .value {
-        @apply text-sm text-gray-600;
-      }
+        .value {
+            @apply text-sm text-gray-600;
+        }
     }
 
     .row:last-child {
-      @apply border-0 ;
+        @apply border-0 ;
     } 
-  }
+}
+.c-user-profile-group-error {
+    @apply flex flex-col items-center justify-center bg-gray-200 rounded-xl px-4 py-6;
+
+    i {
+        @apply text-9xl text-gray-500;
+    }
+
+    span {
+        @apply mt-2 mb-5 text-gray-700 text-xl;
+
+        i {
+            @apply text-xl text-gray-700 ml-1;
+        }
+    }
+
+    button {
+        @apply bg-blue-600 hover:bg-blue-900 text-white px-4 py-1 mt-2 rounded transition;
+
+        i {
+            @apply text-base text-white ml-1;
+        }
+    }
+}

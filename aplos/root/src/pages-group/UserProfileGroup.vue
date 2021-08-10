@@ -5,6 +5,11 @@
     <wf1-main>
         <router-view v-if="curUserDataState == 'success'" />
         <skeleton-loader v-if="curUserDataState == 'fetching'" height="300px" />
+        <div class="c-user-profile-group-error" v-if="curUserDataState == 'error'">
+            <i class="fa fa-user"></i>
+            <span>Can't find User Information <i class="fa fa-search"></i></span>
+            <button @click="fetchCurUserData">Retry <i class="fa fa-refresh"></i></button>
+        </div>
     </wf1-main>
 </template>
 <script>
