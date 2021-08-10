@@ -2,10 +2,13 @@
     "/",
     "/login",
     "/register",
+    "/logout",
+    "/user",
+    "/user/:user",
+    "/user/:user/about",
+    "/id/:id",
     "/home",
     "/settings",
-    "/me",
-    "/user/:user",
-    "/id/:id",
-    "/logout"
+    "/settings/bindings",
+    "/settings/password"
 ]
