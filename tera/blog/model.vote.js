@@ -7,8 +7,9 @@ module.exports = () => {
         blog_id: { type: String, required: true },
         author_id: { type: String, required: true },
         author_name: { type: String, required: true },
-        react_type: { type: String, required: true },
+        vote_type: { type: String, required: true },
         created_at: { type: Number, required: true },
+        updated_at: { type: Number, required: true },
     }, { timestamp: true })
 
     BlogVoteSchema.plugin(paginate);

@@ -9,6 +9,8 @@ module.exports = () => {
         title: { type: String, required: true },
         description: { type: String, required: false },
         body: { type: String, required: true },
+        comments_count: { type: Number, required: false },
+        vote_count: { type: Number, required: false },
         created_at: { type: Number, required: true },
         updated_at: { type: Number, required: false },
     }, { timestamp: true })

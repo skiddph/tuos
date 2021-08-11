@@ -9,6 +9,7 @@ module.exports = () => {
         author_name: { type: String, required: true },
         comment: { type: String, required: true },
         created_at: { type: Number, required: true },
+        updated_at: { type: Number, required: true }
     }, { timestamp: true })
 
     BlogCommentSchema.plugin(paginate);
