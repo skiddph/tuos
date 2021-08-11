@@ -25,3 +25,6 @@ yarn dev    # DEVELOPMENT
 |-------|---------------|
 | [aplos](https://github.com/eru123/tuos/tree/main/aplos) | Web UI Client |
 | [tera](https://github.com/eru123/tuos/tree/main/tera)  | API Services  |
+
+# LICENSE
+Apache-2.0[@Jericho Aquino](https://github.com/eru123)
