@@ -4,8 +4,8 @@ const USID = require('usid')
 module.exports = function (app) {
     const Model = app.mongoose.instance.models.Blog
     const writeSchema = {
-	}
-    
+    }
+
     const schema = {
         write: writeSchema
     }
@@ -13,16 +13,16 @@ module.exports = function (app) {
     const alternateID = (title) => {
         return String(title)
             .toLowerCase()
-            .replace("  ","")
-            .replace("  ","")
+            .replace("  ", "")
+            .replace("  ", "")
             .replace(/[^a-z0-9]+/g, '-')
-            .substr(0,36)
-            + `-${usid.rand(7)}`
+            .substr(0, 36)
+            + `-${usid.rand(12)}`
     }
 
     // Prevent actions/changes from frequent request
     const spamGuard = async (req, time = 5) => {
-        return await Model.find({ author_id: req.user._id, updated_at: {$gte: Date.now() - (time * 1000)}})
+        return await Model.find({ author_id: req.user._id, updated_at: { $gte: Date.now() - (time * 1000) } })
             .limit(1)
             .then(e => e.length)
             .catch(() => 0)
@@ -132,7 +132,21 @@ module.exports = function (app) {
             )
     }
 
+    const read = async (req, res) => {
+        const blog_id = req.params.blog_id
+        const blog = blog_id.match(/^[0-9a-fA-F]{24}$/) ? await Model.findOne({ _id: blog_id }): await Model.findOne({ alternate_id: blog_id })
+        
+        if (!blog) return res.code(200).send({ type: 'error', message: "Blog post not found" })
+
+        res.code(200).send({
+            status: "success",
+            message: "Blog post found successfully.",
+            data: blog
+        })
+    }
+
     return {
+        read,
         write,
         update,
         delete: del,
