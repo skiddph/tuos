@@ -7,7 +7,9 @@ module.exports = async function (app, options, done) {
 
 	// Blog Post Routes
 	app.get('/api/blog/:blog_id', {}, hb.read)
-	// app.post('/api/blogs', {...h.auth}, hb.reads)
+	app.get('/api/blogs', {}, hb.reads)
+	app.get('/api/blogs/:page', {}, hb.reads)
+	app.get('/api/blogs/:page/:items', {}, hb.reads)
 	app.post('/api/blog', {...h.auth}, hb.write)
 	app.put('/api/blog/:blog_id', {...h.auth}, hb.update)
 	app.delete('/api/blog/:blog_id', {...h.auth}, hb.delete)

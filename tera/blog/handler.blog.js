@@ -145,8 +145,27 @@ module.exports = function (app) {
         })
     }
 
+    // reads all blog post
+    const reads = async (req, res) => {
+        const page = req.params.page || 1
+        const items = req.params.items || 10
+
+        const blogs = await Model.paginate({}, { page: page, limit: items })
+        res.send({
+			type: "success",
+			message: `${blogs.docs.length} blog posts found.`,
+			data: {
+                page,
+                items,
+                size: blogs.docs.length,
+                items: blogs.docs
+            },
+		});
+    }
+
     return {
         read,
+        reads,
         write,
         update,
         delete: del,

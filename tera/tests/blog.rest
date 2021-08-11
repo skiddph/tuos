@@ -13,6 +13,15 @@ GET {{api}}/blog/{{blog_id}}
 ### Read Blog Post using alternate_id
 GET {{api}}/blog/{{alternate_id}}
 
+### Reads Blog Posts
+GET {{api}}/blogs
+
+### Reads Blog Posts with page
+GET {{api}}/blogs/1
+
+### Reads Blog Posts with page and items
+GET {{api}}/blogs/2/2
+
 ### Write Blog Post
 POST {{api}}/blog
 Authorization: Bearer {{token}}
