@@ -223,7 +223,6 @@ module.exports = function (app) {
 		if (!pass) return res.code(200).send({ type: "error", message: "Invalid credentials" });
 
 		// Reply token
-		console.log('+++++++ USER +++++++',user)
 		res.code(200).send({
 			status: "success",
 			message: "You are now logged in.",
