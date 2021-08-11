@@ -146,7 +146,8 @@ module.exports = function (app) {
 	// Request global validator for Users Model
 	function validate(user) {
 		const schema = Joi.object({
-			name: Joi.string().pattern(new RegExp("^[a-zA-Z ]{2,50}$")).min(2).max(50),
+			_id: Joi.string().pattern(new RegExp("^[0-9a-fA-F]{24}$")),
+			name: Joi.string().pattern(new RegExp("^[a-zA-Z ]{2,50}$")),
 			user: Joi.string().alphanum().min(3).max(30),
 			pass: passwordComplexity(complexityOptions),
 			npass: passwordComplexity(complexityOptions),
@@ -200,7 +201,13 @@ module.exports = function (app) {
 	// Login Handler
 	const login = async (req, res) => {
 		// Filter Request Data
-		const id = _.pick(req.body, (['user', '_id']))
+		const pre_id = _.pick(req.body, (['user', 'id','email']))
+		const login_id = pre_id.id || pre_id.user || pre_id.email;
+
+		const id = login_id.match(/^[0-9a-fA-F]{24}$/) ? { _id: login_id }
+			: login_id.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) ? { email: login_id }
+				: { user: login_id }
+
 		const entry = { ...id, pass: req.body.pass }
 
 		// Validate Request Data
