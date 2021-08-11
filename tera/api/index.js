@@ -3,7 +3,6 @@ const fp = require("fastify-plugin");
 
 const plugin = fp(async function (fastify, options) {
 	const plugins = options?.plugins || []
-	const LOGGER = options.config?.fastify?.logger || false
 	const APPNAME = options.config.appName || 'SYSTEM'
 	let x = -1
 	plugins.forEach(plugin => {
@@ -11,7 +10,7 @@ const plugin = fp(async function (fastify, options) {
 		try {
 			fastify.register(plugin, options)
 		} catch (err) {
-			if (LOGGER) console.log(`[${APPNAME}] Plugin Install: Failed on index:`, x)
+			fastify.log.error(`[${APPNAME}] Plugin Install: Failed on index: ${x}`) 
 			process.exit(1);
 		}
 	})
@@ -26,17 +25,16 @@ const server = (options) => {
 			const PORT = options.port || 8080;
 			const HOST = options.host || "0.0.0.0";
 			const APPNAME = options.config.appName || 'SYSTEM'
-			const LOGGER = options.config?.fastify?.logger || false
-			if (LOGGER) console.log(`[${APPNAME}] Starting...`);
+			fastify.log.info(`[${APPNAME}] Starting...`)
 			await fastify.ready();
 			await fastify
 				.listen(PORT, HOST)
 				.then((addr) => {
-					if (LOGGER) console.log(`[${APPNAME}] Server listening on ${addr}`);
+					fastify.log.info(`[${APPNAME}] Server listening on ${addr}`);
 				})
 				.catch((err) => {
 					fastify.log.error(err);
-					if (LOGGER) console.log(`[${APPNAME}] Failed to start server! exiting...`);
+					fastify.log.info(`[${APPNAME}] Failed to start server! exiting...`);
 					process.exit(1);
 				});
 		}

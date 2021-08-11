@@ -17,9 +17,10 @@ module.exports = fp(async function (fastify, options, done) {
   const models = config?.models || {}
 
   await mongoose.connect(options.mongo, optionsDefault).then(() => {
-    if (LOGGER) console.log(`[${APPNAME}] Connected to database.`);
+    if (LOGGER) fastify.log.info(`[${APPNAME}] Connected to database.`) 
   }).catch(e => {
-    if (LOGGER) console.log("\n[DATABASE ERROR]",e)
+    if (LOGGER) fastify.log.error(`[${APPNAME}] DATABASE ERROR`)
+    console.error(`\n[${APPNAME}] DATABASE ERROR`,e)
   })
 
   fastify.decorate("mongoose", {

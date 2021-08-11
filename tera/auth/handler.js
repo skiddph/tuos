@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const passwordComplexity = require("joi-password-complexity");
 var md5 = require('md5');
 
-module.exports = function (app, options) {
+module.exports = function (app) {
 	const UsersModel = "Users"
 
 	// Password Hashing
