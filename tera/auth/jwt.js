@@ -8,7 +8,7 @@ module.exports = fp(async function (app, options) {
         try {
             await req.jwtVerify()
         } catch (err) {
-            res.code(401).send({ type: 'error', message: 'Invalid token.' })
+            res.code(401).send({ type: 'error', message: 'Invalid token.',server_message: err.message })
         }
     })
 })
