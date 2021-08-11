@@ -3,17 +3,10 @@ const Joi = require("joi");
 const Phone = Joi.extend(require('joi-phone-number'));
 const bcrypt = require("bcrypt");
 const passwordComplexity = require("joi-password-complexity");
-const Numesis = require("numesis");
 var md5 = require('md5');
 
 module.exports = function (app, options) {
-	// Plugin config from Tuos Universal Config
-	const config = options.config?.plugins?.auth || {}
-
-	// Users `key` to `app.mongoose[key]`
-	const UsersModel = config.users.model || "Users"
-
-	const numesis = new Numesis()
+	const UsersModel = "Users"
 
 	// Password Hashing
 	async function pash(pass) {
@@ -32,7 +25,7 @@ module.exports = function (app, options) {
 	// Function for signing Users Token
 	const newJWTToken = async (payload,req) => {
 		const hc =  await newHC(payload._id,req.ip)
-		return String(app.jwt.sign({..._.pick(payload, (config?.jwt?.payload || ["_id", "name", "user"])),hc}))
+		return String(app.jwt.sign({..._.pick(payload, ( ["_id", "name", "user"])),hc}))
 	}
 
 	// Global Response Schema
@@ -207,7 +200,7 @@ module.exports = function (app, options) {
 	// Login Handler
 	const login = async (req, res) => {
 		// Filter Request Data
-		const id = _.pick(req.body, (config?.login?.allowed || ['user', '_id']))
+		const id = _.pick(req.body, (['user', '_id']))
 		const entry = { ...id, pass: req.body.pass }
 
 		// Validate Request Data
@@ -254,7 +247,7 @@ module.exports = function (app, options) {
 	const reads = async (req, res) => {
 		const pg = _.pick(req.params, ['page', 'items'])
 		const page = pg.page || 1
-		const items = pg.items || config.users?.items || 20
+		const items = pg.items || 20
 		const users = await app.mongoose[UsersModel].paginate({}, { page: page, limit: items });
 		res.send({
 			type: "success",

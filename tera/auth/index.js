@@ -5,5 +5,5 @@ module.exports = {
 	models: (options) => ({
 		Users: require('./ModelUsers')(options)
 	}),
-	routes: require('./routes'),
+	routes: require('./routes')
 }

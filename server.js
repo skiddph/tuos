@@ -11,9 +11,13 @@ const config = {
 		require('./tera/auth').plugin,
 		require('./tera/static'),
 		require('./tera/rate-limit'),
+		require('./tera/blog').plugin,
 		require('fastify-cors')
 	]
 }
 
-config.config.plugins.mongoose.models = {...require('./tera/auth').models(config)}
+config.config.plugins.mongoose.models = {
+	...require('./tera/auth').models(config),
+	...require('./tera/auth').models
+}
 app(config).start()
