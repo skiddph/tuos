@@ -2,11 +2,12 @@
 @url = http://0.0.0.0:8080
 @api = {{url}}/api
 @name = Jericho Aquino
+@email = yeoligoakino@gmail.com
+@phone = +639206080487
 @user = eru123
 @pass = !P4s5W04d~
-
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGVmZWViOGRiNWY2YzEzNDgxMWRlYzkiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiaWF0IjoxNjI2MzM2OTUzfQ.tdxLQRpKa2sasIccKrRQf2v5YTyWDs1OL4oCSZUkktI
-@id = 60efeeb8db5f6c134811dec9
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTE3ZTZlNmZjMjMxYTA4ODg2NjU4YTIiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiaGMiOiJiNWVkMWJjNDQwODIzYTVjODlkMmFlM2RiNjZkN2ZhYiIsImlhdCI6MTYyODk1NjM5MH0.Jn9qSHb6o2LUSAWFkSNbx7dvlBxgmU9qud0XOjWnzyY
+@id = 6117e6e6fc231a08886658a2
 
 ### Create User
 POST {{api}}/auth/register
@@ -14,6 +15,8 @@ Content-Type: application/json
 
 {
   "name": "{{name}}",
+  "email": "{{email}}",
+  "phone": "{{phone}}",
   "pass": "{{pass}}",
   "user": "{{user}}"
 }
@@ -40,7 +43,7 @@ GET {{api}}/user/${{id}}
 Authorization: Bearer {{token}}
 
 ### GET users
-GET {{api}}/users/1/1
+GET {{api}}/users/1/100
 Authorization: Bearer {{token}}
 
 ### UPDATE user
@@ -61,8 +64,3 @@ Content-Type: application/json
   "user": "eru123",
   "pass": "{{pass}}"
 }
-
-### GET
-GET https://www.whatsmydns.net/api/details?server=428&type=MX&query=facebook.com
-
-####
