@@ -1,10 +1,12 @@
-require("dotenv").config();
-const app = require('./tera/api').server
-const config = {
-	port: process.env.PORT,
-	host: process.env.HOST,
-	token: process.env.JWT_TOKEN,
-	mongo: process.env.MONGO_DIRECT,
+require("dotenv").config()
+require('./tera/api').server({
+	port: process.env.PORT || "8080",
+	host: process.env.HOST || '0.0.0.0',
+	token: process.env.JWT_TOKEN || (() => {
+		console.log("[SYSTEM] Using default JWT Token");
+		return "tuos_default_jwt_token"
+	})(),
+	mongo: process.env.MONGO_DIRECT || "mongodb://0.0.0.0:27017/tuos",
 	config: require('./tera/api').config,
 	plugins: [
 		require('./tera/mongoose'),
@@ -12,12 +14,11 @@ const config = {
 		require('./tera/static'),
 		require('./tera/rate-limit'),
 		require('./tera/blog').plugin,
+		require('./tera/users-api').plugin,
 		require('fastify-cors')
-	]
-}
-
-config.config.plugins.mongoose.models = {
-	...require('./tera/auth').models(config),
-	...require('./tera/auth').models
-}
-app(config).start()
+	],
+	db_models: {
+		...require('./tera/auth').models,
+		...require('./tera/auth').models
+	}
+}).start()

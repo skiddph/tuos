@@ -92,6 +92,7 @@ module.exports = function (app) {
             )
     }
 
+    // Delete blog post handler
     const del = async (req, res) => {
         const blog_id = req.params.blog_id
         const blog = await Model.findOne({ _id: blog_id })
@@ -114,6 +115,7 @@ module.exports = function (app) {
             )
     }
 
+    // Delete all blog post handler
     const delAll = async (req, res) => {
         const user_id = req.user._id
         await Model.deleteMany({ author_id: user_id })
@@ -132,6 +134,7 @@ module.exports = function (app) {
             )
     }
 
+    // read single blog post handler
     const read = async (req, res) => {
         const blog_id = req.params.blog_id
         const blog = blog_id.match(/^[0-9a-fA-F]{24}$/) ? await Model.findOne({ _id: blog_id }): await Model.findOne({ alternate_id: blog_id })
@@ -145,7 +148,7 @@ module.exports = function (app) {
         })
     }
 
-    // reads all blog post
+    // reads 1 or many blog post handler
     const reads = async (req, res) => {
         const page = req.params.page || 1
         const items = req.params.items || 10
@@ -158,7 +161,7 @@ module.exports = function (app) {
                 page,
                 items,
                 size: blogs.docs.length,
-                items: blogs.docs
+                data: blogs.docs
             },
 		});
     }

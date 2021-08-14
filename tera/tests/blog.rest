@@ -3,7 +3,7 @@
 @api = {{url}}/api
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTA0ZTA0ZWI2OTFhMjAwZDBkY2Q1OGMiLCJuYW1lIjoiU2tpZGQgUEgiLCJ1c2VyIjoic2tpZGRwaCIsImhjIjoiNDhlMDlmNzY3M2FmY2Y0ZTExOTNkM2VjNjdmY2JiZWUiLCJpYXQiOjE2Mjg2NjM2NTJ9.utRqP5s1qO7ZdjNoqzJRQ3dvy4APUBfZtPfkN1nk-k4
 
-@blog_id = 6113cd1dd2c7da15d006b8d4
+@blog_id = 6113d5458cc18902445f94f3
 
 @alternate_id = hello-world-3-JhafDLR
 

@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
-const fp = require("fastify-plugin");
 
-module.exports = fp(async function (fastify, options, done) {
+module.exports = require("fastify-plugin")(async function (fastify, options, done) {
   const APPNAME = options.config?.appName || 'SYSTEM'
-  const LOGGER = options.config?.fastify?.logger || false
-  const config = options.config.plugins?.mongoose || {}
-  const optionsDefault = {
+
+  await mongoose.connect(options.mongo, {
     "useNewUrlParser": true,
     "config": {
       "autoIndex": true
@@ -13,19 +11,18 @@ module.exports = fp(async function (fastify, options, done) {
     "useUnifiedTopology": true,
     "useFindAndModify": false,
     "useCreateIndex": true
-  }
-  const models = config?.models || {}
-
-  await mongoose.connect(options.mongo, optionsDefault).then(() => {
-    if (LOGGER) fastify.log.info(`[${APPNAME}] Connected to database.`) 
-  }).catch(e => {
-    if (LOGGER) fastify.log.error(`[${APPNAME}] DATABASE ERROR`)
-    console.error(`\n[${APPNAME}] DATABASE ERROR`,e)
   })
+    .then(() => {
+      fastify.log.info(`[${APPNAME}] Connected to database.`)
+    })
+    .catch(e => {
+      fastify.log.error(`[${APPNAME}] DATABASE ERROR`)
+      console.error(`\n[SYSTEM] DATABASE ERROR`, e)
+    })
 
   fastify.decorate("mongoose", {
     instance: mongoose,
-    ...models,
+    ...options.db_models,
   });
 
   done();
