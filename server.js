@@ -14,6 +14,7 @@ require('./tera/api').server({
 		require('./tera/static'),
 		require('./tera/rate-limit'),
 		require('./tera/blog').plugin,
+		require('./tera/users-api').plugin,
 		require('fastify-cors')
 	],
 	db_models: {

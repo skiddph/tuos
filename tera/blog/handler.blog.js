@@ -161,7 +161,7 @@ module.exports = function (app) {
                 page,
                 items,
                 size: blogs.docs.length,
-                items: blogs.docs
+                data: blogs.docs
             },
 		});
     }
