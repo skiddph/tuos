@@ -1,4 +1,0 @@
-@url = http://0.0.0.0:8080
-
-# Get Test
-GET {{url}}/api/users-api

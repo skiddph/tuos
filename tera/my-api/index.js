@@ -1,10 +1,8 @@
 module.exports = {
 	plugin: require('./plugin'),
-	handler: {
-		
-	},
+	handler: require('./handler'),
 	models: {
-	
+		MyAPI: require('./model.myapi')
 	},
 	routes: require('./routes'),
 }
