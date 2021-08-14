@@ -6,7 +6,7 @@ const passwordComplexity = require("joi-password-complexity");
 var md5 = require('md5');
 
 module.exports = function (app) {
-	const UsersModel = "Users"
+	const Model = app.mongoose.instance.models.Users
 
 	// Password Hashing
 	async function pash(pass) {
@@ -169,11 +169,11 @@ module.exports = function (app) {
 		if (error) return res.code(200).send({type: 'error', message: error.details[0].message });
 
 		// Validate Username
-		const dups = await app.mongoose[UsersModel].findOne({ user: req.body.user });
+		const dups = await Model.findOne({ user: req.body.user });
 		if (dups) return res.code(200).send({type: 'error', message: "Username already exists" });
 
 		// Create user object
-		const user = new app.mongoose[UsersModel](req.body);
+		const user = new Model(req.body);
 
 		// Set timestamp
 		user.created_at = Date.now();
@@ -183,11 +183,11 @@ module.exports = function (app) {
 
 		// Save user object to database
 		await user.save()
-			.then((u) =>
+			.then(async (u) =>
 				res.code(200).send({
 					message: "User successfully created.",
 					...u._doc,
-					token: newJWTToken(u,req),
+					token: await newJWTToken(u,req),
 				})
 			)
 			.catch((e) => {
@@ -215,7 +215,7 @@ module.exports = function (app) {
 		if (error) return res.code(200).send({type: 'error', message: error.details[0].message });
 
 		// Check if user exists
-		const user = await app.mongoose[UsersModel].findOne(id);
+		const user = await Model.findOne(id);
 		if (!user) return res.code(200).send({ type: "error", message: "Invalid credentials" });
 
 		// Verify Password
@@ -244,7 +244,7 @@ module.exports = function (app) {
 		const me = { _id: req.user?._id }
 		const other = _.pick(req.params, ['user', '_id'])
 		const find = (other._id || other.user) ? other : me
-		const user = await app.mongoose[UsersModel].findOne(find);
+		const user = await Model.findOne(find);
 		if (!user) return res.code(200).send({});
 		res.send(user);
 	}
@@ -254,7 +254,7 @@ module.exports = function (app) {
 		const pg = _.pick(req.params, ['page', 'items'])
 		const page = pg.page || 1
 		const items = pg.items || 20
-		const users = await app.mongoose[UsersModel].paginate({}, { page: page, limit: items });
+		const users = await Model.paginate({}, { page: page, limit: items });
 		res.send({
 			type: "success",
 			message: `${users.docs.length} users found.`,
@@ -279,7 +279,7 @@ module.exports = function (app) {
 		let ndata = {};
 
 		const { _id } = req.user;
-		const user = await app.mongoose[UsersModel].findOne({ _id });
+		const user = await Model.findOne({ _id });
 		if (!user) return res.code(200).send({ type: 'error',message: "User not found" });
 
 		if (Object.keys(cfPub).length > 0) {
@@ -300,7 +300,7 @@ module.exports = function (app) {
 
 			if (typeof ndata.user == "string") {
 				if (ndata.user == user.user) return res.code(200).send({type: 'error', message: "New username must not be equal to old username! try again later." });
-				const usernameCheck = await app.mongoose[UsersModel].findOne({ user: ndata.user });
+				const usernameCheck = await Model.findOne({ user: ndata.user });
 				if (usernameCheck) return res.code(200).send({type: 'error', message: "Username already exists, please choose another username" });
 			}
 		}
@@ -309,7 +309,7 @@ module.exports = function (app) {
 
 		if (Object.keys(ndata).length <= 0) return res.code(200).send({ message: "Noting to update" });
 
-		const update = await app.mongoose[UsersModel].findOneAndUpdate(
+		const update = await Model.findOneAndUpdate(
 			{ _id },
 			ndata,
 			{ new: true }
@@ -329,7 +329,7 @@ module.exports = function (app) {
 					"You must re-submit your password to complete this action.",
 			});
 		const { _id } = req.user;
-		const user = await app.mongoose[UsersModel].findOne({ _id });
+		const user = await Model.findOne({ _id });
 		if (!user) {
 			return res
 				.code(200)
@@ -344,7 +344,7 @@ module.exports = function (app) {
 		if (!pass)
 			return res.code(200).send({ type: "error", message: "Invalid password" });
 
-		const deleteStatus = await app.mongoose[UsersModel].findOneAndDelete({ _id });
+		const deleteStatus = await Model.findOneAndDelete({ _id });
 		if (!deleteStatus)
 			return res
 				.code(200)
