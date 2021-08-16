@@ -15,10 +15,21 @@ require('./tera/api').server({
 		require('./tera/rate-limit'),
 		require('./tera/blog').plugin,
 		require('./tera/my-api').plugin,
+		require('./tera/mailer'),
+		require('./tera/misc'),
 		require('fastify-cors')
 	],
 	db_models: {
 		...require('./tera/auth').models,
-		...require('./tera/auth').models
+		...require('./tera/blog').models,
+		...require('./tera/my-api').models,
+	},
+	mailer: {
+		secure: process.env.MAILER_SECURE == "1",
+		host: process.env.MAILER_HOST,
+		auth: {
+			user: process.env.MAILER_USER,
+			pass: process.env.MAILER_PASS
+		}
 	}
 }).start()
