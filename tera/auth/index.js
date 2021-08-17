@@ -1,9 +1,8 @@
 module.exports = {
 	plugin: require('./plugin'),
 	handler: require('./handler'),
-	jwt: require('./jwt'),
 	models: {
-		Users: require('./ModelUsers')
+		Users: require('./model.users')
 	},
 	routes: require('./routes')
 }
