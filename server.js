@@ -9,16 +9,16 @@ require('./tera/api').server({
 	mongo: process.env.MONGO_DIRECT || "mongodb://0.0.0.0:27017/tuos",
 	config: require('./tera/api').config,
 	plugins: [
-		require('./tera/auth').plugin,
-		require('./tera/blog').plugin,
-		require('./tera/my-api').plugin,
+		require('fastify-cors'),
 		require('./tera/jwt'),
 		require('./tera/mailer'),
 		require('./tera/misc'),
 		require('./tera/mongoose'),
 		require('./tera/rate-limit'),
 		require('./tera/static'),
-		require('fastify-cors')
+		require('./tera/auth').plugin,
+		require('./tera/blog').plugin,
+		require('./tera/my-api').plugin,
 	],
 	db_models: {
 		...require('./tera/auth').models,
