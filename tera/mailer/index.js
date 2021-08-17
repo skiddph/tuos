@@ -5,13 +5,8 @@ const mailer = async (fastify, options, next) => {
     const transporter = nodemailer
         .createTransport(options.defaults || {}, options.transport || {})
 
-    const verifyDefaultCallback = (error) => {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log("tuos-mailer is ready");
-        }
-    }
+    // returns true if authenticated by smtp server
+    const verifyDefaultCallback = error => !Boolean(error);
 
     const send = async mailOptions => await transporter.sendMail(mailOptions);
     const verify = (callback = verifyDefaultCallback) => transporter.verify(callback)
