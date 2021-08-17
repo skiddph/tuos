@@ -6,7 +6,7 @@ const passwordComplexity = require("joi-password-complexity");
 var md5 = require('md5');
 
 module.exports = function (app) {
-	const Model = app.mongoose.instance.models.Users
+	const Model = app.mongoose.models.Users
 
 	// Password Hashing
 	async function pash(pass) {

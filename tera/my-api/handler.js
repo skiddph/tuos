@@ -4,7 +4,7 @@ const USID = require('usid')
 const _ = require('lodash')
 
 module.exports = function (app) {
-    const Model = app.mongoose.instance.models.MyAPI
+    const Model = app.mongoose.models.MyAPI
 
     const auth = { preValidation: [ app.authenticate ] }
 

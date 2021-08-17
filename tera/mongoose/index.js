@@ -20,10 +20,7 @@ module.exports = require("fastify-plugin")(async function (fastify, options, don
       console.error(`\n[SYSTEM] DATABASE ERROR`, e)
     })
 
-  fastify.decorate("mongoose", {
-    instance: mongoose,
-    ...options.db_models,
-  });
+  fastify.decorate("mongoose", mongoose)
 
   done();
 });
