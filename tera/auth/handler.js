@@ -3,127 +3,83 @@ const Joi = require("joi");
 const Phone = Joi.extend(require('joi-phone-number'));
 const bcrypt = require("bcrypt");
 const passwordComplexity = require("joi-password-complexity");
-var md5 = require('md5');
 
 module.exports = function (app) {
 	const Model = app.mongoose.models.Users
 
-	// Password Hashing
 	async function pash(pass) {
 		const salt = await bcrypt.genSalt(10);
 		const hashed = await bcrypt.hash(pass, salt);
 		return hashed;
 	}
 
-	async function newHC(id,ip){
-		const pass = md5(id + ip)
-		const salt = await bcrypt.genSalt(10);
-		const hashed = await bcrypt.hash(pass, salt);
-		return pass;
-	}
+	const newJWTToken = (payload) => String(app.jwt.sign({ ..._.pick(payload, ([ "_id", "name", "user" ])) }))
 
-	// Function for signing Users Token
-	const newJWTToken = async (payload,req) => {
-		const hc =  await newHC(payload._id,req.ip)
-		return String(app.jwt.sign({..._.pick(payload, ( ["_id", "name", "user"])),hc}))
-	}
+	const userResponseSchema = [
+		'_id',
+		'name',
+		'user',
+		'phone',
+		'phoneVerified',
+		'email',
+		'emailVerified',
+		'created_at',
+		'updated_at',
+	]
 
-	// Global Response Schema
-	const userResponseSchema = {
-		_id: { type: 'string' },
-		name: { type: 'string' },
-		user: { type: 'string' },
-		phone: { type: 'string' },
-		phoneVerified: { type: 'boolean' },
-		countryCode: { type: 'string' },
-		lon: { type: 'number' },
-		lat: { type: 'number' },
-		email: { type: 'string' },
-		emailVerified: { type: 'boolean' },
-		defaultPhoto: { type: 'string' },
-		created_at: { type: 'number' },
-		createdAt: { type: 'string' },
-		updatedAt: { type: 'string' },
-		token: { type: 'string' }
-	}
+	const readResponseSchema = [
+		'_id',
+		'name',
+		'user',
+		'created_at',
+	]
 
 	// Global Schema Template for Users Model
-	const gschema = {
-		schema: {
-			params: {
-				type: "object",
-				properties: {
-					_id: { type: 'string' },
-					user: { type: 'string' },
-					page: { type: 'number' },
-					items: { type: 'number' }
-				}
-			},
-			body: {
-				type: "object",
-				required: [],
-				properties: {
-					_id: { type: 'string' },
-					name: { type: 'string' },
-					user: { type: 'string' },
-					pass: { type: 'string' },
-					npass: { type: 'string' },
-					phone: { type: 'string' },
-					countryCode: { type: 'string' },
-					lon: { type: 'number' },
-					lat: { type: 'number' },
-					email: { type: 'string' },
-					defaultPhoto: { type: 'string' }
-				}
-			},
-			response: {
-				200: {
-					type: "object",
-					properties: {
-						type: { type: "string", default: "success" },
-						message: { type: "string", default: "Request success" },
-						data: {
-							type: "array",
-							items: {
-								type: "object",
-								properties: userResponseSchema
-							}
-						},
-						...userResponseSchema
-					},
-				},
-				400: {
-					type: "object",
-					properties: {
-						type: { type: "string", require: true, default: "error" },
-						message: { type: "string", default: "Invalid data" },
-					},
-				},
-				404: {
-					type: "object",
-					properties: {
-						type: { type: "string", default: "error" },
-						message: { type: "string", default: "Invalid Credentials" },
-					},
-				},
-				500: {
-					type: "object",
-					properties: {
-						type: { type: "string", default: "error" },
-						message: { type: "string", default: "Server error" },
-					},
-				},
+	const schemaParams = {
+		params: {
+			type: "object",
+			properties: {
+				_id: { type: 'string' },
+				user: { type: 'string' },
+				page: { type: 'number' },
+				items: { type: 'number' }
 			}
 		}
 	}
 
-	// Schema for Read Handler
-	const rdschema = {
-		schema: {
-			params: gschema.schema.params,
-			response: gschema.schema.response,
+	schemaBody = {
+		body: {
+			type: "object",
+			required: [],
+			properties: {
+				_id: { type: 'string' },
+				id: { type: 'string' },
+				name: { type: 'string' },
+				user: { type: 'string' },
+				phone: { type: 'string' },
+				phoneVerified: { type: 'boolean' },
+				email: { type: 'string' },
+				emailVerified: { type: 'boolean' },
+				created_at: { type: 'number' },
+				updated_at: { type: 'string' },
+				token: { type: 'string' }
+			}
 		}
 	}
+	const gschema = {
+		schema: {
+			...schemaParams,
+			...schemaBody
+		}
+	}
+
+	const rdschema = {
+		preValidation: [ app.authenticate ],
+		schema: {
+			...schemaParams
+		}
+	}
+
 
 	// Add additional required parameters to `schema.body.required` from Global Schema
 	const rschema = (req = []) => {
@@ -131,6 +87,9 @@ module.exports = function (app) {
 		schem.schema.body.required = req
 		return schem
 	}
+
+	// Auth + Global Schema 
+	const auth = { preValidation: [ app.authenticate ], ...gschema }
 
 	// Password Complexity for Password Validation
 	const complexityOptions = {
@@ -147,6 +106,7 @@ module.exports = function (app) {
 	function validate(user) {
 		const schema = Joi.object({
 			_id: Joi.string().pattern(new RegExp("^[0-9a-fA-F]{24}$")),
+			id: Joi.string().pattern(new RegExp("^[0-9a-fA-F]{24}$")),
 			name: Joi.string().pattern(new RegExp("^[a-zA-Z ]{2,50}$")),
 			user: Joi.string().alphanum().min(3).max(30),
 			pass: passwordComplexity(complexityOptions),
@@ -154,8 +114,6 @@ module.exports = function (app) {
 			string: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
 			phone: Phone.string().phoneNumber(),
 			email: Joi.string().email(),
-			lon: Joi.number(),
-			lat: Joi.number(),
 			defaultPhoto: Joi.string().min(1),
 		});
 		return schema.validate(user);
@@ -164,34 +122,28 @@ module.exports = function (app) {
 
 	// Register Handler
 	const register = async (req, res) => {
-		// Validate Request Data
 		const { error } = validate(req.body);
-		if (error) return res.code(200).send({type: 'error', message: error.details[0].message });
+		if (error) return res.code(200).send({ type: 'error', message: error.details[ 0 ].message });
 
-		// Validate Username
 		const dups = await Model.findOne({ user: req.body.user });
-		if (dups) return res.code(200).send({type: 'error', message: "Username already exists" });
+		if (dups) return res.code(200).send({ type: 'error', message: "Username already exists" });
 
-		// Create user object
 		const user = new Model(req.body);
-
-		// Set timestamp
 		user.created_at = Date.now();
-
-		// Hash password
 		user.pass = await pash(req.body.pass)
 
-		// Save user object to database
 		await user.save()
 			.then(async (u) =>
 				res.code(200).send({
+					status: "success",
 					message: "User successfully created.",
-					...u._doc,
-					token: await newJWTToken(u,req),
+					data: _.pick(u._doc, userResponseSchema),
+					token: newJWTToken(u, req),
 				})
 			)
 			.catch((e) => {
-				res.code(200).send({type: 'error',
+				res.code(200).send({
+					type: 'error',
 					message:
 						"Failed to register. Please contact your administrator to fix this error",
 				})
@@ -201,7 +153,7 @@ module.exports = function (app) {
 	// Login Handler
 	const login = async (req, res) => {
 		// Filter Request Data
-		const pre_id = _.pick(req.body, (['user', 'id','email']))
+		const pre_id = _.pick(req.body, ([ 'user', 'id', 'email' ]))
 		const login_id = pre_id.id || pre_id.user || pre_id.email;
 
 		const id = login_id.match(/^[0-9a-fA-F]{24}$/) ? { _id: login_id }
@@ -212,7 +164,7 @@ module.exports = function (app) {
 
 		// Validate Request Data
 		const { error } = validate(entry);
-		if (error) return res.code(200).send({type: 'error', message: error.details[0].message });
+		if (error) return res.code(200).send({ type: 'error', message: error.details[ 0 ].message });
 
 		// Check if user exists
 		const user = await Model.findOne(id);
@@ -226,39 +178,37 @@ module.exports = function (app) {
 		res.code(200).send({
 			status: "success",
 			message: "You are now logged in.",
-			token: await newJWTToken(user,req),
-			..._.pick(user,['name','_id','user','created_at'])
+			token: newJWTToken(user, req),
+			data: _.pick(user, userResponseSchema)
 		});
 	}
 
-	// Auth + Global Schema 
-	const auth = () => ({ preValidation: [app.authenticate], ...gschema });
-
-	// Auth + Read Handler Schema
-	const rdauth = () => ({ preValidation: [app.authenticate], ...rdschema });
-
-	// Read User Handler
-	// Make sure to add `rdauth()`` as a schema in your routes 
-	// to validate the request before calling this handler
+	// Read Users Handler
 	const read = async (req, res) => {
 		const me = { _id: req.user?._id }
-		const other = _.pick(req.params, ['user', '_id'])
+		const other = _.pick(req.params, [ 'user', '_id' ])
 		const find = (other._id || other.user) ? other : me
 		const user = await Model.findOne(find);
 		if (!user) return res.code(200).send({});
-		res.send(user);
+		res.send({
+			status: "success",
+			message: "User found successfully",
+			data: _.pick(user, (user._id == req.user._id ? userResponseSchema : readResponseSchema)),
+		});
 	}
 
-	// Read Users Handler
+	// Reads Users Handler
 	const reads = async (req, res) => {
-		const pg = _.pick(req.params, ['page', 'items'])
+		const pg = _.pick(req.params, [ 'page', 'items' ])
 		const page = pg.page || 1
 		const items = pg.items || 20
 		const users = await Model.paginate({}, { page: page, limit: items });
+		const result = []
+		users.docs.forEach(u => result.push(_.pick(u, readResponseSchema)))
 		res.send({
-			type: "success",
+			status: "success",
 			message: `${users.docs.length} users found.`,
-			data: users.docs,
+			data: result,
 		});
 	}
 
@@ -266,42 +216,42 @@ module.exports = function (app) {
 	const update = async (req, res) => {
 		// Filter Request
 		const { error } = validate(req.body);
-		if (error) return res.code(200).send({ type: 'error',message: error.details[0].message });
+		if (error) return res.code(200).send({ type: 'error', message: error.details[ 0 ].message });
 
 		// Filter Data
-		
+
 		// Updatables that don't need to resubmit password
-		const upPub = _.pick(req.body, ['defaultPhoto', 'countryCode', 'phone', 'email'])
-		
+		const upPub = _.pick(req.body, [ 'defaultPhoto', 'countryCode', 'phone', 'email' ])
+
 		// Confidential/Secured data that needs to re-sub mit password
-		const cfPub = _.pick(req.body, ['user', 'pass', 'npass', 'name'])
+		const cfPub = _.pick(req.body, [ 'user', 'pass', 'npass', 'name' ])
 
 		let ndata = {};
 
 		const { _id } = req.user;
 		const user = await Model.findOne({ _id });
-		if (!user) return res.code(200).send({ type: 'error',message: "User not found" });
+		if (!user) return res.code(200).send({ type: 'error', message: "User not found" });
 
 		if (Object.keys(cfPub).length > 0) {
-			if (!cfPub.pass) return res.code(200).send({type: 'error', message: "Invalid password, you must re-submit your password to apply this changes." });
+			if (!cfPub.pass) return res.code(200).send({ type: 'error', message: "Invalid password, you must re-submit your password to apply this changes." });
 
 			const pass = await bcrypt.compare(cfPub.pass, user.pass);
 			if (cfPub.npass) {
 				if (cfPub.pass == cfPub.npass) {
-					return res.code(200).send({type: 'error', message: "Invalid Password, must be different from previous password!" });
+					return res.code(200).send({ type: 'error', message: "Invalid Password, must be different from previous password!" });
 				} else {
-					ndata["pass"] = await pash(cfPub.npass);
+					ndata[ "pass" ] = await pash(cfPub.npass);
 				}
 			}
 
-			if (!pass) return res.code(200).send({type: 'error', message: "Password doesn't match! try again later." });
+			if (!pass) return res.code(200).send({ type: 'error', message: "Password doesn't match! try again later." });
 
-			ndata = { ...ndata, ..._.pick(cfPub, ['user', 'name']) }
+			ndata = { ...ndata, ..._.pick(cfPub, [ 'user', 'name' ]) }
 
 			if (typeof ndata.user == "string") {
-				if (ndata.user == user.user) return res.code(200).send({type: 'error', message: "New username must not be equal to old username! try again later." });
+				if (ndata.user == user.user) return res.code(200).send({ type: 'error', message: "New username must not be equal to old username! try again later." });
 				const usernameCheck = await Model.findOne({ user: ndata.user });
-				if (usernameCheck) return res.code(200).send({type: 'error', message: "Username already exists, please choose another username" });
+				if (usernameCheck) return res.code(200).send({ type: 'error', message: "Username already exists, please choose another username" });
 			}
 		}
 
@@ -315,8 +265,8 @@ module.exports = function (app) {
 			{ new: true }
 		);
 
-		if (!update) res.code(200).send({type: 'error', message: "Server error! Failed to update." })
-		res.code(200).send({type: 'success', message: "Userdata updated successfully." })
+		if (!update) res.code(200).send({ type: 'error', message: "Server error! Failed to update." })
+		res.code(200).send({ type: 'success', message: "Userdata updated successfully." })
 	}
 
 	// Delete User Handler
@@ -355,14 +305,13 @@ module.exports = function (app) {
 		res.send({ message: "User deleted successfully" });
 	}
 
-	// Returns Schema and Handlers
 	return {
 		register,
 		gschema,
 		rschema,
+		rdschema,
 		login,
 		auth,
-		rdauth,
 		read,
 		reads,
 		update,
