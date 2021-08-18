@@ -11,7 +11,6 @@ const UsersSchema = new mongoose.Schema({
 	phoneVerified: { type: Boolean, required: false },
 	email: { type: String, required: false },
 	emailVerified: { type: Boolean, required: false },
-	defaultPhoto: { type: String, required: false }
 }, { timestamp: true })
 
 UsersSchema.plugin(paginate);
