@@ -6,6 +6,7 @@ const UsersSchema = new mongoose.Schema({
 	user: { type: String, required: true, unique: true },
 	pass: { type: String, required: true, },
 	created_at: { type: Number, required: true },
+	updated_at: { type: Number, required: true },
 	phone: { type: String, required: false },
 	countryCode: { type: String, required: false },
 	lon: { type: Number, required: false },
