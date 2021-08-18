@@ -1,24 +1,33 @@
 require("dotenv").config()
 require('./tera/api').server({
-	port: process.env.PORT || "8080",
-	host: process.env.HOST || '0.0.0.0',
+	port: process.env.PORT || (()=>{
+		console.log("[SYSTEM] Using default PORT");
+		return "8080"
+	})(),
+	host: process.env.HOST || (()=>{
+		console.log("[SYSTEM] Using default HOST IP");
+		return "0.0.0.0"
+	})(),
 	token: process.env.JWT_TOKEN || (() => {
-		console.log("[SYSTEM] Using default JWT Token");
+		console.log("[SYSTEM] Using default SECRET_TOKEN");
 		return "tuos_default_jwt_token"
 	})(),
-	mongo: process.env.MONGO_DIRECT || "mongodb://0.0.0.0:27017/tuos",
+	mongo: process.env.MONGO_DIRECT || (()=>{
+		console.log("[SYSTEM] Using default DB HOST");
+		return "mongodb://localhost:27017/tuos"
+	})(),
 	config: require('./tera/api').config,
 	plugins: [
 		require('fastify-cors'),
-		require('./tera/jwt'),
-		require('./tera/mailer'),
+		require('./tera/rate-limit'),
 		require('./tera/misc'),
 		require('./tera/mongoose'),
-		require('./tera/rate-limit'),
-		require('./tera/static'),
+		require('./tera/mailer'),
+		require('./tera/jwt'),
 		require('./tera/auth').plugin,
 		require('./tera/blog').plugin,
 		require('./tera/my-api').plugin,
+		require('./tera/static'),
 	],
 	db_models: {
 		...require('./tera/auth').models,
