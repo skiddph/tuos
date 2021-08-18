@@ -117,7 +117,5 @@ out
 .yarn/install-state.gz
 .pnp.*
 
-# Personal Files
-tuos-*
-client/root/run.bat
-spam.js
+# App Generated Files
+/db
