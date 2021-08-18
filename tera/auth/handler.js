@@ -106,7 +106,6 @@ module.exports = function (app) {
 	function validate(user) {
 		const schema = Joi.object({
 			_id: Joi.string().pattern(new RegExp("^[0-9a-fA-F]{24}$")),
-			id: Joi.string().pattern(new RegExp("^[0-9a-fA-F]{24}$")),
 			name: Joi.string().pattern(new RegExp("^[a-zA-Z ]{2,50}$")),
 			user: Joi.string().alphanum().min(3).max(30),
 			pass: passwordComplexity(complexityOptions),
@@ -129,7 +128,9 @@ module.exports = function (app) {
 		if (dups) return res.code(200).send({ type: 'error', message: "Username already exists" });
 
 		const user = new Model(req.body);
-		user.created_at = Date.now();
+		const tstamp = Date.now()
+		user.created_at = tstamp;
+		user.updated_at = tstamp;
 		user.pass = await pash(req.body.pass)
 
 		await user.save()
@@ -152,7 +153,6 @@ module.exports = function (app) {
 
 	// Login Handler
 	const login = async (req, res) => {
-		// Filter Request Data
 		const pre_id = _.pick(req.body, ([ 'user', 'id', 'email' ]))
 		const login_id = pre_id.id || pre_id.user || pre_id.email;
 
@@ -162,19 +162,15 @@ module.exports = function (app) {
 
 		const entry = { ...id, pass: req.body.pass }
 
-		// Validate Request Data
 		const { error } = validate(entry);
 		if (error) return res.code(200).send({ type: 'error', message: error.details[ 0 ].message });
 
-		// Check if user exists
 		const user = await Model.findOne(id);
 		if (!user) return res.code(200).send({ type: "error", message: "Invalid credentials" });
 
-		// Verify Password
 		const pass = await bcrypt.compare(entry.pass, user.pass);
 		if (!pass) return res.code(200).send({ type: "error", message: "Invalid credentials" });
 
-		// Reply token
 		res.code(200).send({
 			status: "success",
 			message: "You are now logged in.",
@@ -214,59 +210,33 @@ module.exports = function (app) {
 
 	// Update User Handler
 	const update = async (req, res) => {
-		// Filter Request
-		const { error } = validate(req.body);
+		const pre_data = _.pick(req.body, [ 'user', 'email', 'pass', 'npass', 'name', 'phone' ])
+		const { error } = validate(pre_data);
 		if (error) return res.code(200).send({ type: 'error', message: error.details[ 0 ].message });
-
-		// Filter Data
-
-		// Updatables that don't need to resubmit password
-		const upPub = _.pick(req.body, [ 'defaultPhoto', 'countryCode', 'phone', 'email' ])
-
-		// Confidential/Secured data that needs to re-sub mit password
-		const cfPub = _.pick(req.body, [ 'user', 'pass', 'npass', 'name' ])
-
-		let ndata = {};
 
 		const { _id } = req.user;
 		const user = await Model.findOne({ _id });
 		if (!user) return res.code(200).send({ type: 'error', message: "User not found" });
 
-		if (Object.keys(cfPub).length > 0) {
-			if (!cfPub.pass) return res.code(200).send({ type: 'error', message: "Invalid password, you must re-submit your password to apply this changes." });
+		const pass = await bcrypt.compare(pre_data['pass'] || "", user.pass);
+		if (!pass) return res.code(200).send({ type: "error", message: "Invalid credentials" });
 
-			const pass = await bcrypt.compare(cfPub.pass, user.pass);
-			if (cfPub.npass) {
-				if (cfPub.pass == cfPub.npass) {
-					return res.code(200).send({ type: 'error', message: "Invalid Password, must be different from previous password!" });
-				} else {
-					ndata[ "pass" ] = await pash(cfPub.npass);
-				}
-			}
-
-			if (!pass) return res.code(200).send({ type: 'error', message: "Password doesn't match! try again later." });
-
-			ndata = { ...ndata, ..._.pick(cfPub, [ 'user', 'name' ]) }
-
-			if (typeof ndata.user == "string") {
-				if (ndata.user == user.user) return res.code(200).send({ type: 'error', message: "New username must not be equal to old username! try again later." });
-				const usernameCheck = await Model.findOne({ user: ndata.user });
-				if (usernameCheck) return res.code(200).send({ type: 'error', message: "Username already exists, please choose another username" });
-			}
-		}
-
-		ndata = { ...ndata, ...upPub }
-
-		if (Object.keys(ndata).length <= 0) return res.code(200).send({ message: "Noting to update" });
-
-		const update = await Model.findOneAndUpdate(
-			{ _id },
-			ndata,
-			{ new: true }
-		);
-
-		if (!update) res.code(200).send({ type: 'error', message: "Server error! Failed to update." })
-		res.code(200).send({ type: 'success', message: "Userdata updated successfully." })
+		const data = _.pick(req.body, [ 'user', 'email', 'name', 'phone' ])
+		user.user = data['user'] || user.user;
+		user.email = data['email'] || user.email;
+		user.emailVerified = data['email'] ? false : user.emailVerified;
+		user.name = data['name'] || user.name;
+		user.phone = data['phone'] || user.phone;
+		user.pass = pre_data['npass'] ? await pash(pre_data['npass']) : user.pass;
+		user.updated_at = Date.now()
+		
+		await user.save()
+            .then(() =>
+                res.code(200).send({ type: 'success', message: "User updated successfully." })
+            )
+            .catch(() =>
+                res.code(200).send({ type: 'error', message: "Server error! Failed to update or username already exists" })
+            )
 	}
 
 	// Delete User Handler
