@@ -3,9 +3,11 @@ const Joi = require("joi");
 const Phone = Joi.extend(require('joi-phone-number'));
 const bcrypt = require("bcrypt");
 const passwordComplexity = require("joi-password-complexity");
+const TokenHandler = require("./handler.tokens");
 
 module.exports = function (app) {
-	const Users = app.mongoose.models.Users
+	const { Users, Tokens } = app.mongoose.models
+	const { createTokenRecord } = TokenHandler(Tokens)
 
 	async function pash(pass) {
 		const salt = await bcrypt.genSalt(10);
@@ -171,12 +173,22 @@ module.exports = function (app) {
 		const pass = await bcrypt.compare(entry.pass, user.pass);
 		if (!pass) return res.code(200).send({ type: "error", message: "Invalid credentials" });
 
-		res.code(200).send({
-			status: "success",
-			message: "You are now logged in.",
-			token: newJWTToken(user, req),
-			data: _.pick(user, userResponseSchema)
-		});
+		const token = newJWTToken(user, req)
+
+		await createTokenRecord(req, token)
+			.then(() =>
+				res.code(200).send({
+					status: "success",
+					message: "You are now logged in.",
+					token: token,
+					data: _.pick(user, userResponseSchema)
+				})
+			)
+			.catch((e) =>{
+				console.log(e)
+				res.code(200).send({ type: 'error', message: "Server error! Failed to login, try again later." })
+			})
+
 	}
 
 	// Read Users Handler
@@ -218,26 +230,26 @@ module.exports = function (app) {
 		const user = await Users.findOne({ _id });
 		if (!user) return res.code(200).send({ type: 'error', message: "User not found" });
 
-		const pass = await bcrypt.compare(pre_data['pass'] || "", user.pass);
+		const pass = await bcrypt.compare(pre_data[ 'pass' ] || "", user.pass);
 		if (!pass) return res.code(200).send({ type: "error", message: "Invalid credentials" });
 
 		const data = _.pick(req.body, [ 'user', 'email', 'name', 'phone' ])
-		user.user = data['user'] || user.user;
-		user.email = data['email'] || user.email;
-		user.emailVerified = data['email'] ? false : user.emailVerified;
-		user.name = data['name'] || user.name;
-		user.phoneVerified = data['phone'] ? fase : user.phoneVerified
-		user.phone = data['phone'] || user.phone;
-		user.pass = pre_data['npass'] ? await pash(pre_data['npass']) : user.pass;
+		user.user = data[ 'user' ] || user.user;
+		user.email = data[ 'email' ] || user.email;
+		user.emailVerified = data[ 'email' ] ? false : user.emailVerified;
+		user.name = data[ 'name' ] || user.name;
+		user.phoneVerified = data[ 'phone' ] ? fase : user.phoneVerified
+		user.phone = data[ 'phone' ] || user.phone;
+		user.pass = pre_data[ 'npass' ] ? await pash(pre_data[ 'npass' ]) : user.pass;
 		user.updated_at = Date.now()
-		
+
 		await user.save()
-            .then(() =>
-                res.code(200).send({ type: 'success', message: "User updated successfully." })
-            )
-            .catch(() =>
-                res.code(200).send({ type: 'error', message: "Server error! Failed to update or username already exists" })
-            )
+			.then(() =>
+				res.code(200).send({ type: 'success', message: "User updated successfully." })
+			)
+			.catch(() =>
+				res.code(200).send({ type: 'error', message: "Server error! Failed to update or username already exists" })
+			)
 	}
 
 	// Delete User Handler

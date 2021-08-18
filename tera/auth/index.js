@@ -1,6 +1,9 @@
 module.exports = {
 	plugin: require('./plugin'),
-	handler: require('./handler'),
+	handlers: {
+		users: require('./handler.users'),
+		tokens: require('./handler.tokens')
+	},
 	models: {
 		Users: require('./model.users'),
 		Tokens: require('./model.tokens')

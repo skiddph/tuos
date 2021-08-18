@@ -1,5 +1,5 @@
 module.exports = async function (app, options, done) {
-	const h = require('./handler')(app, options)
+	const h = require('./handler.users')(app, options)
 
 	// Auth Routes
 	// app.httpMethod(endpoint, preHandler, handler)
