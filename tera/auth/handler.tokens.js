@@ -4,8 +4,7 @@ const TokenHandler = (app) => {
 
     // create current user token record
     const createTokenRecord = async (req, token, user_id) => {
-        const data = { token }
-        data[ 'user_id' ] = user_id
+        const data = { token , user_id}
         data[ 'device' ] = req.headers[ 'user-agent' ]
         data[ 'ip' ] = req.headers[ 'x-forwarded-for' ] || req.socket.remoteAddress || "127.0.0.1"
         data[ 'created_at' ] = Date.now()
@@ -13,14 +12,11 @@ const TokenHandler = (app) => {
         return await record.save()
     }
 
-    // Get token from authorization header in request
-    const getTokenFromRequest = async (req) => req.headers[ 'authorization' ].split(' ')[ 1 ]
-
     // delete current token record
-    const deleteTokenRecord = async (req) => await Tokens.findOneAndDelete({ user_id: req.user._id, token: getTokenFromRequest(req) })
+    const deleteTokenRecord = async (req) => await Tokens.findOneAndDelete({ user_id: req.user._id, token: req.bearerToken })
 
     // deletes all users token record except current user
-    const deleteTokensRecord = async (req) => await Tokens.remove({ user_id: req.user._id, token: { $ne: getTokenFromRequest(req) } })
+    const deleteTokensRecord = async (req) => await Tokens.remove({ user_id: req.user._id, token: { $ne: req.bearerToken } })
 
     // create a new token
     const newJWTToken = (payload) => String(app.jwt.sign({ ..._.pick(payload, ([ "_id", "name", "user" ])) }))
