@@ -5,8 +5,9 @@ const TuosJwt = async function (app, options) {
     app.register(require("fastify-jwt"), {
         secret: options.token
     })
-    app.decorate("jwte", null)
-    
+
+    app.decorateRequest('bearerToken', null)
+
     const { authenticate } = JwtHandler(app)
     app.decorate("authenticate", authenticate)
 }

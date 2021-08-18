@@ -6,6 +6,8 @@ const JwtHandler = (app) => {
     const authenticate = async (req, res, next) => {
         const token = getToken(req)
         const user_id = app.jwt.decode(token)._id
+
+        req['bearerToken'] = token
         
         const record = await Tokens.findOne({ user_id, token })
         if (!record) return res.status(401).send({ type: 'error' ,message: 'Unauthorized' })
