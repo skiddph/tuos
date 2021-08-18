@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const passwordComplexity = require("joi-password-complexity");
 
 module.exports = function (app) {
-	const Model = app.mongoose.models.Users
+	const Users = app.mongoose.models.Users
 
 	async function pash(pass) {
 		const salt = await bcrypt.genSalt(10);
@@ -124,10 +124,10 @@ module.exports = function (app) {
 		const { error } = validate(req.body);
 		if (error) return res.code(200).send({ type: 'error', message: error.details[ 0 ].message });
 
-		const dups = await Model.findOne({ user: req.body.user });
+		const dups = await Users.findOne({ user: req.body.user });
 		if (dups) return res.code(200).send({ type: 'error', message: "Username already exists" });
 
-		const user = new Model(req.body);
+		const user = new Users(req.body);
 		const tstamp = Date.now()
 		user.created_at = tstamp;
 		user.updated_at = tstamp;
@@ -165,7 +165,7 @@ module.exports = function (app) {
 		const { error } = validate(entry);
 		if (error) return res.code(200).send({ type: 'error', message: error.details[ 0 ].message });
 
-		const user = await Model.findOne(id);
+		const user = await Users.findOne(id);
 		if (!user) return res.code(200).send({ type: "error", message: "Invalid credentials" });
 
 		const pass = await bcrypt.compare(entry.pass, user.pass);
@@ -184,7 +184,7 @@ module.exports = function (app) {
 		const me = { _id: req.user?._id }
 		const other = _.pick(req.params, [ 'user', '_id' ])
 		const find = (other._id || other.user) ? other : me
-		const user = await Model.findOne(find);
+		const user = await Users.findOne(find);
 		if (!user) return res.code(200).send({});
 		res.send({
 			status: "success",
@@ -198,7 +198,7 @@ module.exports = function (app) {
 		const pg = _.pick(req.params, [ 'page', 'items' ])
 		const page = pg.page || 1
 		const items = pg.items || 20
-		const users = await Model.paginate({}, { page: page, limit: items });
+		const users = await Users.paginate({}, { page: page, limit: items });
 		const result = []
 		users.docs.forEach(u => result.push(_.pick(u, readResponseSchema)))
 		res.send({
@@ -215,7 +215,7 @@ module.exports = function (app) {
 		if (error) return res.code(200).send({ type: 'error', message: error.details[ 0 ].message });
 
 		const { _id } = req.user;
-		const user = await Model.findOne({ _id });
+		const user = await Users.findOne({ _id });
 		if (!user) return res.code(200).send({ type: 'error', message: "User not found" });
 
 		const pass = await bcrypt.compare(pre_data['pass'] || "", user.pass);
@@ -250,7 +250,7 @@ module.exports = function (app) {
 					"You must re-submit your password to complete this action.",
 			});
 		const { _id } = req.user;
-		const user = await Model.findOne({ _id });
+		const user = await Users.findOne({ _id });
 		if (!user) {
 			return res
 				.code(200)
@@ -265,7 +265,7 @@ module.exports = function (app) {
 		if (!pass)
 			return res.code(200).send({ type: "error", message: "Invalid password" });
 
-		const deleteStatus = await Model.findOneAndDelete({ _id });
+		const deleteStatus = await Users.findOneAndDelete({ _id });
 		if (!deleteStatus)
 			return res
 				.code(200)
