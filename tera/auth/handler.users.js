@@ -6,16 +6,19 @@ const passwordComplexity = require("joi-password-complexity");
 const TokenHandler = require("./handler.tokens");
 
 module.exports = function (app) {
-	const { Users, Tokens } = app.mongoose.models
-	const { createTokenRecord } = TokenHandler(Tokens)
+	const { Users } = app.mongoose.models
+	const {
+		newJWTToken,
+		createTokenRecord,
+		deleteTokenRecord,
+		deleteTokensRecord
+	} = TokenHandler(app)
 
 	async function pash(pass) {
 		const salt = await bcrypt.genSalt(10);
 		const hashed = await bcrypt.hash(pass, salt);
 		return hashed;
 	}
-
-	const newJWTToken = (payload) => String(app.jwt.sign({ ..._.pick(payload, ([ "_id", "name", "user" ])) }))
 
 	const userResponseSchema = [
 		'_id',
@@ -81,7 +84,6 @@ module.exports = function (app) {
 			...schemaParams
 		}
 	}
-
 
 	// Add additional required parameters to `schema.body.required` from Global Schema
 	const rschema = (req = []) => {
@@ -175,7 +177,7 @@ module.exports = function (app) {
 
 		const token = newJWTToken(user, req)
 
-		await createTokenRecord(req, token)
+		await createTokenRecord(req, token, user._id)
 			.then(() =>
 				res.code(200).send({
 					status: "success",
@@ -184,7 +186,7 @@ module.exports = function (app) {
 					data: _.pick(user, userResponseSchema)
 				})
 			)
-			.catch((e) =>{
+			.catch((e) => {
 				console.log(e)
 				res.code(200).send({ type: 'error', message: "Server error! Failed to login, try again later." })
 			})
@@ -288,6 +290,28 @@ module.exports = function (app) {
 		res.send({ message: "User deleted successfully" });
 	}
 
+	// logout handler
+	const logout = async (req, res) => {
+		await deleteTokenRecord(req)
+			.then(() => res.code(200).send({ type: 'success', message: "You are now logged out." }))
+			.catch(() => res.code(200).send({ type: 'error', message: "Server error! Failed to logout." }));
+	}
+
+	// logout all tokens except current token
+	const logouts = async (req, res) => {
+		await deleteTokensRecord(req)
+			.then(() => res.code(200).send({ type: 'success', message: "You are now logged out on all other devices" }))
+			.catch(() => res.code(200).send({ type: 'error', message: "Server error! Failed to logout on other devices" }));
+	}
+
+	const logout_session = async (req, res) => { }
+
+	const session = async (req, res) => { }
+
+	const sessions = async (req, res) => {
+
+	}
+
 	return {
 		register,
 		gschema,
@@ -298,6 +322,11 @@ module.exports = function (app) {
 		read,
 		reads,
 		update,
-		delete: remove
+		delete: remove,
+		logout,
+		logouts,
+		logout_session,
+		session,
+		sessions
 	}
 }
