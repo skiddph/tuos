@@ -226,6 +226,7 @@ module.exports = function (app) {
 		user.email = data['email'] || user.email;
 		user.emailVerified = data['email'] ? false : user.emailVerified;
 		user.name = data['name'] || user.name;
+		user.phoneVerified = data['phone'] ? fase : user.phoneVerified
 		user.phone = data['phone'] || user.phone;
 		user.pass = pre_data['npass'] ? await pash(pre_data['npass']) : user.pass;
 		user.updated_at = Date.now()
