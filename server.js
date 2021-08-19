@@ -1,10 +1,23 @@
+const _ = require('lodash')
 require("dotenv").config()
+
+for (key in _.omit(process.env, [
+	'MONGO_DIRECT',
+	'JWT_TOKEN',
+	'JWT_REFRESH',
+	'MAILER_SECURE',
+	'MAILER_HOST',
+	'MAILER_FROM',
+	'MAILER_USER',
+	'MAILER_PASS'
+])) console.log('ENV ', key, '=', process.env[ key ])
+
 require('./tera/api').server({
-	port: process.env.PORT || (()=>{
+	port: process.env.PORT || (() => {
 		console.log("[SYSTEM] Using default PORT");
 		return "8080"
 	})(),
-	host: process.env.HOST || (()=>{
+	host: process.env.HOST || (() => {
 		console.log("[SYSTEM] Using default HOST IP");
 		return "0.0.0.0"
 	})(),
@@ -12,7 +25,7 @@ require('./tera/api').server({
 		console.log("[SYSTEM] Using default SECRET_TOKEN");
 		return "tuos_default_jwt_token"
 	})(),
-	mongo: process.env.MONGO_DIRECT || (()=>{
+	mongo: process.env.MONGO_DIRECT || (() => {
 		console.log("[SYSTEM] Using default DB HOST");
 		return "mongodb://localhost:27017/tuos"
 	})(),
