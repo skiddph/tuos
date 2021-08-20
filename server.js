@@ -1,17 +1,4 @@
-const _ = require('lodash')
 require("dotenv").config()
-
-for (key in _.omit(process.env, [
-	'MONGO_DIRECT',
-	'JWT_TOKEN',
-	'JWT_REFRESH',
-	'MAILER_SECURE',
-	'MAILER_HOST',
-	'MAILER_FROM',
-	'MAILER_USER',
-	'MAILER_PASS'
-])) console.log('ENV ', key, '=', process.env[ key ])
-
 require('./tera/api').server({
 	port: process.env.PORT || (() => {
 		console.log("[SYSTEM] Using default PORT");
