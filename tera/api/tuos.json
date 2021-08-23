@@ -18,7 +18,10 @@
 			"models": {}
 		},
 		"static": {
-			"index": ["index.html", "README.md"],
+			"index": [
+				"index.html",
+				"README.md"
+			],
 			"dirs": [],
 			"fallbacks": {}
 		}

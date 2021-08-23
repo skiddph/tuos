@@ -14,70 +14,70 @@ import UserProfileGroup from './pages-group/UserProfileGroup.vue'
 import UserAbout from './pages/UserAbout.vue'
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes: [
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      component: Auth,
+      children: [
         {
-            path: '/',
-            component: Auth,
-            children: [
-                {
-                    path: "",
-                    component: Login
-                },
-                {
-                    path: "login",
-                    component: Login
-                },
-                {
-                    path: "register",
-                    component: Register
-                },
-                {
-                    path: "logout",
-                    component: Logout
-                },
-            ]
+          path: '',
+          component: Login
         },
         {
-            path: '/user',
-            component: User,
-            children: [
-                {
-                    path: "@:user",
-                    component: UserProfileGroup,
-                    children: [
-                        {
-                            path: "about",
-                            alias: "",
-                            component: UserAbout
-                        }
-                    ]
-                },
-                {
-                    path: "/home",
-                    component: Home
-                },
-                {
-                    path: "/settings",
-                    component: Settings,
-                    children: [
-                        {
-                            path: "",
-                            component: SettingsProfile
-                        },
-                        {
-                            path: "bindings",
-                            component: SettingsAccBindings
-                        },
-                        {
-                            path: "password",
-                            component: SettingsPassword
-                        }
-                    ]
-                }
-            ]
+          path: 'login',
+          component: Login
+        },
+        {
+          path: 'register',
+          component: Register
+        },
+        {
+          path: 'logout',
+          component: Logout
         }
-        
-    ]
+      ]
+    },
+    {
+      path: '/user',
+      component: User,
+      children: [
+        {
+          path: '@:user',
+          component: UserProfileGroup,
+          children: [
+            {
+              path: 'about',
+              alias: '',
+              component: UserAbout
+            }
+          ]
+        },
+        {
+          path: '/home',
+          component: Home
+        },
+        {
+          path: '/settings',
+          component: Settings,
+          children: [
+            {
+              path: '',
+              component: SettingsProfile
+            },
+            {
+              path: 'bindings',
+              component: SettingsAccBindings
+            },
+            {
+              path: 'password',
+              component: SettingsPassword
+            }
+          ]
+        }
+      ]
+    }
+
+  ]
 })
 export default router

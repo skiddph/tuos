@@ -40,6 +40,11 @@
     "usid": "^1.0.21"
   },
   "devDependencies": {
+    "eslint": "7.12.1",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
     "nodemon": "^2.0.8",
     "svg-captcha": "^1.4.0"
   },

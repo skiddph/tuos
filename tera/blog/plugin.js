@@ -1,5 +1,5 @@
-const fp = require("fastify-plugin")
+const fp = require('fastify-plugin')
 
 module.exports = fp(async function (app) {
-    app.register(require('./routes'))
+  app.register(require('./routes'))
 })

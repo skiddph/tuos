@@ -1,7 +1,7 @@
 module.exports = function (app) {
-    const auth = {preValidation: [app.authenticate]}
+  const auth = { preValidation: [app.authenticate] }
 
-    return {
-        auth
-    }
+  return {
+    auth
+  }
 }

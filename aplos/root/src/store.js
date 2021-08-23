@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
-import createCache from 'vuex-cache';
-import VuexPersistence from 'vuex-persist/dist/esm/index.js';
+import createCache from 'vuex-cache'
+import VuexPersistence from 'vuex-persist/dist/esm/index.js'
 
 import ls from 'store'
 
@@ -15,23 +15,23 @@ const state = {
   authenticated: false,
   userdataState: 'error',
   userdata: {
-    _id: "",
-    user: "",
-    name: "",
-    email: "",
-    phone: ""
+    _id: '',
+    user: '',
+    name: '',
+    email: '',
+    phone: ''
   },
   curUserData: {
-    _id: "",
-    user: "",
-    name: "",
+    _id: '',
+    user: '',
+    name: ''
   },
   curUserDataState: 'error'
 }
 
 const stator = () => {
   const res = {}
-  for(let x in state){
+  for (const x in state) {
     res[x] = oldState[x] || state[x]
   }
   return res
@@ -39,8 +39,8 @@ const stator = () => {
 
 const mutate = () => {
   const res = {}
-  for(let x in state){
-    res[x] = (state,val) => {
+  for (const x in state) {
+    res[x] = (state, val) => {
       state[x] = val
     }
   }
@@ -48,9 +48,9 @@ const mutate = () => {
 }
 
 const store = createStore({
-  plugins: [ createCache(), vuexLocal.plugin ],
+  plugins: [createCache(), vuexLocal.plugin],
   state: stator(),
   mutations: mutate()
-});
+})
 
-export default {store, state};
+export default { store, state }
