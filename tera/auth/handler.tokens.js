@@ -21,11 +21,28 @@ const TokenHandler = (app) => {
   // create a new token
   const newJWTToken = (payload) => String(app.jwt.sign({ ..._.pick(payload, (['_id', 'name', 'user'])) }))
 
+  // read single current token record
+  const readTokenRecord = async (req) => await Tokens.findOne({ user_id: req.user._id, ...(req.params._id ? { _id: req.params._id } : { token: req.bearerToken }) })
+
+  // read many token records
+  const readTokenRecords = async (req, page = 1, items = 10) => await Tokens.paginate({
+    user_id: req.user._id
+  }, {
+    page: req.params.page || page,
+    limit: req.params.items || items
+  })
+
+  // read all token records
+  const readAllTokenRecords = async (req) => await Tokens.find({ user_id: req.user._id })
+
   return {
     newJWTToken,
     createTokenRecord,
     deleteTokenRecord,
-    deleteTokensRecord
+    deleteTokensRecord,
+    readTokenRecord,
+    readTokenRecords,
+    readAllTokenRecords
   }
 }
 module.exports = TokenHandler

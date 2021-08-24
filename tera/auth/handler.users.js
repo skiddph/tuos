@@ -11,7 +11,10 @@ module.exports = function (app) {
     newJWTToken,
     createTokenRecord,
     deleteTokenRecord,
-    deleteTokensRecord
+    deleteTokensRecord,
+    readTokenRecord,
+    readTokenRecords,
+    readAllTokenRecords
   } = TokenHandler(app)
 
   async function pash (pass) {
@@ -94,6 +97,9 @@ module.exports = function (app) {
 
   // Auth + Global Schema
   const auth = { preValidation: [app.authenticate], ...gschema }
+
+  // Auth + Params for session
+  const sessionSchema = { preValidation: [app.authenticate], schema: { ...schemaParams } }
 
   // Password Complexity for Password Validation
   const complexityOptions = {
@@ -301,10 +307,27 @@ module.exports = function (app) {
 
   const logoutSession = async (req, res) => { }
 
-  const session = async (req, res) => { }
+  const session = async (req, res) => {
+    const record = await readTokenRecord(req)
+    if (!record) return res.code(200).send({ type: 'error', message: 'Session not found' })
+    return res.send({ type: 'success', message: 'Session found', data: { ..._.pick(record, ['_id', 'user_id', 'created_at', 'device', 'ip']), is_current: record.token === req.bearerToken } })
+  }
 
   const sessions = async (req, res) => {
+    const records = await readTokenRecords(req)
+    if (!records) return res.code(200).send({ type: 'error', message: 'Sessions not found' })
+    const result = []
+    records.docs.forEach(r => result.push({ ..._.pick(r, ['_id', 'user_id', 'created_at', 'device', 'ip']), is_current: r.token === req.bearerToken }))
+    console.log(result)
+    if (res.sent === false) return res.send({ type: 'success', message: 'Sessions found', data: result })
+  }
 
+  const allSessions = async (req, res) => {
+    const records = await readAllTokenRecords(req)
+    if (!records) return res.code(200).send({ type: 'error', message: 'Sessions not found' })
+    const result = []
+    records.forEach(r => result.push({ ..._.pick(r, ['_id', 'user_id', 'created_at', 'device', 'ip']), is_current: r.token === req.bearerToken }))
+    return res.send({ type: 'success', message: 'Sessions found', data: result })
   }
 
   return {
@@ -314,6 +337,7 @@ module.exports = function (app) {
     rdschema,
     login,
     auth,
+    sessionSchema,
     read,
     reads,
     update,
@@ -322,6 +346,7 @@ module.exports = function (app) {
     logouts,
     logoutSession,
     session,
-    sessions
+    sessions,
+    allSessions
   }
 }
