@@ -6,7 +6,7 @@
 @phone = +639206080487
 @user = eru123
 @pass = !P4s5W04d~
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTE3ZTZlNmZjMjMxYTA4ODg2NjU4YTIiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiaWF0IjoxNjI5MjUxNzMxfQ.zq23-xr9B5l_H5_HFZ8NaxbjnKDr_6_ipH1yrAGkVN4
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTE3ZTZlNmZjMjMxYTA4ODg2NjU4YTIiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiaWF0IjoxNjI5Nzg1MzI1fQ.jJpdIKFHQlF0-dc9CweR6iFMinU8gE_pKbBHJ37IUeM
 @id = 6117e6e6fc231a08886658a2
 
 ### Create User
@@ -64,3 +64,19 @@ Content-Type: application/json
   "user": "eru123",
   "pass": "{{pass}}"
 }
+
+### Read Current Session
+GET {{api}}/auth/session
+Authorization: Bearer {{token}}
+
+### Read other Session
+GET {{api}}/auth/session/611d5dd7094cc31db4e54178
+Authorization: Bearer {{token}}
+
+### Read all sessions
+GET {{api}}/auth/sessions/all
+Authorization: Bearer {{token}}
+
+### Read other sessions
+GET {{api}}/auth/sessions/1/5
+Authorization: Bearer {{token}}
