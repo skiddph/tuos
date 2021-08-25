@@ -318,7 +318,7 @@ module.exports = function (app) {
     if (!records) return res.code(200).send({ type: 'error', message: 'Sessions not found' })
     const result = []
     records.docs.forEach(r => result.push({ ..._.pick(r, ['_id', 'user_id', 'created_at', 'device', 'ip']), is_current: r.token === req.bearerToken }))
-    if (res.sent === false) return res.send({ type: 'success', message: 'Sessions found', data: result })
+    if (res.sent === false) return res.send({ type: 'success', message: `${result.length} sessions found`, size: result.length, data: result })
   }
 
   const allSessions = async (req, res) => {
@@ -326,7 +326,7 @@ module.exports = function (app) {
     if (!records) return res.code(200).send({ type: 'error', message: 'Sessions not found' })
     const result = []
     records.forEach(r => result.push({ ..._.pick(r, ['_id', 'user_id', 'created_at', 'device', 'ip']), is_current: r.token === req.bearerToken }))
-    return res.send({ type: 'success', message: 'Sessions found', data: result })
+    return res.send({ type: 'success', message: `${result.length} sessions found`, data: result, size: result.length })
   }
 
   return {
