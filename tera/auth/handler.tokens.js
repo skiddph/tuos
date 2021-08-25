@@ -18,6 +18,9 @@ const TokenHandler = (app) => {
   // deletes all users token record except current user
   const deleteTokensRecord = async (req) => await Tokens.remove({ user_id: req.user._id, token: { $ne: req.bearerToken } })
 
+  // delete specific record by id or token
+  const deleteTokenRecordByIdOrToken = async (req) => await Tokens.findOneAndDelete({ user_id: req.user._id, ...(req.params._id && req.params._id.match(/^[0-9a-fA-F]{24}$/) ? { _id: req.params._id } : { token: req.params._id }) })
+
   // create a new token
   const newJWTToken = (payload) => String(app.jwt.sign({ ..._.pick(payload, (['_id', 'name', 'user'])) }))
 
@@ -39,6 +42,7 @@ const TokenHandler = (app) => {
     newJWTToken,
     createTokenRecord,
     deleteTokenRecord,
+    deleteTokenRecordByIdOrToken,
     deleteTokensRecord,
     readTokenRecord,
     readTokenRecords,
