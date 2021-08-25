@@ -14,7 +14,8 @@ module.exports = function (app) {
     deleteTokensRecord,
     readTokenRecord,
     readTokenRecords,
-    readAllTokenRecords
+    readAllTokenRecords,
+    deleteTokenRecordByIdOrToken
   } = TokenHandler(app)
 
   async function pash (pass) {
@@ -305,14 +306,24 @@ module.exports = function (app) {
       .catch(() => res.code(200).send({ type: 'error', message: 'Server error! Failed to logout on other devices' }))
   }
 
-  const logoutSession = async (req, res) => { }
+  // logout specific token by id or token
+  const logoutSession = async (req, res) => {
+    return await deleteTokenRecordByIdOrToken(req)
+      .then(rec => {
+        if (rec) return res.code(200).send({ type: 'success', message: 'Your session has been logout' })
+        else throw new Error('No record found')
+      })
+      .catch((e) => res.code(200).send({ type: 'error', message: e.message || 'Server error! Failed to logout.' }))
+  }
 
+  // read current token data
   const session = async (req, res) => {
     const record = await readTokenRecord(req)
     if (!record) return res.code(200).send({ type: 'error', message: 'Session not found' })
     return res.send({ type: 'success', message: 'Session found', data: { ..._.pick(record, ['_id', 'user_id', 'created_at', 'device', 'ip']), is_current: record.token === req.bearerToken } })
   }
 
+  // read many other token data
   const sessions = async (req, res) => {
     const records = await readTokenRecords(req)
     if (!records) return res.code(200).send({ type: 'error', message: 'Sessions not found' })
@@ -321,12 +332,13 @@ module.exports = function (app) {
     if (res.sent === false) return res.send({ type: 'success', message: `${result.length} sessions found`, size: result.length, data: result })
   }
 
+  // read all token data
   const allSessions = async (req, res) => {
     const records = await readAllTokenRecords(req)
     if (!records) return res.code(200).send({ type: 'error', message: 'Sessions not found' })
     const result = []
     records.forEach(r => result.push({ ..._.pick(r, ['_id', 'user_id', 'created_at', 'device', 'ip']), is_current: r.token === req.bearerToken }))
-    return res.send({ type: 'success', message: `${result.length} sessions found`, data: result, size: result.length })
+    return res.send({ type: 'success', message: `${result.length} sessions found`, size: result.length, data: result })
   }
 
   return {
