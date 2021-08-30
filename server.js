@@ -1,19 +1,12 @@
 require('dotenv').config()
-const bootstrap = require('./bootstrap')
+const Bootstrap = require('./bootstrap')
 
-bootstrap({
-  token: process.env.JWT_TOKEN || 'tuos_default_jwt_token',
-  mongo: process.env.MONGO_DIRECT || 'mongodb://localhost:27017/tuos',
-  mailer: {
-    secure: process.env.MAILER_SECURE === '1',
-    host: process.env.MAILER_HOST,
-    auth: {
-      user: process.env.MAILER_USER,
-      pass: process.env.MAILER_PASS
-    }
-  },
+const bootstrap = new Bootstrap({
   plugins: {
-    excluded: [],
-    primary: ['jwt']
+    primary: ['jwt', 'misc', 'ratelimit'],
+    mode: 'all',
+    strict: false
   }
 })
+
+bootstrap.init()

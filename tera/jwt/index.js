@@ -3,7 +3,12 @@ const JwtHandler = require('./handler.jwt')
 
 const TuosJwt = async function (app, options) {
   await app.register(require('fastify-jwt'), {
-    secret: options.token
+    secret: process.env.JWT_TOKEN ||
+    options.token ||
+    (() => {
+      console.log('[PLUGIN] jwt: Using default token')
+      return 'tuos_default_jwt_token'
+    })()
   })
 
   app.decorateRequest('bearerToken', null)

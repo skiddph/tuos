@@ -1,126 +1,142 @@
-const autoload = require('auto-load')
 const path = require('path')
 const Fastify = require('fastify')
 const _ = require('lodash')
-const installedPlugins = []
-const projectConfig = require('./project.config')
-const getPlugins = function (dir, excluded = []) {
-  const dirs = _.omit(autoload(dir), excluded)
-  const plugins = {}
+const autoload = require('auto-load')
 
-  for (const key in dirs) {
-    if ('index' in dirs[key] && 'plugin' in dirs[key].index) {
-      plugins[key] = dirs[key].index
+class Bootstrap {
+  // mode - all | order | only
+  constructor (options = {}) {
+    if (!('plugins' in options)) options.plugins = {}
+
+    this.dir = options.plugins.dir || path.join(__dirname, '../tera')
+    this.primary = options.plugins.primary || []
+    this.excluded = options.plugins.excluded || []
+    this.only = options.plugins.only || []
+    this.order = options.plugins.order || []
+    this.strict = options.plugins.strict || true
+    this.mode = options.plugins.mode || 'all'
+    this.PORT = process.env.PORT || options.port || 8080
+    this.HOST = process.env.HOST || options.host || '0.0.0.0'
+    this.fastifyOpts = options.config ? options.config.fastify || {} : {}
+    this.installed = []
+    this.plugins = []
+    this.fastify = Fastify(this.fastifyOpts)
+    this.options = options
+  }
+
+  getPlugins () {
+    const dirs = _.omit(autoload(this.dir), this.excluded)
+    const plugins = {}
+    for (const key in dirs) {
+      if ('index' in dirs[key] && 'plugin' in dirs[key].index) plugins[key] = dirs[key].index
+    }
+    this.plugins = plugins
+  }
+
+  isInstalled (key) {
+    return Array(Object.keys(this.installed)).includes(key)
+  }
+
+  isPlugin (key) {
+    return Array(Object.keys(this.plugins)).includes(key)
+  }
+
+  async install (key) {
+    console.log(`[PLUGIN] ${key}: Installing...`)
+    try {
+      if (this.isInstalled(key)) {
+        console.log('[PLUGIN] ' + key + ': Already installed')
+      } else if (!this.isPlugin) {
+        console.log('[PLUGIN] ' + key + ': Plugin is not listed')
+      } else {
+        this.installed.push(key)
+        await this.fastify.register(this.plugins[key].plugin, this.options)
+        console.log('[PLUGIN] ' + key + ': Installed')
+      }
+    } catch (e) {
+      console.log('[PLUGIN] ' + key + ': Failed to install', e)
+      if (this.strict) process.exit(1)
     }
   }
 
-  return plugins
-}
-
-const installMongo = async function (fastify, options, plugins) {
-  let isInstalled = false
-
-  if ('mongo' in plugins) {
-    try {
-      await fastify.register(plugins.mongo.plugin, options)
-      isInstalled = true
-      installedPlugins.push('mongo')
-      console.log('[PLUGIN] mongo: Installed')
-    } catch (e) {
-      console.log('[PLUGIN] mongo: Failed to install', e)
+  async installList (keys) {
+    if (Array.isArray(keys)) {
+      await keys.forEach(async key => {
+        await this.install(key)
+      })
     }
-  } else if ('mongoose' in plugins) {
-    try {
-      await fastify.register(plugins.mongoose.plugin, options)
-      isInstalled = true
-      installedPlugins.push('mongoose')
-      console.log('[PLUGIN] mongoose: Installed')
-    } catch (e) {
-      console.log('[PLUGIN] mongoose: Failed to install', e)
-    }
-  } else if ('mongo' in plugins || 'mongoose' in plugins) {
-    isInstalled = true
-    console.log('[PLUGIN] mongo or mongoose: already installed')
   }
 
-  if (!isInstalled) {
-    for (const key in _.omit(plugins, installedPlugins)) {
-      if (typeof plugins[key] === 'object' && 'models' in plugins[key]) { installedPlugins.push(key) }
-    }
-  } else {
-    for (const key in _.omit(plugins, installedPlugins)) {
-      if (typeof plugins[key] === 'object' && 'models' in plugins[key]) {
-        try {
-          await fastify.register(plugins[key].plugin, options)
-          installedPlugins.push(key)
-          console.log('[PLUGIN] ' + key + ': Installed')
-        } catch (e) {
-          console.log('[PLUGIN] ' + key + ': Failed to install', e)
+  async installOnly () {
+    if (Array.isArray(this.only)) this.plugins = _.pick(this.plugins, this.only)
+  }
+
+  async installPrimary () {
+    await this.installList(this.primary)
+  }
+
+  async installMongo (mongoKey = 'mongo') {
+    if (mongoKey in this.plugins) {
+      await this.install(mongoKey)
+      if (this.isInstalled(mongoKey)) {
+        for (const key in _.omit(this.plugins, this.installed)) {
+          if ('models' in this.plugins[key]) await this.install(key)
         }
       }
     }
   }
-}
 
-const installPrimary = async function (fastify, options, plugins, allowed) {
-  for (const key in _.pick(plugins, allowed)) {
-    try {
-      await fastify.register(plugins[key].plugin, options)
-      installedPlugins.push(key)
-      console.log('[PLUGIN] ' + key + ': Installed')
-    } catch (e) {
-      console.log('[PLUGIN] ' + key + ': Failed to install', e)
+  async installSecondary () {
+    const list = Object.keys(_.omit(this.plugins, this.installed))
+    await this.installList(list)
+  }
+
+  async masterInstallAll () {
+    await this.fastify.decorate('bootstrap', { plugins: this.plugins, options: this.options })
+    await this.installPrimary()
+    await this.installMongo('mongo')
+    await this.installMongo('mongoose')
+    await this.installSecondary()
+  }
+
+  async masterInstallOnly () {
+    await this.installOnly()
+    await this.masterInstallAll()
+  }
+
+  async masterInstallOrder () {
+    await this.fastify.decorate('bootstrap', { plugins: this.plugins, options: this.options })
+    if (Array.isArray(this.order)) this.order.forEach(async key => await this.install(key))
+  }
+
+  async init () {
+    this.getPlugins()
+
+    switch (this.mode) {
+      case 'all':
+        await this.masterInstallAll()
+        break
+      case 'only':
+        await this.masterInstallOnly()
+        break
+      case 'order':
+        await this.masterInstallOrder()
+        break
+      default:
+        throw new Error('[PLUGIN] Master installer: Invalid mode (available: all|only|order)')
     }
+
+    await this.fastify.ready()
+    await this.fastify
+      .listen(this.PORT, this.HOST)
+      .then((addr) => {
+        console.log(`[APP] Server: listening on ${addr}`)
+      })
+      .catch((err) => {
+        console.log('[APP] Server: Failed to start', err)
+        process.exit(1)
+      })
   }
 }
 
-const installSecondary = async function (fastify, options, plugins) {
-  for (const key in _.omit(plugins, installedPlugins)) {
-    try {
-      await fastify.register(plugins[key].plugin, options)
-      installedPlugins.push(key)
-      console.log('[PLUGIN] ' + key + ': Installed')
-    } catch (e) {
-      console.log('[PLUGIN] ' + key + ': Failed to install', e)
-    }
-  }
-}
-
-const init = async function (options = {}) {
-  if (!('config' in options)) options.config = projectConfig
-
-  const pluginsDir = options.pluginsDir || path.join(__dirname, '../tera')
-  const fastifyOpts = options.config ? options.config.fastify || {} : {}
-  const primaryPlugins = options.plugins.primary || []
-  const excludedPlugins = options.plugins.excluded || []
-  const fastify = Fastify(fastifyOpts)
-  const plugins = getPlugins(pluginsDir, excludedPlugins)
-
-  console.log('[APP] Starting...')
-
-  await fastify.decorate('bootstrap', { plugins, options })
-
-  await installPrimary(fastify, options, plugins, primaryPlugins)
-    .catch(e => console.warn('[PLUGIN] MASTER primary failed to install', e))
-
-  await installMongo(fastify, options, _.omit(plugins, excludedPlugins))
-    .catch(e => console.warn('[PLUGIN] MASTER mongo: Failed to install', e))
-
-  await installSecondary(fastify, options, plugins, _.omit(plugins, excludedPlugins))
-    .catch(e => console.warn('[PLUGIN] MASTER secondary: Failed to install', e))
-
-  const PORT = process.env.PORT || options.port || 8080
-  const HOST = process.env.HOST || options.host || '0.0.0.0'
-
-  await fastify.ready()
-  await fastify
-    .listen(PORT, HOST)
-    .then((addr) => {
-      console.log(`[APP] Server: listening on ${addr}`)
-    })
-    .catch((err) => {
-      console.log('[APP] Server: Failed to start', err)
-      process.exit(1)
-    })
-}
-module.exports = init
+module.exports = Bootstrap

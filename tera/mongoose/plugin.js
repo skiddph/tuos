@@ -1,7 +1,14 @@
 const mongoose = require('mongoose')
 
 module.exports = require('fastify-plugin')(async function (fastify, options, done) {
-  await mongoose.connect(options.mongo, {
+  const mongoDirect = process.env.MONGO_DIRECT ||
+   options.mongo ||
+   (() => {
+     console.log('[PLUGIN] mongoose: Using default credentials')
+     return 'mongodb://localhost:27017/tuos'
+   })()
+
+  await mongoose.connect(mongoDirect, {
     useNewUrlParser: true,
     config: {
       autoIndex: true
