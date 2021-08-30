@@ -1,0 +1,9 @@
+@host = http://0.0.0.0:8080
+@api = {{host}}/api
+
+### default UUID
+GET {{api}}/id
+
+### custom length UUID
+
+GET {{api}}/id/100
