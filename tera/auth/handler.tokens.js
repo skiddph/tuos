@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const TokenHandler = (app) => {
-  const { Tokens } = app.mongoose.models
+  const { Tokens } = app.bootstrap.plugins.auth.models
 
   // create current user token record
   const createTokenRecord = async (req, token, userId) => {

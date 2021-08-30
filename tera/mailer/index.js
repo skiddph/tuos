@@ -20,7 +20,9 @@ const mailer = async (fastify, options, next) => {
   next()
 }
 
-module.exports = fp(mailer, {
-  fastify: '>=2.0.0',
-  name: 'tuos-mailer'
-})
+module.exports = {
+  plugin: fp(mailer, {
+    fastify: '>=2.0.0',
+    name: 'tuos-mailer'
+  })
+}

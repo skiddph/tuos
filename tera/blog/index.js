@@ -1,6 +1,6 @@
 module.exports = {
   plugin: require('./plugin'),
-  handler: {
+  handlers: {
     blog: require('./handler.blog'),
     comment: require('./handler.comment'),
     vote: require('./handler.vote'),

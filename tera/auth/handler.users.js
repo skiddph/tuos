@@ -6,7 +6,7 @@ const passwordComplexity = require('joi-password-complexity')
 const TokenHandler = require('./handler.tokens')
 
 module.exports = function (app) {
-  const { Users } = app.mongoose.models
+  const { Users } = app.bootstrap.plugins.auth.models
   const {
     newJWTToken,
     createTokenRecord,
@@ -97,10 +97,16 @@ module.exports = function (app) {
   }
 
   // Auth + Global Schema
-  const auth = { preValidation: [app.authenticate], ...gschema }
+  const auth = {
+    preValidation: [app.authenticate],
+    ...gschema
+  }
 
   // Auth + Params for session
-  const sessionSchema = { preValidation: [app.authenticate], schema: { ...schemaParams } }
+  const sessionSchema = {
+    preValidation: [app.authenticate],
+    schema: { ...schemaParams }
+  }
 
   // Password Complexity for Password Validation
   const complexityOptions = {

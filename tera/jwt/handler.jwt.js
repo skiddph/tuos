@@ -1,5 +1,5 @@
 const JwtHandler = (app) => {
-  const { Tokens } = app.mongoose.models
+  const { Tokens } = app.bootstrap.plugins.auth.models
 
   const authenticate = async (req, res, next) => {
     try {
