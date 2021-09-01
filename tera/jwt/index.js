@@ -12,6 +12,7 @@ const TuosJwt = async function (app, options) {
   })
 
   app.decorateRequest('bearerToken', null)
+  app.decorateRequest('isAuthenticated', null)
 
   const { authenticate } = JwtHandler(app)
   app.decorate('authenticate', authenticate)

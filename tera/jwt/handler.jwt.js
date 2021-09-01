@@ -20,8 +20,33 @@ const JwtHandler = (app) => {
     }
   }
 
+  const preAuth = async (req, res, next) => {
+    try {
+      req.isAuthenticated = false
+
+      const token = req.headers.authorization.split(' ')[1]
+      req.bearerToken = token
+
+      const userId = app.jwt.decode(token)._id
+      const record = await Tokens.findOne({ user_id: userId, token })
+      if (!record) return next()
+
+      app.jwt.verify(token, null, (err, decoded) => {
+        if (!err) {
+          req.isAuthenticated = true
+          req.user = decoded
+        }
+
+        next()
+      })
+    } catch (e) {
+      next()
+    }
+  }
+
   return {
-    authenticate
+    authenticate,
+    preAuth
   }
 }
 
