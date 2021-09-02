@@ -1,44 +1,25 @@
-const _ = require('lodash')
-
 module.exports = function (app) {
-  const Model = app.bootstrap.plugins.blog.models.Quiz
+  // const Model = app.bootstrap.plugins.blog.models.FormResponse
 
-  const modifySchema = {}
-  const readSchema = {}
-  const deleteSchema = {}
-
-  // Create quiz handler
-  const create = async (req, res) => {
-    const body = _.pick(req.body, [
-      'title',
-      'description',
-      'quiz_type',
-      'has_score',
-      'allow_edit',
-      'tags',
-      'questions'
-    ])
-
-    const quiz = new Model(body)
-
-    const tstamp = Date.now()
-
-    quiz.created_at = tstamp
-    quiz.updated_at = tstamp
-    quiz.author_id = req.user.id
-    quiz.author_name = req.user.name
-    quiz.alternate_id = app.usid.uuid()
-
-    await quiz.save()
-    res.json(quiz)
+  const schema = {
+    create: {},
+    update: {},
+    delete: {},
+    list: {},
+    read: {}
   }
+  const create = async (req, res) => {}
+  const update = async (req, res) => {}
+  const remove = async (req, res) => {}
+  const get = async (req, res) => {}
+  const list = async (req, res) => {}
 
   return {
-    schema: {
-      modify: modifySchema,
-      read: readSchema,
-      delete: deleteSchema
-    },
-    create
+    create,
+    update,
+    remove,
+    get,
+    list,
+    schema
   }
 }
