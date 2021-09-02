@@ -15,6 +15,7 @@ module.exports = async function (app, options, done) {
   app.get('/api/auth/sessions/:page', h.sessionSchema, h.sessions)
   app.get('/api/auth/sessions/:page/:items', h.sessionSchema, h.sessions)
   app.get('/api/user', h.rdschema, h.read)
+  app.get('/api/user/:user', h.rdschema, h.read)
   app.get('/api/user/@:user', h.rdschema, h.read)
   app.get('/api/user/$:_id', h.rdschema, h.read)
   app.get('/api/users', h.rdschema, h.reads)
