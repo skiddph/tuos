@@ -10,7 +10,8 @@ const UsersSchema = new mongoose.Schema({
   phone: { type: String, required: false },
   phoneVerified: { type: Boolean, required: false },
   email: { type: String, required: false },
-  emailVerified: { type: Boolean, required: false }
+  emailVerified: { type: Boolean, required: false },
+  role: String
 }, { timestamp: true })
 
 UsersSchema.plugin(paginate)

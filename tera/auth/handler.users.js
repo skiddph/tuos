@@ -135,6 +135,12 @@ module.exports = function (app) {
     return schema.validate(user)
   }
 
+  // check if mongodb has a registered user
+  const hasUser = async () => {
+    const user = await Users.findOne({})
+    return !!user
+  }
+
   // Register Handler
   const register = async (req, res) => {
     const { error } = validate(req.body)
@@ -148,6 +154,7 @@ module.exports = function (app) {
     user.created_at = tstamp
     user.updated_at = tstamp
     user.pass = await pash(req.body.pass)
+    user.role = await hasUser() ? 'user' : 'admin'
 
     await user.save()
       .then(async (u) =>
