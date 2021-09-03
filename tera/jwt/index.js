@@ -14,8 +14,9 @@ const TuosJwt = async function (app, options) {
   app.decorateRequest('bearerToken', null)
   app.decorateRequest('isAuthenticated', null)
 
-  const { authenticate } = JwtHandler(app)
+  const { authenticate, preAuth } = JwtHandler(app)
   app.decorate('authenticate', authenticate)
+  app.decorate('preAuth', preAuth)
 }
 
 module.exports = {
