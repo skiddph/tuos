@@ -13,13 +13,13 @@ module.exports = () => {
     score: Number, // total scores of all questions
     accumulated_time: Number, // total time spent on all questions
     answers: [{
-      id: String, // question number
+      id: String, // question id
       answer: String, // answer (applicable on single|manual type question)
       answers: [String], // string of answers (applicable on multiple)
       accumulated_time: Number // time spent in this particular question
     }],
     scores: [{
-      id: Number, // question number
+      id: String, // question number
       graded: Boolean, // automatically set to true if the question is not manually graded or else false
       score: Number // score of the question
     }]

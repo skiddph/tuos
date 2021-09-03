@@ -24,8 +24,9 @@ module.exports = () => {
     allow_answer_edit: Boolean, // allow editing of answers after submission(default: false)
     total_points: Number, // total points that can be earn by answering the form (applicable on quiz|test) (default: 0)
     shuffle_choices: Boolean, // default shuffle choices in every question (default: true)
+    shuffle_questions: Boolean, // shuffle questions (default: false)
     questions: [{
-      id: Number,
+      id: String,
       question: String,
       type: String, // (single|multiple|manual)
       points: Number, // points for this specific question (applicable on quiz|test) (default: 1)
