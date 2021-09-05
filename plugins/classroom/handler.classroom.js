@@ -1,7 +1,7 @@
 const _ = require('lodash')
 
 module.exports = function (app) {
-  const Model = app.bootstrap.plugins.classroom.models.Classroom
+  const Model = app.tuos.plugins.classroom.models.Classroom
   const schema = {
     preValidation: [app.preAuth],
     schema: {

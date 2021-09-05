@@ -1,12 +1,13 @@
 require('dotenv').config()
-const Bootstrap = require('./bootstrap')
+const fastify = require('fastify')({ logger: true })
 
-const bootstrap = new Bootstrap({
-  plugins: {
-    primary: ['jwt', 'misc', 'ratelimit'],
-    mode: 'all',
-    strict: false
-  }
+fastify.register(require('tuos-tera'), {
+  dir: 'plugins',
+  order: [
+    'mongoose',
+    'jwt',
+    ['auth', 'blog', 'myapi', 'classroom', 'forms']
+  ]
 })
 
-bootstrap.init()
+fastify.listen(process.env.PORT || 8080)

@@ -1,5 +1,5 @@
 const JwtHandler = (app) => {
-  const { Tokens } = app.bootstrap.plugins.auth.models
+  const Tokens = app.tuos.plugins.auth.models.Tokens
 
   const authenticate = async (req, res, next) => {
     try {

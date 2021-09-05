@@ -2,7 +2,7 @@ const _ = require('lodash')
 const USID = require('usid')
 
 module.exports = function (app) {
-  const Model = app.bootstrap.plugins.blog.models.Blog
+  const Model = app.tuos.plugins.blog.models.Blog
   const writeSchema = {
   }
 

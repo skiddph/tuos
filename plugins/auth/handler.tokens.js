@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const TokenHandler = (app) => {
-  const { Tokens } = app.bootstrap.plugins.auth.models
+  const { Tokens } = app.tuos.plugins.auth.models
 
   // create a new token
   const newJWTToken = (payload) => String(app.jwt.sign({ ..._.pick(payload, (['_id', 'name', 'user', 'role'])) }))

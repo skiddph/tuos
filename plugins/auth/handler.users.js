@@ -6,7 +6,7 @@ const passwordComplexity = require('joi-password-complexity')
 const TokenHandler = require('./handler.tokens')
 
 module.exports = function (app) {
-  const { Users } = app.bootstrap.plugins.auth.models
+  const { Users } = app.tuos.plugins.auth.models
   const {
     createTokenRecord,
     deleteTokenRecord,

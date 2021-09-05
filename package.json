@@ -14,19 +14,15 @@
     "push": "git add . && git commit -am update && git push"
   },
   "dependencies": {
-    "auto-load": "^3.0.4",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "fastify": "^3.18.1",
-    "fastify-autoload": "^3.8.0",
     "fastify-cors": "^6.0.2",
     "fastify-jwt": "^3.0.0",
-    "fastify-leveldb": "^3.1.1",
     "fastify-plugin": "^3.0.0",
     "fastify-rate-limit": "^5.6.0",
     "fastify-static": "^4.2.2",
-    "fastify-swagger": "^4.8.2",
     "joi": "^17.4.0",
     "joi-password-complexity": "^5.1.0",
     "joi-phone-number": "^5.0.1",
@@ -37,6 +33,7 @@
     "nodemailer": "^6.6.3",
     "numesis": "^1.0.1",
     "path": "^0.12.7",
+    "tuos-tera": "^1.0.3",
     "usid": "^1.0.21"
   },
   "devDependencies": {

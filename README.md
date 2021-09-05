@@ -16,10 +16,10 @@ yarn start  # PRODUCTION
 yarn dev    # DEVELOPMENT
 ```
 
-Start [client only](https://github.com/eru123/tuos/tree/main/aplos)
+Start [client only](https://github.com/eru123/tuos/tree/main/clients)
 ```bash
 # LOCATE WEB UI CLIENT DIRECTORY
-cd aplos/<webui_client>
+cd clients/<webUI_client>
 
 yarn start  # PRODUCTION
 yarn dev    # DEVELOPMENT
@@ -29,8 +29,10 @@ yarn dev    # DEVELOPMENT
 
 | PATH  | DESCRIPTION   |
 |-------|---------------|
-| [aplos](https://github.com/eru123/tuos/tree/main/aplos) | Web UI Client |
-| [tera](https://github.com/eru123/tuos/tree/main/tera)  | API Services  |
+| [/clients](https://github.com/eru123/tuos/tree/main/clients) | Web UI Clients |
+| [/plugins](https://github.com/eru123/tuos/tree/main/plugins)  | Plugins directory  |
+| [/tests](https://github.com/eru123/tuos/tree/main/tests)  | Test files  |
+| [/server.js](https://github.com/skiddph/tuos/blob/main/server.js)  | Server entry file  |
 
 # LICENSE
 Apache-2.0[@Jericho Aquino](https://github.com/eru123)
