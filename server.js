@@ -10,4 +10,4 @@ fastify.register(require('tuos-tera'), {
   ]
 })
 
-fastify.listen(process.env.PORT || 8080)
+fastify.listen(process.env.PORT || 8080, process.env.HOST || '0.0.0.0')
