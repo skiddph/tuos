@@ -2,9 +2,13 @@ const _ = require('lodash')
 const TokenHandler = (app) => {
   const { Tokens } = app.bootstrap.plugins.auth.models
 
+  // create a new token
+  const newJWTToken = (payload) => String(app.jwt.sign({ ..._.pick(payload, (['_id', 'name', 'user', 'role'])) }))
+
   // create current user token record
-  const createTokenRecord = async (req, token, userId) => {
-    const data = { token, user_id: userId }
+  const createTokenRecord = async (req, payload) => {
+    const token = newJWTToken(payload)
+    const data = { token, user_id: payload._id, role: payload.role }
     data.device = req.headers['user-agent']
     data.ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1'
     data.created_at = Date.now()
@@ -20,9 +24,6 @@ const TokenHandler = (app) => {
 
   // delete specific record by id or token
   const deleteTokenRecordByIdOrToken = async (req) => await Tokens.findOneAndDelete({ user_id: req.user._id, ...(req.params._id && req.params._id.match(/^[0-9a-fA-F]{24}$/) ? { _id: req.params._id } : { token: req.params._id }) })
-
-  // create a new token
-  const newJWTToken = (payload) => String(app.jwt.sign({ ..._.pick(payload, (['_id', 'name', 'user'])) }))
 
   // read single current token record
   const readTokenRecord = async (req) => await Tokens.findOne({ user_id: req.user._id, ...(req.params._id ? { _id: req.params._id } : { token: req.bearerToken }) })

@@ -8,7 +8,6 @@ const TokenHandler = require('./handler.tokens')
 module.exports = function (app) {
   const { Users } = app.bootstrap.plugins.auth.models
   const {
-    newJWTToken,
     createTokenRecord,
     deleteTokenRecord,
     deleteTokensRecord,
@@ -33,7 +32,8 @@ module.exports = function (app) {
     'email',
     'emailVerified',
     'created_at',
-    'updated_at'
+    'updated_at',
+    'role'
   ]
 
   const readResponseSchema = [
@@ -156,15 +156,14 @@ module.exports = function (app) {
     user.pass = await pash(req.body.pass)
     user.role = await hasUser() ? 'user' : 'admin'
 
-    await user.save()
-      .then(async (u) =>
-        res.code(200).send({
-          status: 'success',
-          message: 'User successfully created.',
-          data: _.pick(u._doc, userResponseSchema),
-          token: newJWTToken(u, req)
-        })
-      )
+    return await user.save()
+      .then((u) => createTokenRecord(req, u._doc))
+      .then((t) => res.code(200).send({
+        type: 'success',
+        message: 'User created successfully',
+        data: _.pick(user._doc, userResponseSchema),
+        token: t._doc.token
+      }))
       .catch((e) => {
         res.code(200).send({
           type: 'error',
@@ -191,14 +190,12 @@ module.exports = function (app) {
     const pass = await bcrypt.compare(entry.pass, user.pass)
     if (!pass) return res.code(200).send({ type: 'error', message: 'Invalid credentials' })
 
-    const token = newJWTToken(user, req)
-
-    await createTokenRecord(req, token, user._id)
-      .then(() =>
+    await createTokenRecord(req, user)
+      .then((t) =>
         res.code(200).send({
           status: 'success',
           message: 'You are now logged in.',
-          token: token,
+          token: t._doc.token,
           data: _.pick(user, userResponseSchema)
         })
       )

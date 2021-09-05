@@ -34,6 +34,7 @@ const JwtHandler = (app) => {
       app.jwt.verify(token, null, (err, decoded) => {
         if (!err) {
           req.isAuthenticated = true
+          req.isAdmin = decoded.role === 'admin'
           req.user = decoded
         }
 
