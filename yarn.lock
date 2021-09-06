@@ -2906,10 +2906,10 @@ tsconfig-paths@^3.9.0:
     minimist "^1.2.0"
     strip-bom "^3.0.0"
 
-tuos-tera@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/tuos-tera/-/tuos-tera-1.0.3.tgz#a77df67e1cebe8ce3cb9e59caffc11fdeda4b4ec"
-  integrity sha512-jWxM0cbNa/kMHbeXOm/h9e4bd8xWbIRc6sIaCG6ArFywfpnu+WDC53yM9KgcZoPagsVx1C3kPBTZ2adRJdDzIw==
+tuos-tera@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/tuos-tera/-/tuos-tera-1.0.4.tgz#d30539672d8dbd291fadb95425f99e46d2b69a4d"
+  integrity sha512-3/udFRz6Kohvk0gkmdLu16XYrDfXIMoHLY0ETerQXyV0WIpmI8o2rXulra7JqPGf1Z6TKidDrDFD8zDE3CzXqg==
   dependencies:
     auto-load "^3.0.4"
     fastify-plugin "^3.0.0"
