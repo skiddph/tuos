@@ -3,7 +3,7 @@ const fastify = require('fastify')({ logger: true })
 
 const options = {
   mongoose: {
-    connect: 'mongodb://localhost:27017/tuos'
+    connect: process.env.MONGO_DIRECT || 'mongodb://localhost:27017/tuos'
   }
 }
 
