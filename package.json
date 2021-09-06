@@ -33,6 +33,7 @@
     "nodemailer": "^6.6.3",
     "numesis": "^1.0.1",
     "path": "^0.12.7",
+    "tuos-mongoose": "^1.0.0",
     "tuos-tera": "^1.0.4",
     "usid": "^1.0.21"
   },
