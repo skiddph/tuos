@@ -7,11 +7,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server",
-    "build:root": "cd aplos\\root && yarn install && yarn build",
-    "dev:root": "cd aplos\\root && yarn install && yarn dev",
-    "dev:sc": "start yarn dev && cd aplos\\root && start yarn dev",
-    "push": "git add . && git commit -am update && git push"
+    "dev": "nodemon server"
   },
   "dependencies": {
     "axios": "^0.21.1",
