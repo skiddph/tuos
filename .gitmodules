@@ -1,0 +1,9 @@
+[submodule "core/tera"]
+	path = core/tera
+	url = https://github.com/eru123/tera
+[submodule "core/auth"]
+	path = core/auth
+	url = https://github.com/eru123/tuos-auth
+[submodule "core/mongoose"]
+	path = core/mongoose
+	url = https://github.com/eru123/tuos-mongoose
