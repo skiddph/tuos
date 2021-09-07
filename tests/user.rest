@@ -6,8 +6,8 @@
 @phone = +639206080487
 @user = eru123
 @pass = !P4s5W04d~
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTE3ZTZlNmZjMjMxYTA4ODg2NjU4YTIiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwiaWF0IjoxNjI5ODg1MDE5fQ.EzyNQFrxV4I_bcQTjrnhShZ_FU_WWUPKJobWOjiq_2c
-@id = 6117e6e6fc231a08886658a2
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTM2MDQ5YjlhMWNhM2M4ODdjZGI4ZGYiLCJuYW1lIjoiSmVyaWNobyBBcXVpbm8iLCJ1c2VyIjoiZXJ1MTIzIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjMwOTg3Njg1fQ.80OMs0o2zkWkAyYKPGqFtOFUCEnrFi1u9tVvEA6phM0
+@id = 6136049b9a1ca3c887cdb8df
 
 ### Create User
 POST {{api}}/auth/register
@@ -35,11 +35,11 @@ GET {{api}}/user
 Authorization: Bearer {{token}}
 
 ### Read User By Username
-GET {{api}}/user/@{{user}}
+GET {{api}}/user/{{user}}
 Authorization: Bearer {{token}}
 
 ### Read user by id
-GET {{api}}/user/${{id}}
+GET {{api}}/user/{{id}}
 Authorization: Bearer {{token}}
 
 ### GET users
@@ -70,7 +70,7 @@ GET {{api}}/auth/session
 Authorization: Bearer {{token}}
 
 ### Read other Session
-GET {{api}}/auth/session/612494748ed2e50f746a79a2
+GET {{api}}/auth/session/613610a74f679a58a145dcbb
 Authorization: Bearer {{token}}
 
 ### Read all sessions
@@ -86,7 +86,7 @@ DELETE {{api}}/auth/logout
 Authorization: Bearer {{token}}
 
 ### Logout other session
-DELETE {{api}}/auth/logout/session/611d5dd7094cc31db4e54178
+DELETE {{api}}/auth/logout/session/61360e0e5a6733bad19895ba
 Authorization: Bearer {{token}}
 
 ### Logout all sessions except current session
