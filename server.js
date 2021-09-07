@@ -11,11 +11,6 @@ if (process.env.NODE_ENV === 'production') {
   console.log('[MODE] Production')
   fastify.register(require('tuos-mongoose'), options)
   fastify.register(require('tuos-auth'), options)
-  fastify.register(require('tuos-tera'), {
-    dir: path.resolve(__dirname, 'plugins'),
-    options,
-    only: ['static']
-  })
 } else {
   console.log('[MODE] Development')
   const tera = require('./core/tera')
@@ -26,11 +21,6 @@ if (process.env.NODE_ENV === 'production') {
   fastify.register(tera, {
     dir: path.resolve(__dirname, 'core/auth/plugins'),
     options
-  })
-  fastify.register(tera, {
-    dir: path.resolve(__dirname, 'plugins'),
-    options,
-    only: ['static']
   })
 }
 
