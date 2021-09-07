@@ -1,5 +1,5 @@
 # Variables
-@url = http://0.0.0.0:8080
+@url = https://tuos.herokuapp.com/
 @api = {{url}}/api
 @name = Jericho Aquino
 @email = yeoligoakino@gmail.com
