@@ -27,8 +27,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "nodemon": "^2.0.8",
-    "svg-captcha": "^1.4.0",
-    "usid": "^1.0.21"
+    "svg-captcha": "^1.4.0"
   },
   "description": "Offers free online tools and services for the public.",
   "private": true,
