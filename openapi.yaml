@@ -1,0 +1,92 @@
+openapi: 3.0.3
+servers:
+  - url: https://tuos.herokuapp.com/api
+    description: Heroku dev server
+  - url: http://localhost:8080/api
+    description: Local dev server
+info:
+  description: Tuos standard API for third-party access
+  version: 0.1.0-alpha-1
+  title: Tuos API
+  contact:
+    name: Developer
+    email: admin@skiddph.ml
+    url: https://github.com/skiddph/tuos
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+tags:
+  - name: Auth
+    description: Authentication, Tokens, and Sessions
+  - name: User
+    description: User Read, Update, and Delete
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      description: Login user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                pass:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  message:
+                    type: string
+                  token:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      user:
+                        type: string
+                      email:
+                        type: string
+                      email_expire:
+                        type: number
+                      email_verified:
+                        type: boolean
+                      created_at:
+                        type: number
+                      updated_at:
+                        type: number
+                      status:
+                        type: string
+                      role:
+                        type: string
+                      data:
+                        type: object
+        default:
+          description: Server Error
+  /user:
+    get:
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      responses:
+        default:
+          description: Server Error
