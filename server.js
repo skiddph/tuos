@@ -27,6 +27,8 @@ const options = {
   }
 }
 
+fastify.register(require('./bootstrap'), options)
+
 if (process.env.NODE_ENV === 'production') {
   console.log('[MODE] Production')
   fastify.register(require('tuos-mongoose'), options)
