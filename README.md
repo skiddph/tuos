@@ -29,10 +29,13 @@ yarn dev    # DEVELOPMENT
 
 | PATH  | DESCRIPTION   |
 |-------|---------------|
-| [/clients](https://github.com/eru123/tuos/tree/main/clients) | Web UI Clients |
+| [/bootstsrap](https://github.com/eru123/tuos/tree/main/bootstsrap) | Preloaded plugins  |
+| [/clients](https://github.com/eru123/tuos/tree/main/clients) | Web UI Clients  |
+| [/core](https://github.com/eru123/tuos/tree/main/core) | Core/Submodules directory for Dev  |
 | [/plugins](https://github.com/eru123/tuos/tree/main/plugins)  | Plugins directory  |
-| [/tests](https://github.com/eru123/tuos/tree/main/tests)  | Test files  |
+| [/index.js](https://github.com/skiddph/tuos/blob/main/index.js)  | Fastify plugin file  |
 | [/server.js](https://github.com/skiddph/tuos/blob/main/server.js)  | Server entry file  |
+| [/openapi.yaml](https://github.com/skiddph/tuos/blob/main/openapi.yaml)  | API docs  |
 
 # LICENSE
 Apache-2.0[@Jericho Aquino](https://github.com/eru123)
