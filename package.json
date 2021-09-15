@@ -1,13 +1,13 @@
 {
   "name": "tuos",
-  "version": "1.0.0",
-  "main": "server.js",
+  "version": "0.1.0.alpha-1",
+  "main": "index.js",
   "repository": "https://github.com/eru123/tuos",
   "author": "eru123 <yeoligoakino@gmail.com>",
   "license": "Apache-2.0",
   "scripts": {
-    "start": "node server",
-    "dev": "nodemon server"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -16,7 +16,7 @@
     "fastify-cors": "^6.0.2",
     "fastify-rate-limit": "^5.6.0",
     "fastify-static": "^4.2.2",
-    "nodemailer": "^6.6.3",
+    "fastify-swagger": "^4.11.0",
     "tuos-auth": "^1.0.1",
     "tuos-mongoose": "^1.0.2"
   },
