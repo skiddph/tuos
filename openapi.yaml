@@ -23,10 +23,73 @@ components:
       bearerFormat: JWT
 tags:
   - name: Auth
-    description: Authentication, Tokens, and Sessions
+    description: Authentication endpoints
+  - name: Session
+    description:  Session endpoints
   - name: User
-    description: User Read, Update, and Delete
+    description: User Read, Update, and Delete endpoints
 paths:
+# Auth
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      description: Register user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                pass:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  message:
+                    type: string
+                  token:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      user:
+                        type: string
+                      name: 
+                        type: string
+                      email:
+                        type: string
+                      email_expire:
+                        type: number
+                      email_verified:
+                        type: boolean
+                      created_at:
+                        type: number
+                      updated_at:
+                        type: number
+                      status:
+                        type: string
+                      role:
+                        type: string
+                      data:
+                        type: object
+        500:
+          description: SERVER ERROR
   /auth/login:
     post:
       tags:
@@ -63,6 +126,8 @@ paths:
                         type: string
                       user:
                         type: string
+                      name: 
+                        type: string
                       email:
                         type: string
                       email_expire:
@@ -81,12 +146,544 @@ paths:
                         type: object
         default:
           description: Server Error
+  /auth/email/verify:
+    post:
+      description: Verify email
+      tags:
+        - Auth
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+        500:
+          description: Server Error
+  /auth/email/resend:
+    post:
+      description: Verify email
+      tags:
+        - Auth
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+        500:
+          description: Server Error
+  /auth/logout:
+    delete:
+      description: Logout current user
+      tags:
+       - Auth
+      security:
+       - BearerAuth: []
+      responses:
+        '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+        500:
+          description: Error
+  /auth/logout/all:
+    delete:
+      description: Logout all user sessions except current
+      tags:
+       - Auth
+      security:
+       - BearerAuth: []
+      responses:
+        '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+        500:
+          description: Error
+  /auth/logout/session/{id}:
+    delete:
+      description: Logout specific user sessions
+      tags:
+       - Auth
+      security:
+       - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+        500:
+          description: Error
+# Session
+  /auth/session:
+    get:
+      description: Read signed-in user session data
+      tags:
+        - Session
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      user_id: 
+                        type: string
+                      created_at:
+                        type: number
+                      device:
+                        type: string
+                      ip:
+                        type: string
+                      is_current:
+                        type: boolean
+        500:
+          description: Error
+  /auth/session/{id}:
+    get:
+      description: Read signed-in user other session data
+      tags:
+        - Session
+      security:
+        - BearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: session id
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      user_id: 
+                        type: string
+                      created_at:
+                        type: number
+                      device:
+                        type: string
+                      ip:
+                        type: string
+                      is_current:
+                        type: boolean
+        500:
+          description: Error
+  /auth/sessions:
+    get:
+      description: Read signed-in user sessions data
+      tags:
+        - Session
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  message:
+                    type: string
+                  size:
+                    type: number
+                  totalDocs: 
+                    type: number
+                  limit: 
+                    type: number
+                  totalPages:
+                    type: number
+                  page: 
+                    type: number
+                  pagingCounter:
+                    type: number
+                  hasPrevPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                  prevPage: 
+                    type: number
+                  nextPage: 
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        user_id: 
+                          type: string
+                        created_at:
+                          type: number
+                        device:
+                          type: string
+                        ip:
+                          type: string
+                        is_current:
+                          type: boolean
+        500:
+          description: Error
+  /auth/sessions/all:
+    get:
+      description: Read signed-in user all session data
+      tags:
+        - Session
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  message:
+                    type: string
+                  size:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        user_id: 
+                          type: string
+                        created_at:
+                          type: number
+                        device:
+                          type: string
+                        ip:
+                          type: string
+                        is_current:
+                          type: boolean
+                    
+        500:
+          description: Error
+  /auth/sessions/{page}:
+    get:
+      description: Read signed-in user session data
+      tags:
+        - Session
+      security:
+        - BearerAuth: []
+      parameters:
+      - name: page
+        in: path
+        required: true
+        description: page
+        schema:
+          type: number
+          default: 1
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  message:
+                    type: string
+                  size:
+                    type: number
+                  totalDocs: 
+                    type: number
+                  limit: 
+                    type: number
+                  totalPages:
+                    type: number
+                  page: 
+                    type: number
+                  pagingCounter:
+                    type: number
+                  hasPrevPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                  prevPage: 
+                    type: number
+                  nextPage: 
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        user_id: 
+                          type: string
+                        created_at:
+                          type: number
+                        device:
+                          type: string
+                        ip:
+                          type: string
+                        is_current:
+                          type: boolean           
+        500:
+          description: Error
+  /auth/sessions/{page}/{items}:
+    get:
+      description: Read signed-in user session data
+      tags:
+        - Session
+      security:
+        - BearerAuth: []
+      parameters:
+      - name: page
+        in: path
+        required: true
+        description: page
+        schema:
+          type: number
+          default: 1
+      - name: items
+        in: path
+        required: true
+        description: page
+        schema:
+          type: number
+          default: 10
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  message:
+                    type: string
+                  size:
+                    type: number
+                  totalDocs: 
+                    type: number
+                  limit: 
+                    type: number
+                  totalPages:
+                    type: number
+                  page: 
+                    type: number
+                  pagingCounter:
+                    type: number
+                  hasPrevPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                  prevPage: 
+                    type: number
+                  nextPage: 
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        user_id: 
+                          type: string
+                        created_at:
+                          type: number
+                        device:
+                          type: string
+                        ip:
+                          type: string
+                        is_current:
+                          type: boolean           
+        500:
+          description: Error
+# User
   /user:
     get:
+      description: Read signed-in user public data
       tags:
         - User
       security:
         - BearerAuth: []
       responses:
-        default:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  message:
+                    type: string
+                  token:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      user:
+                        type: string
+                      email:
+                        type: string
+                      email_expire:
+                        type: number
+                      email_verified:
+                        type: boolean
+                      created_at:
+                        type: number
+                      updated_at:
+                        type: number
+                      status:
+                        type: string
+                      role:
+                        type: string
+                      data:
+                        type: object
+        500:
+          description: Server Error
+  /user/{user}:
+    get:
+      description: Read other user public data
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      parameters:
+      - name: user
+        in: path
+        required: true
+        description: the user identifier, as userId 
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  message:
+                    type: string
+                  token:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      user:
+                        type: string
+                      name: 
+                        type: string
+                      email:
+                        type: string
+                      email_expire:
+                        type: number
+                      email_verified:
+                        type: boolean
+                      created_at:
+                        type: number
+                      updated_at:
+                        type: number
+                      status:
+                        type: string
+                      role:
+                        type: string
+                      data:
+                        type: object
+        500:
           description: Server Error
