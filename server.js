@@ -10,6 +10,11 @@ const options = {
   },
   mongoose: { connect: process.env.MONGO_DIRECT || 'mongodb://localhost:27017/tuos' },
   jwt: { secret_token: process.env.JWT_TOKEN || 'jwt_default_token' },
+  auth: {
+    api_url: process.env.API_URL || 'http://localhost:8080',
+    client_url: process.env.CLIENT_URL || 'http://localhost:8080',
+    code_expiration: process.env.EMAIL_CODE_EXPIRATION
+  },
   mailer: {
     // see https://nodemailer.com/
     transport: {
