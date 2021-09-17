@@ -1,6 +1,7 @@
-console.log('[INSTALLED DEPENDECIES VERSION]')
+console.log('[Installed dependencies version]')
 const ds = require('./package.json').dependencies
-for (const d in ds){
+
+for (const d in ds) {
   try {
     const v = require(`${d}/package.json`).version
     console.log(`${d}: ${v}`)
