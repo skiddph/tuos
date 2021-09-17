@@ -2893,10 +2893,10 @@ tsconfig-paths@^3.9.0:
     minimist "^1.2.0"
     strip-bom "^3.0.0"
 
-tuos-auth@^1.0.1:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/tuos-auth/-/tuos-auth-1.0.5.tgz#a8ab129f4395e548e942544dc918b03d32691079"
-  integrity sha512-AnecEZcpO/jXZVR0OuANYsGpF0xHLhFpR827I/ch1zRjlv14aPIMtvMuMNF89miy16yzXnq4EDbieS3jBM/Hmw==
+tuos-auth@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/tuos-auth/-/tuos-auth-1.0.6.tgz#3f949126369c23112d80503d8c4d33bc2419ab10"
+  integrity sha512-fN03UO1aCoFli8H0e+KBM6OhFeTzWhoFFcYCLy/rOeuaUeDJFP23YpN08nAA0ecR8x2GU75kKM7etjZS2fItgg==
   dependencies:
     bcrypt "^5.0.1"
     fastify-jwt "^3.0.1"
@@ -2907,7 +2907,7 @@ tuos-auth@^1.0.1:
     tuos-tera "^1.0.9"
     usid "^1.0.21"
 
-tuos-mongoose@^1.0.2:
+tuos-mongoose@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tuos-mongoose/-/tuos-mongoose-1.0.3.tgz#82f330e389992d33f5fdf141007dec6429990c6f"
   integrity sha512-OERCMC11QeeG26vGNLTJL46h21sXX5L9k9EzUKoXxQc/mf4zuA5izfPp77Le1tprqfU21KweSqpYWATpjgbXEw==
