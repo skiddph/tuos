@@ -8,7 +8,7 @@ servers:
     description: Local - Development
 info:
   description: Tuos standard API for third-party access
-  version: 0.1.0-alpha-1
+  version: 0.1.0
   title: Tuos API
   contact:
     name: Developer
