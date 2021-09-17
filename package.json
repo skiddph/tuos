@@ -1,7 +1,7 @@
 {
   "name": "tuos",
-  "version": "0.1.0",
-  "main": "index.js",
+  "version": "0.0.1",
+  "main": "production.js",
   "repository": "https://github.com/skiddph/tuos",
   "author": "eru123 <yeoligoakino@gmail.com>",
   "license": "Apache-2.0",

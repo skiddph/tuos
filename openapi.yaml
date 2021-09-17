@@ -8,7 +8,7 @@ servers:
     description: Azure WebAppService - Production
 info:
   description: Tuos standard API for third-party access
-  version: 0.1.0
+  version: 0.0.1
   title: Tuos API
   contact:
     name: Developer
