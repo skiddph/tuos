@@ -6,7 +6,7 @@
   "author": "eru123 <yeoligoakino@gmail.com>",
   "license": "Apache-2.0",
   "scripts": {
-    "start": "node server.js",
+    "start": "node test.js && node server.js",
     "test":"node test.js",
     "dev": "nodemon server.js"
   },
@@ -18,8 +18,8 @@
     "fastify-rate-limit": "^5.6.0",
     "fastify-static": "^4.2.2",
     "fastify-swagger": "^4.11.0",
-    "tuos-auth": "^1.0.1",
-    "tuos-mongoose": "^1.0.2"
+    "tuos-auth": "^1.0.6",
+    "tuos-mongoose": "^1.0.3"
   },
   "devDependencies": {
     "eslint": "7.12.1",
