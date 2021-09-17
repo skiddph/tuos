@@ -32,7 +32,7 @@
   "description": "Offers free online tools and services for the public.",
   "private": true,
   "engines": {
-    "yarn": ">=1.22.x",
+    "yarn": ">=1.x.x",
     "node": ">=14.x",
     "npm": ">=7.x"
   }
