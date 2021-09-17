@@ -1,9 +1,11 @@
 openapi: 3.0.3
 servers:
   - url: https://tuos.herokuapp.com/api/v1
-    description: Heroku dev server
+    description: Heroku - Development
+  - url: https://tuos.azurewebsites.net/api/v1
+    description: Azure WebAppService - Production
   - url: http://localhost:8080/api/v1
-    description: Local dev server
+    description: Local - Development
 info:
   description: Tuos standard API for third-party access
   version: 0.1.0-alpha-1
