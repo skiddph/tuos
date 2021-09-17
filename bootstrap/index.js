@@ -2,10 +2,10 @@ const fp = require('fastify-plugin')
 const path = require('path')
 const tera = require('tuos-tera')
 
-const plugin = async (fastify, opts, done) => {
+const plugin = async (fastify, options, done) => {
   await fastify.register(tera, {
     dir: path.resolve(__dirname, 'plugins'),
-    options: opts,
+    options,
     order: [
       'cors',
       'swagger'
