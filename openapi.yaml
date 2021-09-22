@@ -1,14 +1,14 @@
 openapi: 3.0.3
 servers:
+  - url: http://localhost:8080/api/v1
+    description: Local - Development
   - url: https://tuos.herokuapp.com/api/v1
     description: Heroku - Development
   - url: https://tuos.azurewebsites.net/api/v1
     description: Azure WebAppService - Production
-  - url: http://localhost:8080/api/v1
-    description: Local - Development
 info:
   description: Tuos standard API for third-party access
-  version: 0.1.0
+  version: 0.0.1
   title: Tuos API
   contact:
     name: Developer
@@ -182,6 +182,81 @@ paths:
                   type: string
         500:
           description: Error
+  /auth/password:
+    get:
+      description: Verify reset password link
+      tags:
+       - Auth
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+            description: OK
+            content:
+              text/plain:
+                schema:
+                  type: string
+        500:
+          description: Error
+    post:
+      description: Reset password
+      tags:
+       - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                pass:
+                  type: string
+                return_url:
+                  type: string
+                error_url:
+                  type: string
+      responses:
+        '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+        500:
+          description: Error
+  /auth/token:
+    post:
+      description: Refresh token
+      security:
+       - BearerAuth: []
+      tags:
+       - Auth
+      responses:
+        '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+                    token:
+                      type: string
+        500:
+          description: Error
   /auth/logout:
     delete:
       description: Logout current user
@@ -331,64 +406,6 @@ paths:
                         type: boolean
         500:
           description: Error
-  /auth/sessions:
-    get:
-      description: Read signed-in user sessions data
-      tags:
-        - Session
-      security:
-        - BearerAuth: []
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  type:
-                    type: string
-                  message:
-                    type: string
-                  size:
-                    type: number
-                  totalDocs: 
-                    type: number
-                  limit: 
-                    type: number
-                  totalPages:
-                    type: number
-                  page: 
-                    type: number
-                  pagingCounter:
-                    type: number
-                  hasPrevPage:
-                    type: boolean
-                  hasNextPage:
-                    type: boolean
-                  prevPage: 
-                    type: number
-                  nextPage: 
-                    type: number
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        user_id: 
-                          type: string
-                        created_at:
-                          type: number
-                        device:
-                          type: string
-                        ip:
-                          type: string
-                        is_current:
-                          type: boolean
-        500:
-          description: Error
   /auth/sessions/all:
     get:
       description: Read signed-in user all session data
@@ -428,72 +445,6 @@ paths:
                         is_current:
                           type: boolean
                     
-        500:
-          description: Error
-  /auth/sessions/{page}:
-    get:
-      description: Read signed-in user session data
-      tags:
-        - Session
-      security:
-        - BearerAuth: []
-      parameters:
-      - name: page
-        in: path
-        required: true
-        description: page
-        schema:
-          type: number
-          default: 1
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  type:
-                    type: string
-                  message:
-                    type: string
-                  size:
-                    type: number
-                  totalDocs: 
-                    type: number
-                  limit: 
-                    type: number
-                  totalPages:
-                    type: number
-                  page: 
-                    type: number
-                  pagingCounter:
-                    type: number
-                  hasPrevPage:
-                    type: boolean
-                  hasNextPage:
-                    type: boolean
-                  prevPage: 
-                    type: number
-                  nextPage: 
-                    type: number
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        user_id: 
-                          type: string
-                        created_at:
-                          type: number
-                        device:
-                          type: string
-                        ip:
-                          type: string
-                        is_current:
-                          type: boolean           
         500:
           description: Error
   /auth/sessions/{page}/{items}:
@@ -814,150 +765,6 @@ paths:
                         type: object
         500:
           description: Server Error
-  /users:
-    get:
-      description: Read users data
-      tags:
-        - User
-      security:
-        - BearerAuth: []
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  type:
-                    type: string
-                  message:
-                    type: string
-                  size:
-                    type: number
-                  totalDocs: 
-                    type: number
-                  limit: 
-                    type: number
-                  totalPages:
-                    type: number
-                  page: 
-                    type: number
-                  pagingCounter:
-                    type: number
-                  hasPrevPage:
-                    type: boolean
-                  hasNextPage:
-                    type: boolean
-                  prevPage: 
-                    type: number
-                  nextPage: 
-                    type: number
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        user:
-                          type: string
-                        name: 
-                          type: string
-                        email:
-                          type: string
-                        email_expire:
-                          type: number
-                        email_verified:
-                          type: boolean
-                        created_at:
-                          type: number
-                        updated_at:
-                          type: number
-                        status:
-                          type: string
-                        role:
-                          type: string
-                        data:
-                          type: object           
-        500:
-          description: Error
-  /users/{page}:
-    get:
-      description: Read users data
-      tags:
-        - User
-      security:
-        - BearerAuth: []
-      parameters:
-      - name: page
-        in: path
-        required: true
-        description: page
-        schema:
-          type: number
-          default: 1
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  type:
-                    type: string
-                  message:
-                    type: string
-                  size:
-                    type: number
-                  totalDocs: 
-                    type: number
-                  limit: 
-                    type: number
-                  totalPages:
-                    type: number
-                  page: 
-                    type: number
-                  pagingCounter:
-                    type: number
-                  hasPrevPage:
-                    type: boolean
-                  hasNextPage:
-                    type: boolean
-                  prevPage: 
-                    type: number
-                  nextPage: 
-                    type: number
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        user:
-                          type: string
-                        name: 
-                          type: string
-                        email:
-                          type: string
-                        email_expire:
-                          type: number
-                        email_verified:
-                          type: boolean
-                        created_at:
-                          type: number
-                        updated_at:
-                          type: number
-                        status:
-                          type: string
-                        role:
-                          type: string
-                        data:
-                          type: object           
-        500:
-          description: Error
   /users/{page}/{items}:
     get:
       description: Read users data
