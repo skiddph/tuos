@@ -18,7 +18,7 @@
     "fastify-rate-limit": "^5.6.0",
     "fastify-static": "^4.2.2",
     "fastify-swagger": "^4.11.0",
-    "tuos-auth": "^1.0.6",
+    "tuos-auth": "^1.0.7",
     "tuos-mongoose": "^1.0.3"
   },
   "devDependencies": {

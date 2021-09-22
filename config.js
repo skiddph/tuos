@@ -8,7 +8,7 @@ module.exports = {
     api_version: 'v1'
   },
   mongoose: { connect: process.env.MONGO_DIRECT || 'mongodb://localhost:27017/tuos' },
-  jwt: { secret_token: process.env.JWT_TOKEN || 'jwt_default_token' },
+  jwt: { secret: process.env.JWT_TOKEN || 'jwt_default_token', sign: { expiresIn: '5000ms' } },
   auth: {
     api_url: process.env.API_URL || 'http://localhost:8080',
     client_url: process.env.CLIENT_URL || 'http://localhost:8080',
