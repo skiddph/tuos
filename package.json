@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "start": "node test.js && node server.js",
-    "test":"node test.js",
+    "test": "node test.js",
     "dev": "nodemon server.js"
   },
   "dependencies": {
