@@ -1,3 +1,7 @@
+# ⚠️[DISCONTINUED]
+
+This project is discontinued. The project will be revamped into another project and other programming language that we think will fit our current funds and development resources.
+
 # Tuos
 
 Offers free online tools and services for the public.
